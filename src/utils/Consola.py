@@ -1,9 +1,9 @@
-from src.exceptions.excepciones import DatoNumericoObligatorio, DniRegistrado
+from src.exceptions.excepciones import DatoNumericoObligatorio, DniRegistrado, AuthenticationError, OpcionInvalida, TecStoreError
 from src.persistensia import extraer_productos
 from src.classes.Usuario import Usuario
 from src.services.Producto_services import agregar_prod, listar_productos, mod_stock_prod, mod_prod, eliminar_producto
 from src.services.Ventas_services import realizar_venta, listar_ventas
-from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni
+from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni, listar_usuarios,lista_usuarios_activos,lista_usuarios_suspendidos
 from src.services.Actividad_services import crear_sesion,cerrar_sesion
 from .Helpers import limpiar_consola, hashear_clave, pedir_telefono, definir_rol, definir_clave, cabecera_menu
 
@@ -26,38 +26,41 @@ def menuPrincipal(vendedor):
             if verificar_permisos(vendedor):
                 print('| 9 ) --- Gestion de Usuario') # solo admin
             print('| 0 ) --- Salir')
-            op = input('|OPCION···---: ')
-    
-            limpiar_consola()
-            match op:
-                case "1":
-                    abm_producto(vendedor)
-                case "2":
-                    cabecera_menu()
-                    print('|·# Productos')
-                    listar_productos(productos)
-                    input('precione una tecla para continuar!')
-                case "3":
-                    mod_stock_prod()
-                case "4":
-                    realizar_venta(vendedor)
-                case "5":
-                    listar_ventas()
-            #    case "6":
-            #        buscador()
-            #    case "7":
-            #        eliminar_producto()
-            #    case "8":
-            #        estadisticas_generales()
-            #    case "9":
-
-                case "0":
-                    cerrar_sesion(vendedor)
-                    print('Saliendo.....')
-                    break
-                case _:
-                    print('Ingrese una opcion valida!')
-                
+            try:
+                op = input('|OPCION···---: ')
+                limpiar_consola()
+                match op:
+                    case "1":
+                        abm_producto(vendedor)
+                    case "2":
+                        cabecera_menu()
+                        print('|·# Productos')
+                        listar_productos(productos)
+                        input('precione una tecla para continuar!')
+                    case "3":
+                        mod_stock_prod()
+                    case "4":
+                        realizar_venta(vendedor)
+                    case "5":
+                        listar_ventas()
+                #    case "6":
+                #        buscador()
+                #    case "7":
+                #        eliminar_producto()
+                #    case "8":
+                #        estadisticas_generales()
+                    case "9":
+                        abm_usuarios()
+                    case "0":
+                        cerrar_sesion(vendedor)
+                        print('Saliendo.....')
+                        break
+                    case _:
+                        raise OpcionInvalida()
+                    
+            except TecStoreError as e:
+                print(e)
+                input( '|##······················##|')
             #input('precione una tecla para continuar!')
     
 
@@ -72,18 +75,18 @@ def Login():
         clave = input('|#-CONTRASEÑA: ')
         limpiar_consola()
         cabecera_menu()
-        if autenticar_usuario(dni, clave):
+        try:
             user = autenticar_usuario(dni, clave)
             print(f'|# BIENVENIDO {user.nombre}')
             input( '|##······················##|')
             return crear_sesion(user)
-        else:
-            print(f'|·· *ERROR* - USUARIO Y/O  |')
-            print( '| CONTRASEÑA INCORRECTOS ··|')
+        except AuthenticationError as e:
+            print(e)
             input( '|##······················##|')
 
 
-
+#   ___________________________________
+#|--| Sub-Menu de registro de usuario |-----------------------------------------------------
 def menu_registrar_usuario():
     while True:
         try:
@@ -107,14 +110,11 @@ def menu_registrar_usuario():
                 print("|· Usuario registrado con exito!")
                 return
             else:
-                input("|· Sucedio un error al crear el usuario")
-
-        except DatoNumericoObligatorio as e:
-            input(f"Error: {e}")
-        except ValueError:
-            input(f"Ingrese un numero!")
-        except DniRegistrado as er:
-            input(f"Error: {er}")
+                raise TecStoreError()
+            
+        except TecStoreError as e:
+            input(e)
+            break
 
 
 
@@ -131,25 +131,71 @@ def abm_producto(usuario):
         print('| 3 ) --- Modificar Stock')
         print('| 4 ) --- Eliminar')
         print('| 5 ) --- Listar Productos')
-        print('| 0 ) --- Salir')
-        op = input('|OPCION···---: ')
+        print('| 0 ) --- Volver')
 
+        try:
+
+            op = input('|OPCION···---: ')
+
+            limpiar_consola()
+            match op:
+                case "1":
+                    agregar_prod()
+                case "2":
+                    mod_prod(productos)
+                case "3":
+                    mod_stock_prod(productos)
+                case "4":
+                    eliminar_producto(productos)
+                case "5":
+                    productos = extraer_productos()
+                    listar_productos(extraer_productos())
+                case "0":
+                    break
+                case _:
+                    raise OpcionInvalida()
+
+            input('precione una tecla para continuar!')
+
+        except TecStoreError as e:
+            print(e)
+
+#   ________________________________
+#|--| Sub-Menu de gestion Usuarios |-----------------------------------------------------
+def abm_usuarios():
+    while True:
         limpiar_consola()
-        match op:
-            case "1":
-                agregar_prod()
-            case "2":
-                mod_prod(productos)
-            case "3":
-                mod_stock_prod(productos)
-            case "4":
-                eliminar_producto(productos)
-            case "5":
-                productos = extraer_productos()
-                listar_productos(extraer_productos())
-            case "0":
-                break
-            case _:
-                print('Ingrese una opcion valida!')
+        cabecera_menu()
+        print('| 1 ) --- Registrar Usuario')
+        print('| 2 ) --- Usuarios Activos')
+        print('| 3 ) --- Usuarios Suspendidos')
+        print('| 4 ) --- Usuarios General')
+        #print('| 5 ) --- Suspender Usuario')
+        print('| 0 ) --- Volver')
 
-        input('precione una tecla para continuar!')
+        try:
+            op = input('|OPCION···---: ')
+
+            limpiar_consola()
+            match op:
+                case "1":
+                    menu_registrar_usuario()
+                case "2":
+                    cabecera_menu()
+                    listar_usuarios(lista_usuarios_activos())
+                case "3":
+                    cabecera_menu()
+                    listar_usuarios(lista_usuarios_suspendidos())
+                case "4":
+                    cabecera_menu()
+                    listar_usuarios()
+                #case "5":
+                case "0":
+                    break
+                case _:
+                    raise OpcionInvalida()
+
+            input('precione una tecla para continuar!')
+
+        except TecStoreError as e:
+            input(e)

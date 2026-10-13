@@ -8,14 +8,20 @@ class TecStoreError(Exception):
     def __str__(self):
         return self.mensaje
 
-class DatoInvalidoError(Exception):
+class DatoInvalidoError(TecStoreError):
     mensaje_default = "|· El dato ingresado es invalido"
 
-class DniRegistrado(Exception):
+class DniRegistrado(TecStoreError):
     mensaje_default = "|· Este DNI ya se encuentra registrado"
 
-class DatoNumericoObligatorio(Exception):
+class DatoNumericoObligatorio(TecStoreError):
     mensaje_default = "|· Debe ingresar solo valores numericos"
 
-class OpcionInvalida(Exception):
+class OpcionInvalida(TecStoreError):
     mensaje_default = "|· Ingrese una opcion valida!"
+
+class AuthenticationError(TecStoreError):
+    mensaje_default = f'|·· *ERROR* - USUARIO Y/O  |\n| CONTRASEÑA INCORRECTOS ··|'
+
+class ClavesDistintaError(TecStoreError):
+    mensaje_default = f'|· Las contraseñas deben ser iguales'

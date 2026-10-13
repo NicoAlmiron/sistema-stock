@@ -1,6 +1,7 @@
 import os
 import hmac
 import hashlib
+from src.exceptions.excepciones import DatoNumericoObligatorio, OpcionInvalida, ClavesDistintaError
 
 def limpiar_consola():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -37,7 +38,7 @@ def pedir_telefono():
     while True:
         telefono = input('|#-TELEFONO: ')
         if not telefono.isdigit():
-            input("|· El DNI tiene que ser valido!")
+            raise DatoNumericoObligatorio()
         else:
             return telefono
 
@@ -50,7 +51,7 @@ def definir_rol():
         elif rol == "2" or rol.upper == "ADMIN" or rol.upper == "ADMINISTRADOR":
             return "ADMINISTRADOR"
         else:
-            input('|· ingrese una opcion valida!')
+            raise OpcionInvalida()
         
 def definir_clave():
     while True:
@@ -60,6 +61,20 @@ def definir_clave():
         if clave == claveRep:
             return clave
         else:
-            input("|· Las contraseñas deben coincidir!")
+            raise ClavesDistintaError()
 
+def dar_formato_id(id) -> None:
+    return (" " * ( 6 - len(str(id)) ) )
+
+def dar_formato_nombre(nombre) -> None:
+    return (" " * ( 30 - len(nombre) ) )
+
+def dar_formato_precio(precio_prod) -> None:
+    return (" " * ( 13 - len(precio_prod)))
+
+def dar_formato_dni(dni) -> None:
+    return (" " * ( 10 - len(str(dni)) ) )
+
+def dar_formato_telefono(telefono) -> None:
+    return (" " * ( 10 - len(str(telefono)) ) )
 

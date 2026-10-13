@@ -1,5 +1,5 @@
 from src.persistensia.Usuario_JSON import extraer_usuarios, escribir_usuarios
-from src.exceptions.excepciones import DatoNumericoObligatorio
+from src.exceptions.excepciones import DatoNumericoObligatorio, AuthenticationError
 from src.exceptions.excepciones import DniRegistrado
 from src.utils.Helpers import verificar_clave
 
@@ -11,7 +11,7 @@ def validar_dni(dni):
         return True
     for user in usuarios:
         if user.dni == dni:
-            raise DniRegistrado(f"Este DNI Ya se encuentra registrado")
+            raise DniRegistrado()
     return True
 
 def pedir_dni():
@@ -44,11 +44,36 @@ def autenticar_usuario(dni, clave):
         if user.dni == dni:
             if verificar_clave(clave, user.sal, user.hash):
                 return user
-            else:
-                return False
+    raise AuthenticationError()
 
 def verificar_permisos(user):
     if user.rol == "ADMINISTRADOR":
         return True
     elif user.rol == "EMPLEADO":
         return False
+
+def listar_usuarios(usuarios=None) -> None:
+    if not usuarios:
+        usuarios = extraer_usuarios()
+    for user in usuarios:
+        print(user)
+
+def lista_usuarios_activos():
+    usuarios = extraer_usuarios()
+    usuarios_activos = []
+
+    for user in usuarios:
+        if user.fecha_baja is "":
+            usuarios_activos.append(user)
+
+    return usuarios_activos
+
+def lista_usuarios_suspendidos():
+    usuarios = extraer_usuarios()
+    usuarios_suspendidos = []
+
+    for user in usuarios:
+        if user.fecha_baja is not "":
+            usuarios_suspendidos.append(user)
+
+    return usuarios_suspendidos
