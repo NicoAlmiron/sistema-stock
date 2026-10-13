@@ -1,0 +1,34 @@
+from datetime import datetime
+
+class Usuario():
+    def __init__(self, id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta = None, productos_vendidos = 0, importe_vendido = 0.0, fecha_baja = ""):
+        self.id_usuario = id_usuario
+        self.nombre = nombre
+        self.dni = dni
+        self.telefono = telefono
+        self.rol = rol
+        self.sal = sal
+        self.hash = hash
+        self.fecha_alta = fecha_alta if fecha_alta is not None else datetime.now()
+        self.productos_vendidos = productos_vendidos
+        self.importe_vendido = importe_vendido
+        self.fecha_baja = fecha_baja
+
+
+
+    def a_dict(self):
+        user_dict = {
+            "id_usuario": self.id_usuario,
+            "nombre": self.nombre,
+            "dni": self.dni,
+            "telefono": self.telefono,
+            "rol": self.rol,
+            "sal": self.sal,
+            "hash": self.hash,
+            "fecha_alta": str(self.fecha_alta),
+            "productos_vendidos": self.productos_vendidos,
+            "importe_vendido": self.importe_vendido,
+            "fecha_baja": str(self.fecha_baja) if self.fecha_baja else ""
+        }
+        return user_dict    
+    
