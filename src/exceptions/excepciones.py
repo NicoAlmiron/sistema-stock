@@ -1,3 +1,7 @@
+class AppBaseError(Exception):
+    
+    pass
+
 class DatoInvalidoError(Exception):
     pass
 
