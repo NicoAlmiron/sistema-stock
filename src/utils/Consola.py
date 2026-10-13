@@ -5,7 +5,7 @@ from src.services.Producto_services import agregar_prod, listar_productos, mod_s
 from src.services.Ventas_services import realizar_venta, listar_ventas
 from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni, listar_usuarios,lista_usuarios_activos,lista_usuarios_suspendidos
 from src.services.Actividad_services import crear_sesion,cerrar_sesion
-from .Helpers import limpiar_consola, hashear_clave, pedir_telefono, definir_rol, definir_clave, cabecera_menu
+from .Helpers import limpiar_consola, hashear_clave, pedir_telefono, definir_rol, definir_clave, cabecera_menu, pedir_nombre
 
 
 # Menu Principal
@@ -94,7 +94,7 @@ def menu_registrar_usuario():
             cabecera_menu()
             print('|##··REGISTROS DE DATOS··##|')
             id_usuario = definir_id()
-            nombre = input('|#-NOMBRE: ')
+            nombre = pedir_nombre(input('|#-NOMBRE: '))
             dni = pedir_dni()            
             telefono = pedir_telefono()
             rol = definir_rol()
@@ -146,7 +146,9 @@ def abm_producto():
                 case "4":
                     eliminar_producto()
                 case "5":
+                    cabecera_menu()
                     listar_productos()
+                    input('|· precione una tecla para continuar')
                 case "0":
                     break
                 case _:
@@ -179,10 +181,10 @@ def abm_usuarios():
                     menu_registrar_usuario()
                 case "2":
                     cabecera_menu()
-                    listar_usuarios(lista_usuarios_activos())
+                    user_act = lista_usuarios_activos()
+                    listar_usuarios(user_act)
                 case "3":
-                    cabecera_menu()
-                    listar_usuarios(lista_usuarios_suspendidos())
+                    lista_usuarios_suspendidos()
                 case "4":
                     cabecera_menu()
                     listar_usuarios()

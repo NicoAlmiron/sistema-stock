@@ -1,7 +1,7 @@
 from src.persistensia.Usuario_JSON import extraer_usuarios, escribir_usuarios
-from src.exceptions.excepciones import DatoNumericoObligatorio, AuthenticationError
-from src.exceptions.excepciones import DniRegistrado
-from src.utils.Helpers import verificar_clave
+from src.exceptions.excepciones import DatoNumericoObligatorio, AuthenticationError, NumeroDemasiadoAlto, NumeroNegativoError
+from src.exceptions.excepciones import DniRegistrado, ArchivoVacio
+from src.utils.Helpers import verificar_clave, cabecera_menu
 
 # Registro de usuario 
 
@@ -18,7 +18,9 @@ def pedir_dni():
     while True:
         dni = input('|#-DNI: ')
         if not dni.isdigit():
-            input("|· El DNI tiene que ser valido!")
+            raise DatoNumericoObligatorio()
+        elif len(dni) > 10:
+            raise NumeroDemasiadoAlto()
         else:
             if validar_dni(dni):
                 return dni
@@ -65,17 +67,28 @@ def lista_usuarios_activos():
     usuarios_activos = []
 
     for user in usuarios:
-        if user.fecha_baja is "":
+        if user.fecha_baja == "":
             usuarios_activos.append(user)
 
-    return usuarios_activos
+    if usuarios_activos:
+        return usuarios_activos
+    else:
+        input('|· Sin Usuarios Activos')
+        return []
 
 def lista_usuarios_suspendidos():
     usuarios = extraer_usuarios()
     usuarios_suspendidos = []
+    cabecera_menu()
 
     for user in usuarios:
-        if user.fecha_baja is not "":
+        if user.fecha_baja != "":
             usuarios_suspendidos.append(user)
 
-    return usuarios_suspendidos
+    if usuarios_suspendidos:
+        listar_usuarios(usuarios_suspendidos)
+    else:
+        raise ArchivoVacio('|· Sin Usuarios Suspendidos')
+    #try:
+    #except ArchivoVacio as er:
+    #    input(er)

@@ -1,7 +1,7 @@
 from src.persistensia import escribir_productos, extraer_productos
-from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock
+from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id
 from src.classes import Producto
-from src.exceptions.excepciones import TecStoreError, OperacionCancelada, DatoNumericoObligatorio
+from src.exceptions.excepciones import TecStoreError, OperacionCancelada, OpcionInvalida, ArchivoVacio
 
 #------                                           ------#
 #--------               PRODUCTOS               --------#
@@ -49,10 +49,12 @@ def mod_prod():
         
         print('|###--··  TecStore  ··--###|')
         listar_productos()
+
+
         print('|##-· Ingrese el Id del producto')
-        id_buscar = input('|##-· ID: ')
+        id_buscar = pedir_id(input('|##-· ID: '))
         for i , prod in enumerate(productos):
-            if prod.id_producto == int(id_buscar):
+            if prod.id_producto == id_buscar:
                 print(f'|##-· Producto ID: {prod.id_producto}')
                 try:
                     print(f"|-Nobre anterior *{prod.nombre}*")
@@ -83,9 +85,9 @@ def mod_stock_prod():
         print('|###--··  TecStore  ··--###|')
         listar_productos()
         print('|##-· Ingrese el Id del producto')
-        id_buscar = input('|##-· ID: ')
+        id_buscar = pedir_id(input('|##-· ID: '))
         for i , prod in enumerate(productos):
-            if prod.id_producto == int(id_buscar):
+            if prod.id_producto == id_buscar:
                 print(f'|##-· Producto ID: {prod.id_producto}')
                 try:
                     print(f"| {prod.nombre}*")
@@ -105,31 +107,34 @@ def mod_stock_prod():
 
 #   _____________________
 #|--| Eliminar Producto |-----------------------------------------------------
-def eliminar_producto(productos):
-    print('|###--··  TecStore  ··--###|')
-    print('|##-· Ingrese el Id del producto')
-    id_buscar = input('|##-· ID: ')
-    for i, prod in enumerate(productos):
-        if prod.id == int(id_buscar):
-            print(f"\n# Producto: {prod.nombre.upper()} - ${prod.precio:,}\n")
-            print(f"# *Esta seguro que quiere eliminar este Producto?")
-            print( '#     Confirmar - 1   |    Cancelar - 0')
-            opcion = input("#Opcion: ")       
-            if opcion != "":
-                if opcion == "0":
-                    print("#   **Se Cancelo la operacion!**")                    
-                elif opcion == "1":
-                    productos.remove(prod)
-                    print("Se Elimino el Producto exitosamente!")
-                    escribir_productos(productos)
+def eliminar_producto():
+    productos = extraer_productos()
+    try:
+        print('|###--··  TecStore  ··--###|')
+        print('|##-· Ingrese el Id del producto')
+        listar_productos()
+        id_buscar = pedir_id(input('|##-· ID: '))
+        for prod in productos:
+            if prod.id_producto == id_buscar:
+                print(f"\n# Producto: {prod.nombre.upper()} - ${prod.precio:,}\n")
+                print(f"# *Esta seguro que quiere eliminar este Producto?")
+                print( '#     Confirmar - 1   |    Cancelar - 0')
+                opcion = input("#Opcion: ")       
+                if opcion != "" and opcion.isdigit():
+                    if opcion == "0":
+                        raise OperacionCancelada()
+                    elif opcion == "1":
+                        productos.remove(prod)
+                        escribir_productos(productos)
+                        print("Se Elimino el Producto exitosamente!")
+                    else:
+                        raise OpcionInvalida()
                 else:
-                    print("#   **Se Cancelo la operacion!**")
-            else:
-                print("#   **Se Cancelo la operacion!**")
-
-
-
-
+                    raise OperacionCancelada()
+    except TecStoreError as er:
+        input(er)
+    except ValueError:
+        input('|· Ingrese valores Numericos')
 
 #   ____________________
 #|--| Listar Productos |-----------------------------------------------------
@@ -140,15 +145,17 @@ def listar_productos(lista_productos = None):
     if lista_productos:
         for i, producto in enumerate(lista_productos):
             print(producto)
+        #input('|· precione una tecla para continuar')
     else:
-        print('|\t·No se encontraron productos!')
+        raise ArchivoVacio()
         
 #   ________________________________
 #|--| Mostrar un producto por 'id' |-----------------------------------------------------
-def mostrar_un_prod(id, productos):
+def mostrar_un_prod(id):
+    productos = extraer_productos()
     encontrado = False
     for producto in productos:
-        if Producto.id_producto == id:
+        if producto.id_producto == id:
             encontrado = True
             return producto
     if encontrado is False : return False

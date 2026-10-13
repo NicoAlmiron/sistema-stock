@@ -33,6 +33,18 @@ def verificar_clave(clave_ingresada, sal_hex, hash_guardaro_hex):
     return hmac.compare_digest(hash_ingresado.hex(), hash_guardaro_hex) # compara y resuleve True o False
 
 
+def pedir_id(id):
+    if id == "": 
+        raise OperacionCancelada() 
+    elif not id.isdigit():
+        raise DatoNumericoObligatorio()
+    elif len(id) >= 12:
+        raise NumeroDemasiadoAlto()
+    elif int(id) < 0:
+        raise NumeroNegativoError() 
+    else:
+        return int(id)
+
 def pedir_nombre(nombre):
     if nombre == "":
         raise OperacionCancelada()
@@ -53,6 +65,8 @@ def pedir_telefono():
 def pedir_precio(precio):
     if precio == "": 
         raise OperacionCancelada() 
+    elif not precio.isdigit():
+        raise DatoNumericoObligatorio()
     elif len(precio) >= 12:
         raise PrecioDemaciadoAlto()
     elif float(precio) < 0:
@@ -63,7 +77,9 @@ def pedir_precio(precio):
 def pedir_stock(stock):
     if stock == "":
         raise OperacionCancelada()
-    elif len(stock) >= 4:
+    elif not stock.isdigit():
+        raise DatoNumericoObligatorio()
+    elif len(stock) >= 5:
         raise NumeroDemasiadoAlto()
     elif int(stock) < 0:
         raise NumeroNegativoError()

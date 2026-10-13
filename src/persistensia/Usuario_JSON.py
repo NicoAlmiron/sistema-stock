@@ -17,17 +17,17 @@ def extraer_usuarios():
             
             for user in lista_users:
                 usuario = Usuario(
-                    int(user["id_usuario"]),
-                    user["nombre"],
-                    user["dni"],
-                    user["telefono"],
-                    user["rol"],
-                    user["sal"],
-                    user["hash"],
-                    user["fecha_alta"],
-                    int(user["productos_vendidos"]),
-                    float(user["importe_vendido"]),
-                    user["fecha_baja"]
+                    id_usuario = int(user["id_usuario"]),
+                    nombre = user["nombre"],
+                    dni = user["dni"],
+                    telefono = user["telefono"],
+                    rol = user["rol"],
+                    sal = user["sal"],
+                    hash = user["hash"],
+                    fecha_alta = user["fecha_alta"],
+                    productos_vendidos = int(user["productos_vendidos"]),
+                    importe_vendido = float(user["importe_vendido"]),
+                    fecha_baja = "" if user["fecha_baja"] is "" else user["fecha_baja"]
                 )
 
                 usuarios.append(usuario)

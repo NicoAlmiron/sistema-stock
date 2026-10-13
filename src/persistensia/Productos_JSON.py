@@ -10,8 +10,8 @@ def extraer_productos():
         productos = [] 
         with open(ARCHIVO_PRODUCTOS_JSON , 'r', encoding='UTF-8') as archivo_producto:
             lista_prod = json.load(archivo_producto)
-            if len(lista_prod) <= 0:
-                print("Archivo Vacio")
+            if not lista_prod:
+                return []
             for prod in lista_prod:
                 producto = Producto(
                     id_producto = int(prod["id_producto"]),

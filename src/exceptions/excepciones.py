@@ -44,3 +44,7 @@ class NumeroDemasiadoAlto(TecStoreError):
 class NumeroNegativoError(TecStoreError):
     mensaje_default = f'|· El numero NO puede ser Negativo'
 
+class ArchivoVacio(TecStoreError):
+    mensaje_default = f'|· Sin Registros '
+
+
