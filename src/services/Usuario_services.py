@@ -52,6 +52,8 @@ def verificar_permisos(user):
     elif user.rol == "EMPLEADO":
         return False
 
+
+
 def listar_usuarios(usuarios=None) -> None:
     if not usuarios:
         usuarios = extraer_usuarios()

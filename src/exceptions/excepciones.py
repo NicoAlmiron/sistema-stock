@@ -25,3 +25,22 @@ class AuthenticationError(TecStoreError):
 
 class ClavesDistintaError(TecStoreError):
     mensaje_default = f'|· Las contraseñas deben ser iguales'
+
+class NombreInvalido(TecStoreError):
+    mensaje_default = f'|· Debe ser un Nombre valido (max 30 caracteres)'
+
+class OperacionCancelada(TecStoreError):
+    mensaje_default = f'|· Se cancelo la operacion'
+
+class PrecioDemaciadoAlto(TecStoreError):
+    mensaje_default = f'|· El Precio exedio el limite permitido (limite $99.999.999.999)'
+
+class PrecioNegativoError(TecStoreError):
+    mensaje_default = f'|· El Precio no puede ser negativo!'
+
+class NumeroDemasiadoAlto(TecStoreError):
+    mensaje_default = f'|· Numero demaciado alto!'
+
+class NumeroNegativoError(TecStoreError):
+    mensaje_default = f'|· El numero NO puede ser Negativo'
+

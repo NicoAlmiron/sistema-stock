@@ -1,0 +1,10 @@
+[
+    {
+        "id_producto": 1,
+        "nombre": "teclado mecanico rgb",
+        "precio": 145000.0,
+        "cant_vendidos": 0,
+        "discontinuado": false,
+        "stock": 9
+    }
+]

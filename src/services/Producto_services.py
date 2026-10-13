@@ -1,12 +1,16 @@
 from src.persistensia import escribir_productos, extraer_productos
-from src.utils.Helpers import limpiar_consola
+from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock
 from src.classes import Producto
-
-
+from src.exceptions.excepciones import TecStoreError, OperacionCancelada, DatoNumericoObligatorio
 
 #------                                           ------#
 #--------               PRODUCTOS               --------#
 #------                                           ------#
+def definir_id():
+    productos = extraer_productos()
+    if not productos:
+        return 1
+    return max(p.id_producto for p in productos) + 1
 
 
 #|--------  PRODUCTOS --------|#
@@ -14,138 +18,90 @@ from src.classes import Producto
 #|--| Agregar Producto |-----------------------------------------------------
 def agregar_prod():
 
-    productos = extraer_productos()
+    try:
+        print('|###--··  TecStore  ··--###|')
+        print('|##-· Producto Nuevo')
+        id = definir_id()
+        print(f'|##-· Producto ID: {id}')
+        nombre_prod = pedir_nombre(input('|-Nobre del articulo: ').lower())
+        precio_prod = pedir_precio(input('|-Precio: $'))
+        stock_prod = pedir_stock(input('|-Stock Inicial: '))
 
-    producto = Producto(None, None, None, None)
-    print('|###--··  TecStore  ··--###|')
-    print('|##-· Producto Nuevo')
+        producto = Producto(id_producto = id, nombre= nombre_prod, precio= precio_prod,stock= stock_prod)
+        productos = extraer_productos()
 
-    ultima_pocicion =  len(productos)-1
-    Producto.id_producto = productos[ultima_pocicion].id + 1
-    print(f'|##-· Producto ID: {Producto.id_producto}')
+        if productos:
+            productos.append(producto)
+        else:
+            productos = []
+            productos.append(producto)
+        escribir_productos(productos)
+        print("Se Guardo el producto exitosamente!")
 
-    nombre_prod = input('|-Nobre del articulo: ').lower()
-    if nombre_prod == "":
-        print("# **Se Cancelo La operacion**")   
-        input('precione una tecla para continuar!') 
-        return        
-    elif len(nombre_prod) > 30:
-        print("# **Se exedio el limite de caracteres**")  
-        input('precione una tecla para continuar!') 
-        return        
-    else:
-        producto.nombre = nombre_prod
-
-    
-
-    precio_prod = input('|-Precio: $')
-    if precio_prod == "":
-        print("# **Se Cancelo La operacion**")   
-        input('precione una tecla para continuar!') 
-        return 
-    elif len(precio_prod) >= 12:
-        print("# **Numero demaciado grande**")   
-        input('precione una tecla para continuar!') 
-        return 
-    elif float(precio_prod) < 0:
-        print("# **no puede tener precio menor a cero**")   
-        input('precione una tecla para continuar!') 
-        return  
-    else:
-        producto.precio = float(precio_prod)
-
-
-    stock_prod = input('|-Stock Inicial: ')
-    if stock_prod == "":
-        print("# **Se Cancelo La operacion**")   
-        input('precione una tecla para continuar!') 
-        return 
-    elif len(stock_prod) >= 4:
-        print("# **Numero demaciado grande**")   
-        input('precione una tecla para continuar!') 
-        return 
-    elif int(stock_prod) < 0:
-        print("# **no puede tener stock menor a cero**")   
-        input('precione una tecla para continuar!') 
-        return  
-    else:
-        producto.stock = int(stock_prod)
-
-
-    productos.append(producto)
-    escribir_productos(productos)
-    print("Se Guardo el producto exitosamente!")
-
+    except TecStoreError as er:
+        print(er)
 
 #   ______________________
 #|--| Modificar Producto |-----------------------------------------------------
-def mod_prod(productos):
-    producto = Producto(None, None, None, None)
-    print('|###--··  TecStore  ··--###|')
-    listar_productos(productos)
-    print('|##-· Ingrese el Id del producto')
-    id_buscar = input('|##-· ID: ')
-    for i , prod in enumerate(productos):
-        if prod.id == int(id_buscar):
-            print(f'|##-· Producto ID: {prod.id}')
-            
-            print(f"|-Nobre anterior *{prod.nombre}*")
-            nombre_nuevo = input('|-Nobre del articulo: ')
-            if len(nombre_nuevo) > 30:
-                print("# **Se exedio el limite de caracteres**")  
-                input('precione una tecla para continuar!') 
-                return        
-            elif nombre_nuevo != "":
-                productos[i].nombre = nombre_nuevo
-            print(f"|-Precio anterior $*{prod.precio:,}*".replace(",","."))
-            precio_nuevo = input('|-Precio: $')
-            if precio_nuevo != "":
-                if len(precio_nuevo) >= 12:
-                    print("# **Numero demaciado grande**")   
-                    input('precione una tecla para continuar!') 
-                    return 
-                elif float(precio_nuevo) < 0:
-                    print("# **no puede tener precio menor a cero**")   
-                    input('precione una tecla para continuar!') 
-                    return  
-                else:
-                    productos[i].precio = float(precio_nuevo)
-            #prod.update(producto)  
-            break
+def mod_prod():
+    try:
+        productos = extraer_productos()
+        
+        print('|###--··  TecStore  ··--###|')
+        listar_productos()
+        print('|##-· Ingrese el Id del producto')
+        id_buscar = input('|##-· ID: ')
+        for i , prod in enumerate(productos):
+            if prod.id_producto == int(id_buscar):
+                print(f'|##-· Producto ID: {prod.id_producto}')
+                try:
+                    print(f"|-Nobre anterior *{prod.nombre}*")
+                    productos[i].nombre = pedir_nombre(input('|-Nobre del articulo: '))
+                except OperacionCancelada:
+                    pass
+                try:    
+                    print(f"|-Precio anterior $*{prod.precio:,}*".replace(",","."))
+                    productos[i].precio = pedir_precio(input('|-Precio: $'))
+                except OperacionCancelada:
+                    pass
 
-    escribir_productos(productos)
-    print("Se Guardo el producto exitosamente!")
+                break
 
+        if escribir_productos(productos): 
+            print("|· Se Guardo el producto exitosamente!")
+        else:
+            print("Error al guardar el producto")
+    except TecStoreError as er:
+        print(er)
 
 #   _______________________________
 #|--| Modificar Stock de Producto |-----------------------------------------------------
 def mod_stock_prod():
-    productos = extraer_productos()
-    print('|###--··  TecStore  ··--###|')
-    listar_productos(productos)
-    print('|##-· Ingrese el Id del producto')
-    id_buscar = input('|##-· ID: ')
-    for i, prod in enumerate(productos):
-        if prod.id == int(id_buscar):   
-            print(f"| {prod.nombre}*")
-            print(f"| -Stock actual *{prod.stock}*")
-            stock_nuevo = input('|-Nuevo Stock: ')
-            if stock_nuevo == "":
-                print("# **Se Cancelo La operacion**")   
-                input('precione una tecla para continuar!') 
-                return 
-            elif len(stock_nuevo) >= 4:
-                print("# **Numero demaciado grande**")   
-                input('precione una tecla para continuar!') 
-                return 
-            elif int(stock_nuevo) < 0:
-                print("# **no puede tener stock menor a cero**")   
-                input('precione una tecla para continuar!') 
-                return  
-            else:
-                productos[i].stock = int(stock_nuevo)
-    escribir_productos(productos)
-    print("Se actualizo el stock exitosamente!")
+    try:
+        productos = extraer_productos()
+            
+        print('|###--··  TecStore  ··--###|')
+        listar_productos()
+        print('|##-· Ingrese el Id del producto')
+        id_buscar = input('|##-· ID: ')
+        for i , prod in enumerate(productos):
+            if prod.id_producto == int(id_buscar):
+                print(f'|##-· Producto ID: {prod.id_producto}')
+                try:
+                    print(f"| {prod.nombre}*")
+                    print(f"| -Stock actual *{prod.stock}*")
+                    productos[i].stock = pedir_stock(input('|-Nuevo Stock: '))
+                except OperacionCancelada:
+                    pass
+    
+                break
+    
+        if escribir_productos(productos): 
+            print("|· Se actualizo el stock exitosamente!")
+        else:
+            print("Error al guardar el producto")
+    except TecStoreError as er:
+        print(er)
 
 #   _____________________
 #|--| Eliminar Producto |-----------------------------------------------------
@@ -177,27 +133,16 @@ def eliminar_producto(productos):
 
 #   ____________________
 #|--| Listar Productos |-----------------------------------------------------
-def listar_productos(lista_productos):
+def listar_productos(lista_productos = None):
+    if lista_productos is None:
+        lista_productos = extraer_productos()
 
     if lista_productos:
         for i, producto in enumerate(lista_productos):
             print(producto)
     else:
-        print('|\t·No se emcontraron productos!')
+        print('|\t·No se encontraron productos!')
         
-
-# def imprimir_producto(producto):
-#    precio_prod = f'{producto.precio:,}'
-#    renglon = f'|ID: {Producto.id_producto}{(" " * ( 6 - len(str(Producto.id_producto)) ) )}'
-#    renglon += f'| {producto.nombre}{(" " * ( 30 - len(producto.nombre) ) )}'
-#    renglon += f'| ${producto.precio:,}{(" " * ( 13 - len(precio_prod)))}'
-#    renglon += f'| STOCK: {producto.stock}'
-#    if int(producto.stock) < 4 and int(producto.stock) > 0:
-#        renglon += ' (STOCK BAJO)'
-#    elif int(producto.stock) == 0:
-#        renglon += ' (SIN STOCK!!*!*!*!)'
-#    print(renglon)
-
 #   ________________________________
 #|--| Mostrar un producto por 'id' |-----------------------------------------------------
 def mostrar_un_prod(id, productos):
@@ -260,7 +205,6 @@ def buscador(productos):
                 prod = fitrador('nombre', nombre.lower())
                 if prod :
                     print(prod)
-                    #imprimir_producto(prod)
                 else:
                     print('# *No se encontro el producto***')
             case "2":
@@ -270,7 +214,6 @@ def buscador(productos):
                 prod = fitrador('id', id_prod)
                 if prod :
                     print(prod)
-                    #imprimir_producto(prod)
                 else:
                     print('# *No se encontro el producto***')
             case "3":
@@ -280,7 +223,6 @@ def buscador(productos):
                 prod = fitrador('precio', precio)
                 if prod :
                     print(prod)
-                    #imprimir_producto(prod)
                 else:
                     print('# *No se encontro el producto***')
             case "0":

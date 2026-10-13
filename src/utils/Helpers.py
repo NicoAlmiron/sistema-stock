@@ -1,7 +1,7 @@
 import os
 import hmac
 import hashlib
-from src.exceptions.excepciones import DatoNumericoObligatorio, OpcionInvalida, ClavesDistintaError
+from src.exceptions.excepciones import DatoNumericoObligatorio, OpcionInvalida, ClavesDistintaError, NombreInvalido, OperacionCancelada, PrecioDemaciadoAlto, PrecioNegativoError, NumeroDemasiadoAlto, NumeroNegativoError
 
 def limpiar_consola():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -33,6 +33,14 @@ def verificar_clave(clave_ingresada, sal_hex, hash_guardaro_hex):
     return hmac.compare_digest(hash_ingresado.hex(), hash_guardaro_hex) # compara y resuleve True o False
 
 
+def pedir_nombre(nombre):
+    if nombre == "":
+        raise OperacionCancelada()
+    elif len(nombre) > 30:
+        raise NombreInvalido()
+    else:
+        return nombre
+
 
 def pedir_telefono():
     while True:
@@ -41,6 +49,26 @@ def pedir_telefono():
             raise DatoNumericoObligatorio()
         else:
             return telefono
+
+def pedir_precio(precio):
+    if precio == "": 
+        raise OperacionCancelada() 
+    elif len(precio) >= 12:
+        raise PrecioDemaciadoAlto()
+    elif float(precio) < 0:
+        raise PrecioNegativoError() 
+    else:
+        return float(precio)
+
+def pedir_stock(stock):
+    if stock == "":
+        raise OperacionCancelada()
+    elif len(stock) >= 4:
+        raise NumeroDemasiadoAlto()
+    elif int(stock) < 0:
+        raise NumeroNegativoError()
+    else:
+        return int(stock)
 
 def definir_rol():
     while True:
@@ -77,4 +105,7 @@ def dar_formato_dni(dni) -> None:
 
 def dar_formato_telefono(telefono) -> None:
     return (" " * ( 10 - len(str(telefono)) ) )
+
+
+
 

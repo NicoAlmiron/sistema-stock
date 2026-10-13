@@ -31,7 +31,7 @@ def menuPrincipal(vendedor):
                 limpiar_consola()
                 match op:
                     case "1":
-                        abm_producto(vendedor)
+                        abm_producto()
                     case "2":
                         cabecera_menu()
                         print('|·# Productos')
@@ -120,9 +120,7 @@ def menu_registrar_usuario():
 
 #   _________________________________
 #|--| Sub-Menu de gestion Productos |-----------------------------------------------------
-def abm_producto(usuario):
-    productos = []
-
+def abm_producto():
     while True:
         limpiar_consola()
         cabecera_menu()
@@ -142,14 +140,13 @@ def abm_producto(usuario):
                 case "1":
                     agregar_prod()
                 case "2":
-                    mod_prod(productos)
+                    mod_prod()
                 case "3":
-                    mod_stock_prod(productos)
+                    mod_stock_prod()
                 case "4":
-                    eliminar_producto(productos)
+                    eliminar_producto()
                 case "5":
-                    productos = extraer_productos()
-                    listar_productos(extraer_productos())
+                    listar_productos()
                 case "0":
                     break
                 case _:
