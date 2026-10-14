@@ -56,7 +56,19 @@
         "rol": "ADMINISTRADOR",
         "inicio_activididad": "2026-10-13 20:55:34.747297",
         "prods_vendidos": 10,
-        "monto_bruto": 345000,
+        "monto_bruto": 345000.0,
         "fin_actividad": "2026-10-13 20:55:54.047220"
+    },
+    {
+        "id_sesion": 6,
+        "id_usuario": 1,
+        "nombre": "nicolas",
+        "dni": "123",
+        "telefono": "123123",
+        "rol": "ADMINISTRADOR",
+        "inicio_activididad": "2026-10-14 12:32:50.637569",
+        "prods_vendidos": 10,
+        "monto_bruto": 345000,
+        "fin_actividad": "2026-10-14 12:33:37.217216"
     }
 ]

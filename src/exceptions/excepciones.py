@@ -1,8 +1,9 @@
 class TecStoreError(Exception):
     mensaje_default = "|· Ocurrio un error inesperado!"
 
-    def __init__(self, mensaje = None):
+    def __init__(self, mensaje = None, dni = None):
         self.mensaje = mensaje or self.mensaje_default
+        self.dni = dni or None
         super().__init__(self.mensaje)
 
     def __str__(self):
@@ -12,6 +13,8 @@ class DatoInvalidoError(TecStoreError):
     mensaje_default = "|· El dato ingresado es invalido"
 
 class DniRegistrado(TecStoreError):
+    def __init__(self, mensaje=None, dni=None):
+        super().__init__(mensaje, dni)
     mensaje_default = "|· Este DNI ya se encuentra registrado"
 
 class DatoNumericoObligatorio(TecStoreError):

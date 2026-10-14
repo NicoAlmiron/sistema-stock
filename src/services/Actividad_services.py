@@ -13,7 +13,7 @@ def definir_id():
 
 def crear_sesion(user):
     id_sesion = definir_id()
-    sesion_activa = Sesion(user.id_usuario, user.nombre, user.dni, user.telefono, user.rol, id_sesion)
+    sesion_activa = Sesion(user.id_usuario, user.nombre, user.dni, user.telefono, user.rol, id_sesion=id_sesion)
     return sesion_activa
 
 def cerrar_sesion(sesion):

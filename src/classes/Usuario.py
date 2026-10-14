@@ -40,3 +40,9 @@ class Usuario():
             "fecha_baja": str(self.fecha_baja) if self.fecha_baja else ""
         }
         return user_dict    
+
+    def validar_estado(self):
+        if self.fecha_baja != "":
+            return False
+        elif self.fecha_baja == "":
+            return True

@@ -3,7 +3,9 @@ from src.persistensia import extraer_productos
 from src.classes.Usuario import Usuario
 from src.services.Producto_services import agregar_prod, listar_productos, mod_stock_prod, mod_prod, eliminar_producto
 from src.services.Ventas_services import realizar_venta, listar_ventas
-from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni, listar_usuarios,lista_usuarios_activos,lista_usuarios_suspendidos
+from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni
+from src.services.Usuario_services import listar_usuarios,lista_usuarios_activos,lista_usuarios_suspendidos, suspender_usuario
+from src.services.Usuario_services import reactivar_usuario
 from src.services.Actividad_services import crear_sesion,cerrar_sesion
 from .Helpers import limpiar_consola, hashear_clave, pedir_telefono, definir_rol, definir_clave, cabecera_menu, pedir_nombre
 
@@ -169,7 +171,8 @@ def abm_usuarios():
         print('| 2 ) --- Usuarios Activos')
         print('| 3 ) --- Usuarios Suspendidos')
         print('| 4 ) --- Usuarios General')
-        #print('| 5 ) --- Suspender Usuario')
+        print('| 5 ) --- Suspender Usuario')
+        print('| 6 ) --- Reactivar Usuario')
         print('| 0 ) --- Volver')
 
         try:
@@ -180,15 +183,16 @@ def abm_usuarios():
                 case "1":
                     menu_registrar_usuario()
                 case "2":
-                    cabecera_menu()
-                    user_act = lista_usuarios_activos()
-                    listar_usuarios(user_act)
+                    lista_usuarios_activos()
                 case "3":
                     lista_usuarios_suspendidos()
                 case "4":
                     cabecera_menu()
                     listar_usuarios()
-                #case "5":
+                case "5":
+                    suspender_usuario()
+                case "6":
+                    reactivar_usuario()
                 case "0":
                     break
                 case _:
