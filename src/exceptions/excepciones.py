@@ -24,30 +24,45 @@ class OpcionInvalida(TecStoreError):
     mensaje_default = "|· Ingrese una opcion valida!"
 
 class AuthenticationError(TecStoreError):
-    mensaje_default = f'|·· *ERROR* - USUARIO Y/O  |\n| CONTRASEÑA INCORRECTOS ··|'
+    mensaje_default = '|·· *ERROR* - USUARIO Y/O  |\n| CONTRASEÑA INCORRECTOS ··|'
 
 class ClavesDistintaError(TecStoreError):
-    mensaje_default = f'|· Las contraseñas deben ser iguales'
+    mensaje_default = '|· Las contraseñas deben ser iguales'
 
 class NombreInvalido(TecStoreError):
-    mensaje_default = f'|· Debe ser un Nombre valido (max 30 caracteres)'
+    mensaje_default = '|· Debe ser un Nombre valido (max 30 caracteres)'
 
 class OperacionCancelada(TecStoreError):
-    mensaje_default = f'|· Se cancelo la operacion'
+    mensaje_default = '|· Se cancelo la operacion'
 
 class PrecioDemaciadoAlto(TecStoreError):
-    mensaje_default = f'|· El Precio exedio el limite permitido (limite $99.999.999.999)'
+    mensaje_default = '|· El Precio exedio el limite permitido (limite $99.999.999.999)'
 
 class PrecioNegativoError(TecStoreError):
-    mensaje_default = f'|· El Precio no puede ser negativo!'
+    mensaje_default = '|· El Precio no puede ser negativo!'
 
 class NumeroDemasiadoAlto(TecStoreError):
-    mensaje_default = f'|· Numero demaciado alto!'
+    mensaje_default = '|· Numero demaciado alto!'
 
 class NumeroNegativoError(TecStoreError):
-    mensaje_default = f'|· El numero NO puede ser Negativo'
+    mensaje_default = '|· El numero NO puede ser Negativo'
 
 class ArchivoVacio(TecStoreError):
-    mensaje_default = f'|· Sin Registros '
+    mensaje_default = '|· Sin Registros '
+
+class StockInsuficiente(TecStoreError):
+    mensaje_default = '|· Producto Sin Stock!'
+
+
+class UsuarioActivo(TecStoreError):
+    mensaje_default = '|· Este Usuario Ya Se Encuentra Activo!'
+
+class UsuarioSuspendido(TecStoreError):
+    mensaje_default = '|· Este Usuario Ya Se Encuentra Suspendido!'
+
+class VentaCancelada():
+    mensaje_default = '|· Se cancelo la venta!'
+
+
 
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 from src.utils.Helpers import dar_formato_id, dar_formato_dni, dar_formato_nombre, dar_formato_telefono
+from src.exceptions.excepciones import UsuarioActivo, UsuarioSuspendido
 
 class Usuario():
     def __init__(self, id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta = None, productos_vendidos = 0, importe_vendido = 0.0, fecha_baja = ""):
@@ -46,3 +47,17 @@ class Usuario():
             return False
         elif self.fecha_baja == "":
             return True
+
+    
+
+    def baja_usuario(self):
+        if self.fecha_baja is "" or None:
+            self.fecha_baja = datetime.now()
+        else:
+            raise UsuarioActivo()
+
+    def reactivacion_usuario(self):
+        if self.fecha_baja:
+            self.fecha_baja = ""
+        else:
+            raise UsuarioSuspendido()

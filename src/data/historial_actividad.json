@@ -5,70 +5,10 @@
         "nombre": "nicolas",
         "dni": "123",
         "telefono": "123123",
-        "rol": 1,
-        "inicio_activididad": "2026-10-13 08:23:02.683095",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-13 08:25:41.196233"
-    },
-    {
-        "id_sesion": 2,
-        "id_usuario": 1,
-        "nombre": "nicolas",
-        "dni": "123",
-        "telefono": "123123",
-        "rol": 1,
-        "inicio_activididad": "2026-10-13 08:45:36.545587",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-13 08:46:05.251255"
-    },
-    {
-        "id_sesion": 3,
-        "id_usuario": 1,
-        "nombre": "nicolas",
-        "dni": "123",
-        "telefono": "123123",
         "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-13 09:50:25.651866",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-13 09:50:35.551496"
-    },
-    {
-        "id_sesion": 4,
-        "id_usuario": 1,
-        "nombre": "nicolas",
-        "dni": "123",
-        "telefono": "123123",
-        "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-13 12:25:09.184799",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-13 12:25:16.169034"
-    },
-    {
-        "id_sesion": 5,
-        "id_usuario": 1,
-        "nombre": "nicolas",
-        "dni": "123",
-        "telefono": "123123",
-        "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-13 20:55:34.747297",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-13 20:55:54.047220"
-    },
-    {
-        "id_sesion": 6,
-        "id_usuario": 1,
-        "nombre": "nicolas",
-        "dni": "123",
-        "telefono": "123123",
-        "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-14 12:32:50.637569",
+        "inicio_activididad": "2026-10-15 20:14:28.879044",
         "prods_vendidos": 10,
         "monto_bruto": 345000,
-        "fin_actividad": "2026-10-14 12:33:37.217216"
+        "fin_actividad": "2026-10-15 20:16:43.942950"
     }
 ]

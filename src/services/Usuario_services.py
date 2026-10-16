@@ -1,19 +1,12 @@
-from src.persistensia.Usuario_JSON import extraer_usuarios, escribir_usuarios
-from src.exceptions.excepciones import DatoNumericoObligatorio, AuthenticationError, NumeroDemasiadoAlto, NumeroNegativoError
-from src.exceptions.excepciones import DniRegistrado, ArchivoVacio, TecStoreError, OperacionCancelada
-from src.utils.Helpers import verificar_clave, cabecera_menu, pedir_id, limpiar_consola
-from datetime import datetime
+from src.persistensia.Gestion_Usuario import Gestion_Usuario
+from src.model.Usuario import Usuario
+from src.exceptions.excepciones import DniRegistrado, OperacionCancelada, TecStoreError
+from src.exceptions.excepciones import DatoNumericoObligatorio, NumeroDemasiadoAlto, TecStoreError
+from src.utils.Helpers import limpiar_consola, cabecera_menu, pedir_nombre, pedir_id, pedir_telefono
+from src.utils.Helpers import definir_clave, definir_rol, hashear_clave
+#from src.services.Actividad_services import Login
 
-# Registro de usuario 
 
-def validar_dni(dni):
-    usuarios = extraer_usuarios()
-    if not usuarios:
-        return True
-    for user in usuarios:
-        if user.dni == dni:
-            raise DniRegistrado(dni=dni)
-    return True
 
 def pedir_dni():
     while True:
@@ -23,90 +16,53 @@ def pedir_dni():
         elif len(dni) > 10:
             raise NumeroDemasiadoAlto()
         else:
-            if validar_dni(dni):
+            if Gestion_Usuario().validar_dni(dni):
                 return dni
-    
-def definir_id():
-    usuarios = extraer_usuarios()
-    if not usuarios:
-        return 1
-    return max(u.id_usuario for u in usuarios) + 1
-
-def registrar_usuario(usuario):
-
-    lista_usuarios = extraer_usuarios()
-    lista_usuarios.append(usuario)
-    
-    return escribir_usuarios(lista_usuarios)
-
-#Logeo
-
-def autenticar_usuario(dni, clave):
-    usuarios = extraer_usuarios()
-    for user in usuarios:
-        if user.dni == dni and user.validar_estado():
-            if verificar_clave(clave, user.sal, user.hash):
-                return user
-    raise AuthenticationError()
-
-def verificar_permisos(user):
-    if user.rol == "ADMINISTRADOR":
-        return True
-    elif user.rol == "EMPLEADO":
-        return False
 
 
+def registrar_usuario():
+    while True:
+        try:
+            limpiar_consola()
+            cabecera_menu()
+            print('|##··REGISTROS DE DATOS··##|')
+            id_usuario = Gestion_Usuario().definir_id()
+            nombre = pedir_nombre(input('|#-NOMBRE: '))
+            dni = pedir_dni()            
+            telefono = pedir_telefono()
+            rol = definir_rol()
+            clave = definir_clave()
 
-def listar_usuarios(usuarios=None) -> None:
-    if not usuarios:
-        usuarios = extraer_usuarios()
+            sal = None
+            hash = None
+            sal, hash = hashear_clave(clave)
 
-    if not usuarios:
-        raise ArchivoVacio('|· No Se Encontraron Usuarios')
-    for user in usuarios:
-        print(user)
+            usuario = Usuario(id_usuario, nombre, dni, telefono, rol, sal, hash)
 
-def lista_usuarios_activos():
-    usuarios = extraer_usuarios()
-    usuarios_activos = []
-    cabecera_menu()
+            if registrar_usuario(usuario):
+                print("|· Usuario registrado con exito!")
+                return
+            else:
+                raise TecStoreError()
+            
+        except TecStoreError as e:
+            input(e)
+            break
 
-
-    for user in usuarios:
-        if user.fecha_baja == "":
-            usuarios_activos.append(user)
-
-    if usuarios_activos:
-        listar_usuarios(usuarios_activos)
-
-def lista_usuarios_suspendidos():
-    usuarios = extraer_usuarios()
-    usuarios_suspendidos = []
-    cabecera_menu()
-
-    for user in usuarios:
-        if user.fecha_baja != "":
-            usuarios_suspendidos.append(user)
-
-    if usuarios_suspendidos:
-        listar_usuarios(usuarios_suspendidos)
-    else:
-        raise ArchivoVacio('|· No Se Encontraron Usuarios')
 
 
 def suspender_usuario():
-    usuarios = extraer_usuarios()
+    usuarios = Gestion_Usuario().extraer_usuarios()
     sin_coincidencias = False
-    usuario = None
     try:
         cabecera_menu()
-        listar_usuarios()
+        Gestion_Usuario().listar_usuarios()
         print('|##-· Ingrese el Id del Usuario')
         id_buscar = pedir_id(input('|##-· ID: '))
-        
+            
         for user in usuarios:
             if user.id_usuario == id_buscar and user.rol != "ADMINISTRADOR":
-                usuario = user
+                #usuario = user
                 sin_coincidencias = True
                 limpiar_consola()
                 cabecera_menu()
@@ -115,16 +71,16 @@ def suspender_usuario():
                 print( '#  *Para confirmar, ingrese el DNI del usuario')
                 dni = pedir_dni()  
 
-                if validar_dni(dni) is True:
+                if Gestion_Usuario().validar_dni(dni) is True:
                     raise OperacionCancelada()
 
         if sin_coincidencias is False:
             print('|· No se encontro el usuario')
-            
+                
     except DniRegistrado as er_dni: 
                 if user.dni == er_dni.dni:
-                    user.fecha_baja = datetime.now()
-                    escribir_usuarios(usuarios)
+                    user.baja_usuario()
+                    Gestion_Usuario().escribir_usuarios(usuarios)
                     print("Se Suspendio el usuario exitosamente!")
                 else:
                     raise OperacionCancelada()
@@ -133,16 +89,15 @@ def suspender_usuario():
     except ValueError:
         input('|· Ingrese valores Numericos')
 
-
 def reactivar_usuario():
-    usuarios = extraer_usuarios()
+    usuarios = Gestion_Usuario().extraer_usuarios()
     sin_coincidencias = False
     dni = None
     try:
-        lista_usuarios_suspendidos()
+        Gestion_Usuario().lista_usuarios_suspendidos()
         print('|##-· Ingrese el Id del Usuario')
         id_buscar = pedir_id(input('|##-· ID: '))
-        
+            
         for user in usuarios:
             if user.id_usuario == id_buscar and user.fecha_baja is not "":
                 sin_coincidencias = True
@@ -153,15 +108,15 @@ def reactivar_usuario():
                 print( '#  *Para confirmar, ingrese el DNI del usuario')
                 dni = pedir_dni()  
 
-                if validar_dni(dni) is True:
+                if Gestion_Usuario().validar_dni(dni) is True:
                     raise OperacionCancelada()
 
         if sin_coincidencias is False:
             print('|· No se encontro el usuario')
     except DniRegistrado as error_dni: 
                 if user.dni == error_dni.dni:
-                    user.fecha_baja = ""
-                    escribir_usuarios(usuarios)
+                    user.reactivacion_usuario()
+                    Gestion_Usuario().escribir_usuarios(usuarios)
                     print("Se Reactivo el usuario exitosamente!")
                 else:
                     raise OperacionCancelada()
@@ -169,3 +124,14 @@ def reactivar_usuario():
         input(er)
     except ValueError:
         input('|· Ingrese valores Numericos')
+
+
+
+
+
+
+
+
+
+
+

@@ -1,19 +1,18 @@
-from src.exceptions.excepciones import DatoNumericoObligatorio, DniRegistrado, AuthenticationError, OpcionInvalida, TecStoreError
-from src.persistensia import extraer_productos
-from src.classes.Usuario import Usuario
-from src.services.Producto_services import agregar_prod, listar_productos, mod_stock_prod, mod_prod, eliminar_producto
+from src.exceptions.excepciones import OpcionInvalida, TecStoreError
+from src.model.Sesion import Sesion
+from src.persistensia.Gestion_Producto import Gestion_Producto
+from src.persistensia.Gestion_Usuario import Gestion_Usuario
+from src.services.Producto_services import agregar_prod, mod_stock_prod, mod_prod, eliminar_producto, reactivacion_producto, buscador
 from src.services.Ventas_services import realizar_venta, listar_ventas
-from src.services.Usuario_services import definir_id, registrar_usuario, autenticar_usuario, verificar_permisos, pedir_dni
-from src.services.Usuario_services import listar_usuarios,lista_usuarios_activos,lista_usuarios_suspendidos, suspender_usuario
-from src.services.Usuario_services import reactivar_usuario
-from src.services.Actividad_services import crear_sesion,cerrar_sesion
-from .Helpers import limpiar_consola, hashear_clave, pedir_telefono, definir_rol, definir_clave, cabecera_menu, pedir_nombre
+from src.services.Usuario_services import registrar_usuario, suspender_usuario, reactivar_usuario
+from src.persistensia.Gestion_Sesion import Gestion_Sesion
+from .Helpers import limpiar_consola, cabecera_menu
 
 
 # Menu Principal
 
 def menuPrincipal(vendedor):
-    productos = extraer_productos()
+    productos = Gestion_Producto().extraer_productos()
     while True:
             limpiar_consola()
             cabecera_menu()
@@ -22,10 +21,10 @@ def menuPrincipal(vendedor):
             print('| 3 ) --- Modificar Stock') 
             print('| 4 ) --- Realizar Venta')
             print('| 5 ) --- Mostrar Ventas')
-            #print('| 6 ) --- Buscar Producto')
+            print('| 6 ) --- Buscar Producto')
             #print('| 7 ) --- Eliminar Producto')
             #print('| 8 ) --- Estadisticas de Ventas')
-            if verificar_permisos(vendedor):
+            if vendedor.verificar_permisos():
                 print('| 9 ) --- Gestion de Usuario') # solo admin
             print('| 0 ) --- Salir')
             try:
@@ -37,7 +36,7 @@ def menuPrincipal(vendedor):
                     case "2":
                         cabecera_menu()
                         print('|·# Productos')
-                        listar_productos(productos)
+                        Gestion_Producto().listar_productos(productos)
                         input('precione una tecla para continuar!')
                     case "3":
                         mod_stock_prod()
@@ -45,8 +44,8 @@ def menuPrincipal(vendedor):
                         realizar_venta(vendedor)
                     case "5":
                         listar_ventas()
-                #    case "6":
-                #        buscador()
+                    case "6":
+                        buscador()
                 #    case "7":
                 #        eliminar_producto()
                 #    case "8":
@@ -54,7 +53,7 @@ def menuPrincipal(vendedor):
                     case "9":
                         abm_usuarios()
                     case "0":
-                        cerrar_sesion(vendedor)
+                        Gestion_Sesion().guardar_sesion(vendedor)
                         print('Saliendo.....')
                         break
                     case _:
@@ -66,57 +65,6 @@ def menuPrincipal(vendedor):
             #input('precione una tecla para continuar!')
     
 
-# Login
-
-def Login():
-    while True:
-        limpiar_consola()
-        cabecera_menu()
-        print('|##···INICIO DE SESION···##|')
-        dni = input('|#-DNI: ')
-        clave = input('|#-CONTRASEÑA: ')
-        limpiar_consola()
-        cabecera_menu()
-        try:
-            user = autenticar_usuario(dni, clave)
-            print(f'|# BIENVENIDO {user.nombre}')
-            input( '|##······················##|')
-            return crear_sesion(user)
-        except AuthenticationError as e:
-            print(e)
-            input( '|##······················##|')
-
-
-#   ___________________________________
-#|--| Sub-Menu de registro de usuario |-----------------------------------------------------
-def menu_registrar_usuario():
-    while True:
-        try:
-            limpiar_consola()
-            cabecera_menu()
-            print('|##··REGISTROS DE DATOS··##|')
-            id_usuario = definir_id()
-            nombre = pedir_nombre(input('|#-NOMBRE: '))
-            dni = pedir_dni()            
-            telefono = pedir_telefono()
-            rol = definir_rol()
-            clave = definir_clave()
-
-            sal = None
-            hash = None
-            sal, hash = hashear_clave(clave)
-
-            usuario = Usuario(id_usuario, nombre, dni, telefono, rol, sal, hash)
-
-            if registrar_usuario(usuario):
-                print("|· Usuario registrado con exito!")
-                return
-            else:
-                raise TecStoreError()
-            
-        except TecStoreError as e:
-            input(e)
-            break
 
 
 
@@ -131,6 +79,7 @@ def abm_producto():
         print('| 3 ) --- Modificar Stock')
         print('| 4 ) --- Eliminar')
         print('| 5 ) --- Listar Productos')
+        print('| 6 ) --- Reactivar')
         print('| 0 ) --- Volver')
 
         try:
@@ -149,8 +98,11 @@ def abm_producto():
                     eliminar_producto()
                 case "5":
                     cabecera_menu()
-                    listar_productos()
-                    input('|· precione una tecla para continuar')
+                    print('|·# Productos')
+                    Gestion_Producto().listar_productos()
+                    input('precione una tecla para continuar!')
+                case "6":
+                    reactivacion_producto()
                 case "0":
                     break
                 case _:
@@ -181,14 +133,14 @@ def abm_usuarios():
             limpiar_consola()
             match op:
                 case "1":
-                    menu_registrar_usuario()
+                    registrar_usuario()
                 case "2":
-                    lista_usuarios_activos()
+                    Gestion_Usuario().lista_usuarios_activos()
                 case "3":
-                    lista_usuarios_suspendidos()
+                    Gestion_Usuario().lista_usuarios_suspendidos()
                 case "4":
                     cabecera_menu()
-                    listar_usuarios()
+                    Gestion_Usuario().listar_usuarios()
                 case "5":
                     suspender_usuario()
                 case "6":

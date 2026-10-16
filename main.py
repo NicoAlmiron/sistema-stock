@@ -1,4 +1,5 @@
-from src.utils.Consola import menuPrincipal, Login, menu_registrar_usuario, Login
+from src.utils.Consola import menuPrincipal
+from src.services.Actividad_services import Login
 
 from src.utils import limpiar_consola
 

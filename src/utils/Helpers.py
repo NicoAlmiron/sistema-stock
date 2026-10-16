@@ -24,7 +24,6 @@ def lista_Clases_a_diccionario(lista_clases):
 def hashear_clave(clave):
     sal = os.urandom(16) # este es un valor aleatorio que se mezclara con la clave
     hash_clave = hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, 100_000) #100_000 son las veces que se repite el calculo
-
     return sal.hex(), hash_clave.hex() #se pasan valores hex, que es como texto en json
 
 def verificar_clave(clave_ingresada, sal_hex, hash_guardaro_hex):
@@ -111,7 +110,7 @@ def dar_formato_id(id) -> None:
     return (" " * ( 6 - len(str(id)) ) )
 
 def dar_formato_nombre(nombre) -> None:
-    return (" " * ( 30 - len(nombre) ) )
+    return (" " * ( 30 - len(str(nombre)) ) )
 
 def dar_formato_precio(precio_prod) -> None:
     return (" " * ( 13 - len(precio_prod)))

@@ -28,3 +28,15 @@ class Sesion(Usuario):
             "fin_actividad" : str(self.fin_actividad)
         }
         return diccionario 
+
+    def verificar_permisos(self):
+        if self.rol == "ADMINISTRADOR":
+            return True
+        elif self.rol == "EMPLEADO":
+            return False    
+
+    def cerrar_sesion(self):
+        self.prods_vendidos = 10 #cant_prod_vend(sesion)
+        self.monto_bruto = 345000 #mon_tot_vend(sesion)
+        self.fin_actividad = datetime.now()
+        
