@@ -33,7 +33,7 @@ def realizar_venta(vendedor):
                 if len(list_prods) > 0:
                     print('||||-Carrito:')
                     for prod in list_prods:
-                        print(prod)
+                        print(prod.to_str())
                     print(f'||\t\t\t·Total: ${total_venta:,}')
                     print('|---------------------------------------------------------------------------')
                 print('|-· Ingrese el Id del producto (Dejar vacio para continuar)')

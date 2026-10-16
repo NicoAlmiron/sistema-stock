@@ -23,7 +23,7 @@ class DetalleVenta(Producto, Venta):
 
 
 
-    def __str__(self):
+    def to_str(self):
         linea = f'|-{self.nombre}{dar_formato_nombre(self.nombre)} x {self.cantidad} - ${self.subtotal:,}'
         return linea
 

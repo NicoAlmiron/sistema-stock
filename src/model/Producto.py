@@ -15,7 +15,7 @@ class Producto:
         precio_prod = f'{self.precio:,}'
         renglon = f'|ID: {self.id_producto}{dar_formato_id(self.id_producto)}'
         renglon += f'| {self.nombre}{dar_formato_nombre(self.nombre)}'
-        renglon += f'| ${self.precio:,}{dar_formato_precio(precio_prod)}'
+        renglon += f'| ${precio_prod}{dar_formato_precio(precio_prod)}'
         renglon += f'| VENDIDOS: {self.cant_vendidos}{dar_formato_id(self.cant_vendidos)}'
 
         if self.discontinuado:
