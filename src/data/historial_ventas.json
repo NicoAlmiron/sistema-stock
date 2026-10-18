@@ -1,0 +1,27 @@
+[
+    {
+        "id_venta": 1,
+        "forma_pago": "Transferencia",
+        "importe_total": 219500.0,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "",
+        "fecha": "2026-10-18 11:48:15.262398",
+        "detalle_venta": [
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 1,
+                "subtotal": 184500.0
+            },
+            {
+                "id_producto": 3,
+                "nombre": "lampara led 8 colores",
+                "precio": 35000.0,
+                "cantidad": 1,
+                "subtotal": 35000.0
+            }
+        ]
+    }
+]

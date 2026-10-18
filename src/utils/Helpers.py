@@ -43,6 +43,18 @@ def pedir_id(id):
         raise NumeroNegativoError() 
     else:
         return int(id)
+    
+def venta_pedir_id(id):
+    if id == "": 
+        return 0
+    elif not id.isdigit():
+        raise DatoNumericoObligatorio()
+    elif len(id) >= 12:
+        raise NumeroDemasiadoAlto()
+    elif int(id) < 0:
+        raise NumeroNegativoError() 
+    else:
+        return int(id)
 
 def pedir_nombre(nombre):
     if nombre == "":

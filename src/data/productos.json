@@ -5,7 +5,7 @@
         "precio": 125000.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 10
+        "stock": 8
     },
     {
         "id_producto": 2,
@@ -13,6 +13,14 @@
         "precio": 184500.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 10
+        "stock": 9
+    },
+    {
+        "id_producto": 3,
+        "nombre": "lampara led 8 colores",
+        "precio": 35000.0,
+        "cant_vendidos": 0,
+        "discontinuado": false,
+        "stock": 7
     }
 ]

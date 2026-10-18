@@ -1,12 +1,11 @@
-from src.model.Venta import Venta
-from src.model.Detalle_Venta import DetalleVenta
+from src.model.Detalle_Venta import Detalle_Venta
+from src.model.Detalle_Producto import Detalle_Producto
 import json
 
 
 class Gestion_Venta():
-    def __init__(self, venta=None, productos=None):
+    def __init__(self, venta=None):
         self.venta = venta
-        self.productos = productos
         self.arch_json = "src/data/historial_ventas.json"
 
     #|--------  ARCHIVO VENTA   --------|#
@@ -17,51 +16,34 @@ class Gestion_Venta():
         
         try:
             ventas_dicc = []
-            
+            lista_ventas = []
+            detalles_ventas = []
             with open(self.arch_json, 'r', encoding='UTF-8') as arch_venta: 
                 ventas_dicc = json.load(arch_venta)
-                #detalles_ventas = json.load(arch_detalle_venta)
-
-                if len(ventas_dicc) <= 0:
+                if not ventas_dicc:
                     return []
                 
-            lista_ventas = []
-            for venta_item in ventas_dicc:
-                detalles_ventas = []
-                for det_vent_item in venta_item["detalle_venta"]:
-                    det_vent = None
-                    det_vent = DetalleVenta( 
-                        id_venta = det_vent_item["id_venta"], 
-                        id_producto = det_vent_item["id_producto"], 
-                        nombre = det_vent_item["nombre"], 
-                        precio = det_vent_item["precio"], 
-                        cantidad = det_vent_item['cantidad'], 
-                        subtotal = det_vent_item['subtotal'])
-                    detalles_ventas.append(det_vent)
+                for venta_item in ventas_dicc:
+                    for det_vent_item in venta_item["detalle_venta"]:
+                        #det_vent = None
+                        det_vent = Detalle_Producto().from_dict(det_vent_item)
+                        detalles_ventas.append(det_vent)
 
-                venta = Venta(
-                    id_venta =int(venta_item["id_venta"]), 
-                    forma_pago = venta_item["forma_pago"], 
-                    importe_total = venta_item["importe_total"], 
-                    id_vendedor = int(venta_item["id_vendedor"]), 
-                    vendedor_nombre = int(venta_item["vendedor_nombre"]), 
-                    cliente = int(venta_item["cliente"]), 
-                    fecha = venta_item["fecha"], 
-                    detalle_venta = detalles_ventas)
-                    
-                lista_ventas.append(venta)
-            
+                    det_venta = Detalle_Venta().from_dict(venta_item, detalles_ventas)   
+                    lista_ventas.append(det_venta)
+
+            return lista_ventas
         except FileNotFoundError:
             return []
-
-        return lista_ventas
+        except Exception:
+            return []
 
 
 
 #   _____________________________
 #|--| Guardar ventas del archivo|-----------------------------------------------------
 
-    def procesar_venta(self):
+    def procesar_venta(self, venta_nueva):
 
         ventas = self.extraer_ventas()
         lis_dic_venta = []
@@ -69,12 +51,21 @@ class Gestion_Venta():
         for venta in ventas:
             lis_dic_venta.append(venta.to_dict())
 
+        lis_dic_venta.append(venta_nueva.to_dict())
+
         try:
             with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: #, open(ARCHIVO_DETALLES_VENTAS_JSON, 'w', encoding='UTF-8') as arch_detalle_venta:
-                json.dump(lis_dic_venta, arch_venta, indent=4)
-                #arch_venta.write(ventas_json)
+                ventas_json = json.dumps(lis_dic_venta, indent=4)
+                arch_venta.write(ventas_json)
+                return True
         except FileNotFoundError:
-            print("Ocurrio un error al crear el archivo!")
+            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: #, open(ARCHIVO_DETALLES_VENTAS_JSON, 'w', encoding='UTF-8') as arch_detalle_venta:
+                ventas_json = json.dumps(lis_dic_venta, indent=4)
+                arch_venta.write(ventas_json)
+                return True
+        except Exception:
+            return False
+            
 
 
     def definir_id(self):
@@ -82,6 +73,11 @@ class Gestion_Venta():
         if not ventas:
             return 1
         return max(v.id_venta for v in ventas) + 1
+
+    def to_dict(self):
+        dic_gestion = {}
+        dic_gestion.update(self.venta.to_dict())
+        dic_gestion.update({"productos": self.productos.to_dict()})
 
 
 

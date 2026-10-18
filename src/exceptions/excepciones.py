@@ -60,7 +60,7 @@ class UsuarioActivo(TecStoreError):
 class UsuarioSuspendido(TecStoreError):
     mensaje_default = '|· Este Usuario Ya Se Encuentra Suspendido!'
 
-class VentaCancelada():
+class VentaCancelada(TecStoreError):
     mensaje_default = '|· Se cancelo la venta!'
 
 
