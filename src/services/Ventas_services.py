@@ -111,8 +111,8 @@ def listar_ventas():
     hist_ventas = Gestion_Venta().extraer_ventas()
     print('|# Lista de Ventas')
     if hist_ventas:
-        for venta in hist_ventas:
-            print(venta)
+        for det_venta in hist_ventas:
+            print(det_venta)
         input('precione una tecla para continuar!')
     else: 
         print('|  ·No se encontraron ventas!')
@@ -179,6 +179,7 @@ def pasarela_produtos():
 
                 print(f'|\t-{producto.nombre.upper()} x {cant} Agregado a la compra') 
                 input('precione una tecla para continuar!')
+
 
 def pasarela_metodos_pago():
     metodos_pago = ("Efectivo", "Transferencia", "Tarjeta")
