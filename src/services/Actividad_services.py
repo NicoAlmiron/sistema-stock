@@ -1,6 +1,7 @@
 from src.utils.Helpers import limpiar_consola, cabecera_menu
 from src.persistensia.Gestion_Usuario import Gestion_Usuario
 from src.persistensia.Gestion_Sesion import Gestion_Sesion
+from src.persistensia.Gestion_Venta import Gestion_Venta
 from src.exceptions.excepciones import AuthenticationError
 
 

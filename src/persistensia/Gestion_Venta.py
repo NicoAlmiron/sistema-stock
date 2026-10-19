@@ -1,7 +1,7 @@
 from src.model.Detalle_Venta import Detalle_Venta
 from src.model.Detalle_Producto import Detalle_Producto
+from datetime import datetime
 import json
-
 
 class Gestion_Venta():
     def __init__(self, venta=None):
@@ -73,6 +73,15 @@ class Gestion_Venta():
             return 1
         return max(v.id_venta for v in ventas) + 1
 
+    def extraer_ventas_en_rango(self, desde, hasta=None, id_vendedor=None):
+        hasta = hasta if hasta is not None else datetime.now() # si no trae el "hasta" pone el momento actual
+
+        return [
+            v for v in self.extraer_ventas()    
+            
+            if desde <= v.fecha <= hasta 
+            and (id_vendedor is None or v.id_vendedor == id_vendedor) 
+        ]    
 
 
 

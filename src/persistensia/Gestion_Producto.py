@@ -113,7 +113,5 @@ class Gestion_Producto():
                 if producto.precio == buscar:
                     encontrado = True
                     print(producto)
-                    
-
         if encontrado == False:
             raise ArchivoVacio('|· No se encontraron coincidencias')

@@ -1,4 +1,5 @@
 from src.model.Sesion import Sesion
+from .Gestion_Venta import Gestion_Venta
 import json
 from datetime import datetime
 
@@ -27,7 +28,6 @@ class Gestion_Sesion():
             return []
         except Exception as er:
             input(er)
-            #return []
 
 
     def escribir_historial_actividad(self, sesion):
@@ -71,7 +71,8 @@ class Gestion_Sesion():
         return sesion_activa
 
     def guardar_sesion(self, sesion):
-        sesion.prods_vendidos = 10 #cant_prod_vend(sesion)
-        sesion.monto_bruto = 345000 #mon_tot_vend(sesion)
+        ventas = Gestion_Venta().extraer_ventas_en_rango(desde=sesion.inicio_actividad,id_vendedor=sesion.id_vendedor) #cant_prod_vend(sesion)
+        sesion.prods_vendidos = sum(dv.cantidad for v in ventas for dv in v.detalle_venta)
+        sesion.monto_bruto = sum(dv.subtotal for v in ventas for dv in v.detalle_venta)
         sesion.fin_actividad = datetime.now()
         self.escribir_historial_actividad(sesion)

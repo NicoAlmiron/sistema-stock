@@ -1,4 +1,5 @@
 from src.utils.Helpers import limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio
+from src.utils.Helpers import auto_descuento, pedir_nombre
 from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
@@ -37,7 +38,7 @@ def realizar_venta(vendedor):
 
                 #venta.importe_total = total_venta
 
-                if list_prods is not []:
+                if list_prods:
                     venta.id_venta = Gestion_Venta().definir_id()
                     #venta.detalle_venta = list_prods
 
@@ -49,11 +50,15 @@ def realizar_venta(vendedor):
                             print(prod)          
                     print(f'|\n|{"-" * 31}Total: ${venta.importe_total:,}')
 
+                    cliente = ingresar_cliente()
+
                     venta.forma_pago = pasarela_metodos_pago()
 
                     if vendedor.verificar_permisos():
                         descuento = True
                         venta.importe_total = aplicar_descuentos_venta(venta)
+                    else:
+                        venta.importe_total = auto_descuento(venta.importe_total, descuento_porcentual=10)
                     
                     venta_completa = Detalle_Venta(
                                     id_venta = venta.id_venta,
@@ -61,7 +66,8 @@ def realizar_venta(vendedor):
                                     importe_total = venta.importe_total, 
                                     id_vendedor = vendedor.id_usuario, 
                                     vendedor_nombre = vendedor.nombre,
-                                    detalle_venta = list_prods
+                                    detalle_venta = list_prods,
+                                    cliente=cliente
                                 )
                     print(venta)
                     if Gestion_Venta().procesar_venta(venta_completa):
@@ -225,3 +231,11 @@ def aplicar_descuentos_venta(venta):
         return venta.importe_total
     else:
         raise OpcionInvalida()
+
+def ingresar_cliente():
+    print('|##-· Ingresar Cliente')
+    try:
+        cliente = pedir_nombre(input('|##-Cliente: '))
+        return cliente
+    except OperacionCancelada():
+        return ""    

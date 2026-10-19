@@ -134,5 +134,13 @@ def dar_formato_telefono(telefono) -> None:
     return (" " * ( 10 - len(str(telefono)) ) )
 
 
+def auto_descuento(importe, descuento_porcentual = None, descuento_importe = None):
+    descuento = descuento_importe if descuento_importe is None else descuento_porcentual
+    if descuento_importe is not None:
+        return importe - descuento_importe
+    else :
+        return float(importe) - (float(importe)*(descuento/100))
+
+
 
 

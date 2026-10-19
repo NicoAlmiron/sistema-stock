@@ -51,8 +51,8 @@ class Sesion(Usuario):
         elif self.rol == "EMPLEADO":
             return False    
 
-    def cerrar_sesion(self):
-        self.prods_vendidos = 10 #cant_prod_vend(sesion)
-        self.monto_bruto = 345000 #mon_tot_vend(sesion)
+    def cerrar_sesion(self, monto_bruto, prods_vendidos):
+        self.prods_vendidos = prods_vendidos #cant_prod_vend(sesion)
+        self.monto_bruto = monto_bruto #mon_tot_vend(sesion)
         self.fin_actividad = datetime.now()
         
