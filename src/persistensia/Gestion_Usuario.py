@@ -30,7 +30,7 @@ class Gestion_Usuario():
                         fecha_alta = user["fecha_alta"],
                         productos_vendidos = int(user["productos_vendidos"]),
                         importe_vendido = float(user["importe_vendido"]),
-                        fecha_baja = "" if user["fecha_baja"] is "" else user["fecha_baja"]
+                        fecha_baja = "" if user["fecha_baja"] == "" else user["fecha_baja"]
                     )
 
                     usuarios.append(usuario)

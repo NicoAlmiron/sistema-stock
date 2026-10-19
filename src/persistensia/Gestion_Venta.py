@@ -16,20 +16,19 @@ class Gestion_Venta():
         
         try:
             ventas_dicc = []
-            lista_ventas = []
-            detalles_ventas = []
             with open(self.arch_json, 'r', encoding='UTF-8') as arch_venta: 
                 ventas_dicc = json.load(arch_venta)
                 if not ventas_dicc:
                     return []
                 
+                lista_ventas = []
                 for venta_item in ventas_dicc:
+                    detalles_ventas = []
                     for det_vent_item in venta_item["detalle_venta"]:
                         #det_vent = None
-                        det_prod = Detalle_Producto().from_dict(det_vent_item)
+                        det_prod = Detalle_Producto(None,None,None,None,None).from_dict(det_vent_item)
                         detalles_ventas.append(det_prod)
-
-                    det_venta = Detalle_Venta().from_dict(venta_item, detalles_ventas)   
+                    det_venta = Detalle_Venta(None,None,None,None,None,None).from_dict(venta_item, detalles_ventas)   
                     lista_ventas.append(det_venta)
 
             return lista_ventas
@@ -54,12 +53,12 @@ class Gestion_Venta():
         lis_dic_venta.append(venta_nueva.to_dict())
 
         try:
-            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: #, open(ARCHIVO_DETALLES_VENTAS_JSON, 'w', encoding='UTF-8') as arch_detalle_venta:
+            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: 
                 ventas_json = json.dumps(lis_dic_venta, indent=4)
                 arch_venta.write(ventas_json)
                 return True
         except FileNotFoundError:
-            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: #, open(ARCHIVO_DETALLES_VENTAS_JSON, 'w', encoding='UTF-8') as arch_detalle_venta:
+            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: 
                 ventas_json = json.dumps(lis_dic_venta, indent=4)
                 arch_venta.write(ventas_json)
                 return True
@@ -74,10 +73,6 @@ class Gestion_Venta():
             return 1
         return max(v.id_venta for v in ventas) + 1
 
-    def to_dict(self):
-        dic_gestion = {}
-        dic_gestion.update(self.venta.to_dict())
-        dic_gestion.update({"productos": self.productos.to_dict()})
 
 
 

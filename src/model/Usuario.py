@@ -22,7 +22,7 @@ class Usuario():
         linea += f"|·NOMBRE: {self.nombre}{dar_formato_nombre(self.nombre)}"
         linea += f"|·DNI: {self.dni}{dar_formato_dni(self.dni)}"
         linea += f"|·TELEFONO: {self.telefono}{dar_formato_telefono(self.telefono)}"
-        linea += "|· ACTIVO" if self.fecha_baja is "" else  f"|· SUSPENDIDO"
+        linea += "|· ACTIVO" if self.fecha_baja == "" else  f"|· SUSPENDIDO"
 
         return linea
 

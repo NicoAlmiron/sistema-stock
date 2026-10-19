@@ -28,8 +28,8 @@ class Venta:
 
         return linea
 
-    def descuento_porcentaje(self, descuento):
-       self.importe_total =self.importe_total - descuento
-
     def descuento_importe(self, descuento):
-       self.importe_total = float(self.importe_total)-(float(self.importe_total)*(descuento/100))
+       self.importe_total = self.importe_total - descuento
+
+    def descuento_porcentaje(self, descuento):
+       self.importe_total = float(self.importe_total) - (float(self.importe_total)*(descuento/100))

@@ -17,25 +17,26 @@ class Gestion_Sesion():
                 if len(lista_actv) == 0:
                     return []
                     
-                for user in lista_actv:
-        
-                    sesion = Sesion().to_dict(user)
-        
+                for user_sesion in lista_actv:
+                    sesion = Sesion(None, None, None, None, None, None).from_dict(user_sesion)
                     historial_actividad.append(sesion)
+
             return historial_actividad
         except FileNotFoundError:
             input("Archivo Json no encontrado!")
             return []
-        except:
-            return []
+        except Exception as er:
+            input(er)
+            #return []
 
 
     def escribir_historial_actividad(self, sesion):
         lista_dicc = []
         historial_actividad = self.extraer_historial_actividad()
-        historial_actividad.append(sesion)
+
         for actv in historial_actividad:
             lista_dicc.append(actv.to_dict())
+        lista_dicc.append(sesion.to_dict())
 
 
         try:
@@ -44,15 +45,15 @@ class Gestion_Sesion():
                     lista_dicc,
                     indent=4)
                 actividad_json.write(arch_json)
-            #return True
+            return True
         except FileNotFoundError:
             with open(self.arch_json , 'w', encoding='UTF-8') as actividad_json:
                 arch_json = json.dumps(
                     lista_dicc,
                     indent=4)
                 actividad_json.write(arch_json)
-            #return True
-        except:
+            return True
+        except Exception as er:
             input("A sucedido un error inesperado!")
             #return False
         

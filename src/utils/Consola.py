@@ -16,42 +16,48 @@ def menuPrincipal(vendedor):
     while True:
             limpiar_consola()
             cabecera_menu()
-            print('| 1 ) --- Gestion de Producto') 
-            print('| 2 ) --- Mostrar Productos')
-            print('| 3 ) --- Modificar Stock') 
-            print('| 4 ) --- Realizar Venta')
-            print('| 5 ) --- Mostrar Ventas')
-            print('| 6 ) --- Buscar Producto')
-            #print('| 7 ) --- Eliminar Producto')
-            #print('| 8 ) --- Estadisticas de Ventas')
+            print('| 1 ) --- Mostrar Productos')
+            print('| 2 ) --- Realizar Venta')
+            print('| 3 ) --- Mostrar Ventas')
+            print('| 4 ) --- Buscar Producto')
+            print('| 5 ) --- Estadisticas de Ventas')
             if vendedor.verificar_permisos():
-                print('| 9 ) --- Gestion de Usuario') # solo admin
+                print('| 6 ) --- Gestion de Producto') 
+                print('| 7 ) --- Modificar Stock') 
+                print('| 8 ) --- Gestion de Usuario') # solo admin
             print('| 0 ) --- Salir')
             try:
                 op = input('|OPCION···---: ')
                 limpiar_consola()
                 match op:
                     case "1":
-                        abm_producto()
-                    case "2":
                         cabecera_menu()
                         print('|·# Productos')
                         Gestion_Producto().listar_productos(productos)
                         input('precione una tecla para continuar!')
-                    case "3":
-                        mod_stock_prod()
-                    case "4":
+                    case "2":
                         realizar_venta(vendedor)
-                    case "5":
+                    case "3":
                         listar_ventas()
-                    case "6":
+                    case "4":
                         buscador()
-                #    case "7":
-                #        eliminar_producto()
-                #    case "8":
+                #    case "5":
                 #        estadisticas_generales()
-                    case "9":
-                        abm_usuarios()
+                    case "6":
+                        if vendedor.verificar_permisos():
+                            abm_producto(vendedor)
+                        else:
+                            raise OpcionInvalida()
+                    case "7":
+                        if vendedor.verificar_permisos():
+                            mod_stock_prod()
+                        else:
+                            raise OpcionInvalida()
+                    case "8":
+                        if vendedor.verificar_permisos():
+                            abm_usuarios()
+                        else:
+                            raise OpcionInvalida()
                     case "0":
                         Gestion_Sesion().guardar_sesion(vendedor)
                         print('Saliendo.....')
@@ -70,7 +76,7 @@ def menuPrincipal(vendedor):
 
 #   _________________________________
 #|--| Sub-Menu de gestion Productos |-----------------------------------------------------
-def abm_producto():
+def abm_producto(vendedor):
     while True:
         limpiar_consola()
         cabecera_menu()

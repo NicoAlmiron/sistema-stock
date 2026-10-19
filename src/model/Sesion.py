@@ -29,6 +29,22 @@ class Sesion(Usuario):
         }
         return diccionario 
 
+    def from_dict(self, user_sesion):
+        sesion = Sesion(
+            id_sesion = int(user_sesion['id_sesion']),
+            id_usuario = int(user_sesion['id_usuario']),
+            nombre = user_sesion['nombre'],
+            dni = user_sesion['dni'],
+            telefono = user_sesion['telefono'],
+            rol = user_sesion['rol'],
+            inicio_activididad = user_sesion['inicio_activididad'],
+            prods_vendidos = int(user_sesion['prods_vendidos']),
+            monto_bruto = float(user_sesion['monto_bruto']),
+            fin_actividad = user_sesion['fin_actividad'] 
+        )
+        return sesion
+
+
     def verificar_permisos(self):
         if self.rol == "ADMINISTRADOR":
             return True

@@ -1,3 +1,4 @@
+from datetime import datetime
 from .Venta import Venta
 
 class Detalle_Venta(Venta):
@@ -42,7 +43,7 @@ class Detalle_Venta(Venta):
             id_venta =int(venta_item["id_venta"]), 
             forma_pago = venta_item["forma_pago"], 
             importe_total = venta_item["importe_total"], 
-            fecha = venta_item["fecha"], 
+            fecha = datetime.fromisoformat(venta_item["fecha"]),
             id_vendedor = int(venta_item["id_vendedor"]), 
             vendedor_nombre = venta_item["vendedor_nombre"], 
             cliente = venta_item["cliente"], 

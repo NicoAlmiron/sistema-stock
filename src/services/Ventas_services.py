@@ -46,10 +46,7 @@ def realizar_venta(vendedor):
                     print('|###--··  TecStore  ··--###|')
 
                     for prod in list_prods:
-                            print(prod)
-
-                            #print(f'|-{nom_prod}{" " * (30 - len(nom_prod))} x {cant_prod} - ${sub_total_prod:,}')
-                        
+                            print(prod)          
                     print(f'|\n|{"-" * 31}Total: ${venta.importe_total:,}')
 
                     venta.forma_pago = pasarela_metodos_pago()
@@ -202,30 +199,29 @@ def pasarela_metodos_pago():
 
 def aplicar_descuentos_venta(venta):
 
-    #while True:
-        print('|##-· Aplicar descuentos')
-        print('|· ( 1 ) % Porcentaje · ( 2 ) $ Importe · ( 0 ) Sin Descuentos')
-        imp_bruto = venta.importe_total
-        importe_desc = 0
-        opc = input('|##-Opcion: ')
+    print('|##-· Aplicar descuentos')
+    print('|· ( 1 ) % Porcentaje · ( 2 ) $ Importe · ( 0 ) Sin Descuentos')
+    imp_bruto = venta.importe_total
+    importe_desc = 0
+    opc = input('|##-Opcion: ')
                                     
-        if opc == "1":
-            venta.descuento_porcentaje(pedir_stock(input('|#  ·Descuento: $ ')))
-            importe_desc = venta.importe_total
-            print(f'|-----------Importe Total ${imp_bruto:,} ')
-            print(f'|-----------Importe con Descuento ${venta.importe_total:,} ')
-            return importe_desc
-        elif opc == "2":
-            venta.descuento_importe(pedir_precio(input('|#  ·Descuento: % ')))
-            importe_desc = venta.importe_total
-            print(f'|-----------| Importe Total ${imp_bruto:,} ')
-            print(f'|-----------| Importe con Descuento ${venta.importe_total:,} ')
-            return importe_desc
-        elif opc == "0":
-            print(f'|-----------Importe Actual ${venta.importe_total:,}')
-            return venta.importe_total
-        elif opc == "":
-            print(f'|-----------Importe Actual ${venta.importe_total:,}')
-            return venta.importe_total
-        else:
-            raise OpcionInvalida()
+    if opc == "1":
+        venta.descuento_porcentaje(pedir_stock(input('|#  ·Descuento: $ ')))
+        importe_desc = venta.importe_total
+        print(f'|-----------Importe Total ${imp_bruto:,} ')
+        print(f'|-----------Importe con Descuento ${venta.importe_total:,} ')
+        return importe_desc
+    elif opc == "2":
+        venta.descuento_importe(pedir_precio(input('|#  ·Descuento: % ')))
+        importe_desc = venta.importe_total
+        print(f'|-----------| Importe Total ${imp_bruto:,} ')
+        print(f'|-----------| Importe con Descuento ${venta.importe_total:,} ')
+        return importe_desc
+    elif opc == "0":
+        print(f'|-----------Importe Actual ${venta.importe_total:,}')
+        return venta.importe_total
+    elif opc == "":
+        print(f'|-----------Importe Actual ${venta.importe_total:,}')
+        return venta.importe_total
+    else:
+        raise OpcionInvalida()

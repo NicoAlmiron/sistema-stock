@@ -23,5 +23,41 @@
                 "subtotal": 35000.0
             }
         ]
+    },
+    {
+        "id_venta": 2,
+        "forma_pago": "Efectivo",
+        "importe_total": 105000.0,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "",
+        "fecha": "2026-10-18 17:27:22.713588",
+        "detalle_venta": [
+            {
+                "id_producto": 3,
+                "nombre": "lampara led 8 colores",
+                "precio": 35000.0,
+                "cantidad": 3,
+                "subtotal": 105000.0
+            }
+        ]
+    },
+    {
+        "id_venta": 3,
+        "forma_pago": "Efectivo",
+        "importe_total": 250000.0,
+        "id_vendedor": 2,
+        "vendedor_nombre": "juancito",
+        "cliente": "",
+        "fecha": "2026-10-18 21:24:48.282308",
+        "detalle_venta": [
+            {
+                "id_producto": 1,
+                "nombre": "teclado mecanico rgb",
+                "precio": 125000.0,
+                "cantidad": 2,
+                "subtotal": 250000.0
+            }
+        ]
     }
 ]

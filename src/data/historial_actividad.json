@@ -6,9 +6,33 @@
         "dni": "123",
         "telefono": "123123",
         "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-15 20:14:28.879044",
+        "inicio_activididad": "2026-10-18 17:35:16.491565",
+        "prods_vendidos": 10,
+        "monto_bruto": 345000.0,
+        "fin_actividad": "2026-10-18 21:02:23.001836"
+    },
+    {
+        "id_sesion": 2,
+        "id_usuario": 1,
+        "nombre": "nicolas",
+        "dni": "123",
+        "telefono": "123123",
+        "rol": "ADMINISTRADOR",
+        "inicio_activididad": "2026-10-18 21:23:50.156562",
+        "prods_vendidos": 10,
+        "monto_bruto": 345000.0,
+        "fin_actividad": "2026-10-18 21:23:58.317807"
+    },
+    {
+        "id_sesion": 3,
+        "id_usuario": 2,
+        "nombre": "juancito",
+        "dni": "222",
+        "telefono": "38123123",
+        "rol": "EMPLEADO",
+        "inicio_activididad": "2026-10-18 21:24:31.786931",
         "prods_vendidos": 10,
         "monto_bruto": 345000,
-        "fin_actividad": "2026-10-15 20:16:43.942950"
+        "fin_actividad": "2026-10-18 21:25:06.088628"
     }
 ]
