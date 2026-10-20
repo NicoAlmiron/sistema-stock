@@ -13,7 +13,7 @@
         "precio": 184500.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 9
+        "stock": 4
     },
     {
         "id_producto": 3,
@@ -21,6 +21,6 @@
         "precio": 35000.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 4
+        "stock": 6
     }
 ]

@@ -8,8 +8,6 @@
         "sal": "c3d8316b0198e52d5aa0c88944e79bf1",
         "hash": "2781da495b1874214aa12dc7b85751b5851d4d09b38dae5826ad85542ae2f105",
         "fecha_alta": "2026-10-12 21:26:08.166515",
-        "productos_vendidos": 0,
-        "importe_vendido": 0.0,
         "fecha_baja": ""
     },
     {
@@ -21,8 +19,6 @@
         "sal": "86ca4b279fef19ae9e52b8f39a35faf7",
         "hash": "629ed1b1c0f223b7daed0df06b6f04a939c7b4a6c24c7c031dec4ff7d9f5e6ab",
         "fecha_alta": "2026-10-12 21:27:01.014106",
-        "productos_vendidos": 0,
-        "importe_vendido": 0.0,
         "fecha_baja": ""
     },
     {
@@ -34,8 +30,6 @@
         "sal": "6c1b25d370e60022616dd2ee6c5201e4",
         "hash": "8df4e23095e4c7d092bfc0ef765f01902d152884e82bbff884aa9737baa4a7da",
         "fecha_alta": "2026-10-13 21:18:08.239446",
-        "productos_vendidos": 0,
-        "importe_vendido": 0.0,
         "fecha_baja": ""
     }
 ]

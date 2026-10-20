@@ -3,7 +3,7 @@ from src.utils.Helpers import auto_descuento, pedir_nombre
 from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
-from src.exceptions.excepciones import TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida
+from src.exceptions.excepciones import TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida, NombreInvalido
 from src.model.Venta import Venta
 from src.model.Detalle_Producto import Detalle_Producto
 from src.model.Detalle_Venta import Detalle_Venta
@@ -24,84 +24,80 @@ def realizar_venta(vendedor):
 
     list_prods = []
 
-    #total_venta = 0
     try:
-        #while True:
-            #try:
-                prod_vent = pasarela_produtos()
-                print(prod_vent)
-                list_prods = prod_vent["lista_productos"]
-                #total_venta = prod_vent["importe_total"]
-                venta.importe_total = prod_vent["importe_total"]
-                productos = prod_vent["productos"]
-            #except OperacionCancelada:
+        prod_vent = pasarela_produtos()
+        print(prod_vent)
+        list_prods = prod_vent["lista_productos"]
+        venta.importe_sin_desc = prod_vent["importe_total"]
+        productos = prod_vent["productos"]
 
-                #venta.importe_total = total_venta
+        if list_prods:
+            venta.id_venta = Gestion_Venta().definir_id()
+            limpiar_consola()
+            print('|###--··  TecStore  ··--###|')
 
-                if list_prods:
-                    venta.id_venta = Gestion_Venta().definir_id()
-                    #venta.detalle_venta = list_prods
+            for prod in list_prods:
+                    print(prod)          
+            print(f'|\n|{"-" * 31}Total: ${venta.importe_sin_desc:,}')
 
-                    #while True:
-                    limpiar_consola()
-                    print('|###--··  TecStore  ··--###|')
+            cliente = ingresar_cliente()
 
-                    for prod in list_prods:
-                            print(prod)          
-                    print(f'|\n|{"-" * 31}Total: ${venta.importe_total:,}')
+            venta.forma_pago = pasarela_metodos_pago()
 
-                    cliente = ingresar_cliente()
+            if vendedor.verificar_permisos():
+                descuento = True
+                venta = aplicar_descuentos_venta(venta)
+            else:
+                venta.descuento_porcentaje(10)
+            
+            venta_completa = Detalle_Venta(
+                            id_venta = venta.id_venta,
+                            id_vendedor = vendedor.id_usuario, 
+                            vendedor_nombre = vendedor.nombre,
+                            cliente=cliente,
+                            forma_pago = venta.forma_pago, 
+                            importe_total = venta.importe_total, 
+                            importe_sin_desc=venta.importe_sin_desc,
+                            descuento_tipo=venta.descuento_tipo,
+                            desc_monto=venta.desc_monto,
+                            desc_tipo_importe=venta.desc_tipo_importe,
+                            desc_tipo_porcentual=venta.desc_tipo_porcentual,
+                            detalle_venta = list_prods
+                            )
+            #print(venta)
+            if Gestion_Venta().procesar_venta(venta_completa):
+                Gestion_Producto().escribir_productos(productos)
+                print("|##·· Se realizo la venta exitosamente! ··##|")
+                input('precione una tecla para continuar!')
+                limpiar_consola()
 
-                    venta.forma_pago = pasarela_metodos_pago()
+                print('|# Resumen de la venta!')
+                print('|-- Productos')
 
-                    if vendedor.verificar_permisos():
-                        descuento = True
-                        venta.importe_total = aplicar_descuentos_venta(venta)
-                    else:
-                        venta.importe_total = auto_descuento(venta.importe_total, descuento_porcentual=10)
-                    
-                    venta_completa = Detalle_Venta(
-                                    id_venta = venta.id_venta,
-                                    forma_pago = venta.forma_pago, 
-                                    importe_total = venta.importe_total, 
-                                    id_vendedor = vendedor.id_usuario, 
-                                    vendedor_nombre = vendedor.nombre,
-                                    detalle_venta = list_prods,
-                                    cliente=cliente
-                                )
-                    print(venta)
-                    if Gestion_Venta().procesar_venta(venta_completa):
-                        Gestion_Producto().escribir_productos(productos)
-                        print("|##·· Se realizo la venta exitosamente! ··##|")
-                        input('precione una tecla para continuar!')
-                        limpiar_consola()
-
-                        print('|# Resumen de la venta!')
-                        print('|-- Productos')
-
-                        for i,prod in enumerate(list_prods):
-                            prod_dicc = list_prods[i]
-                            prcio_prod = f'{prod_dicc.precio:,}'
-                            linea = "| ·"
+                for i,prod in enumerate(list_prods):
+                    prod_dicc = list_prods[i]
+                    prcio_prod = f'{prod_dicc.precio:,}'
+                    linea = "| ·"
                             
-                            linea += prod_dicc.nombre.upper()
-                            linea += " " * (30 - len(prod_dicc.nombre.upper()))
-                            linea += f'${prcio_prod} C/U '
-                            linea += " " * (11 - len(prcio_prod))
-                            linea += f'x {prod_dicc.cantidad}'
-                            linea += f' - ${prod_dicc.subtotal:,}'
+                    linea += prod_dicc.nombre.upper()
+                    linea += " " * (30 - len(prod_dicc.nombre.upper()))
+                    linea += f'${prcio_prod} C/U '
+                    linea += " " * (11 - len(prcio_prod))
+                    linea += f'x {prod_dicc.cantidad}'
+                    linea += f' - ${prod_dicc.subtotal:,}'
                             
-                            print(linea)
+                    print(linea)
                         
-                        print(f'|-- Total: ${venta.importe_total:,}')
-                        if descuento: 
-                            print(f'|-- Total Neto(Descuento): ${venta.importe_total}')
-                        print(f'|-- Forma de pago: {venta.forma_pago}')
-                        input('precione una tecla para continuar!')
-                    else: 
-                        raise TecStoreError()
-                else:
-                    raise OperacionCancelada()
+                print(f'|-- Total: ${venta.importe_sin_desc:,}')
+                if descuento: 
+                    print(f'|-- Descuento: -${venta.desc_monto}')
+                    print(f'|-- Total Neto(Descuento): ${venta.importe_total}')
+                print(f'|-- Forma de pago: {venta.forma_pago}')
+                input('precione una tecla para continuar!')
+            else: 
+                raise TecStoreError()
+        else:
+            raise OperacionCancelada()
     except TecStoreError as e:
         input(e)
 
@@ -203,39 +199,39 @@ def pasarela_metodos_pago():
         case _:
             raise OperacionCancelada()
 
-def aplicar_descuentos_venta(venta):
 
+def aplicar_descuentos_venta(venta):
     print('|##-· Aplicar descuentos')
     print('|· ( 1 ) % Porcentaje · ( 2 ) $ Importe · ( 0 ) Sin Descuentos')
-    imp_bruto = venta.importe_total
-    importe_desc = 0
+    #imp_bruto = venta.importe_total
     opc = input('|##-Opcion: ')
                                     
     if opc == "1":
-        venta.descuento_porcentaje(pedir_stock(input('|#  ·Descuento: $ ')))
-        importe_desc = venta.importe_total
-        print(f'|-----------Importe Total ${imp_bruto:,} ')
+        venta.descuento_porcentaje(pedir_stock(input('|#  ·Descuento: % ')))
+        print(f'|-----------Importe Total ${venta.importe_sin_desc:,} ')
         print(f'|-----------Importe con Descuento ${venta.importe_total:,} ')
-        return importe_desc
+        return venta
     elif opc == "2":
-        venta.descuento_importe(pedir_precio(input('|#  ·Descuento: % ')))
-        importe_desc = venta.importe_total
-        print(f'|-----------| Importe Total ${imp_bruto:,} ')
+        venta.descuento_importe(pedir_precio(input('|#  ·Descuento: $ ')))
+        print(f'|-----------| Importe Total ${venta.importe_sin_desc:,} ')
         print(f'|-----------| Importe con Descuento ${venta.importe_total:,} ')
-        return importe_desc
+        return venta
     elif opc == "0":
         print(f'|-----------Importe Actual ${venta.importe_total:,}')
-        return venta.importe_total
+        return venta
     elif opc == "":
         print(f'|-----------Importe Actual ${venta.importe_total:,}')
-        return venta.importe_total
+        return venta
     else:
         raise OpcionInvalida()
 
+
 def ingresar_cliente():
     print('|##-· Ingresar Cliente')
-    try:
-        cliente = pedir_nombre(input('|##-Cliente: '))
+    cliente = input('|##-Cliente: ')
+    if cliente == "":
+        return ""
+    elif len(cliente) > 30:
+        raise NombreInvalido()
+    else:
         return cliente
-    except OperacionCancelada():
-        return ""    

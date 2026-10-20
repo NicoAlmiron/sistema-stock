@@ -6,10 +6,11 @@
         "dni": "123",
         "telefono": "123123",
         "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-18 17:35:16.491565",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-18 21:02:23.001836"
+        "inicio_actividad": "2026-10-19 21:24:51.997104",
+        "prods_vendidos": 0,
+        "monto_bruto": 0.0,
+        "monto_neto": 0.0,
+        "fin_actividad": "2026-10-19 21:26:14.653466"
     },
     {
         "id_sesion": 2,
@@ -18,21 +19,36 @@
         "dni": "123",
         "telefono": "123123",
         "rol": "ADMINISTRADOR",
-        "inicio_activididad": "2026-10-18 21:23:50.156562",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000.0,
-        "fin_actividad": "2026-10-18 21:23:58.317807"
+        "inicio_actividad": "2026-10-19 22:00:27.202621",
+        "prods_vendidos": 2,
+        "monto_bruto": 309500.0,
+        "monto_neto": 309500.0,
+        "fin_actividad": "2026-10-19 22:02:02.904835"
     },
     {
         "id_sesion": 3,
-        "id_usuario": 2,
-        "nombre": "juancito",
-        "dni": "222",
-        "telefono": "38123123",
-        "rol": "EMPLEADO",
-        "inicio_activididad": "2026-10-18 21:24:31.786931",
-        "prods_vendidos": 10,
-        "monto_bruto": 345000,
-        "fin_actividad": "2026-10-18 21:25:06.088628"
+        "id_usuario": 1,
+        "nombre": "nicolas",
+        "dni": "123",
+        "telefono": "123123",
+        "rol": "ADMINISTRADOR",
+        "inicio_actividad": "2026-10-19 22:07:42.270709",
+        "prods_vendidos": 7,
+        "monto_bruto": 933000.0,
+        "monto_neto": 860650.0,
+        "fin_actividad": "2026-10-19 22:09:28.338392"
+    },
+    {
+        "id_sesion": 4,
+        "id_usuario": 1,
+        "nombre": "nicolas",
+        "dni": "123",
+        "telefono": "123123",
+        "rol": "ADMINISTRADOR",
+        "inicio_actividad": "2026-10-19 22:29:40.634492",
+        "prods_vendidos": 0,
+        "monto_bruto": 0,
+        "monto_neto": 0,
+        "fin_actividad": "2026-10-19 22:36:37.392582"
     }
 ]

@@ -6,12 +6,13 @@ from datetime import datetime
 #print(ahora.strftime("%d/%m/%Y %H:%M:%S"))  # 12/10/2026 19:05:32
 
 class Sesion(Usuario):
-    def __init__(self, id_usuario, nombre, dni, telefono, rol, id_sesion, sal=None, hash= None, fecha_alta = None, productos_vendidos = None, importe_vendido = None, fecha_baja = None, prods_vendidos = None, monto_bruto = None, inicio_activididad=None, fin_actividad = None):
-        super().__init__(id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta, productos_vendidos, importe_vendido, fecha_baja)
+    def __init__(self, id_usuario, nombre, dni, telefono, rol, id_sesion, sal=None, hash= None, fecha_alta = None, fecha_baja = None, prods_vendidos = None, monto_bruto = None, inicio_actividad=None, fin_actividad = None, monto_neto = None):
+        super().__init__(id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta, fecha_baja)
         self.id_sesion = id_sesion
-        self.inicio_activididad = inicio_activididad if inicio_activididad is not None else datetime.now()
+        self.inicio_actividad = inicio_actividad if inicio_actividad is not None else datetime.now()
         self.prods_vendidos = prods_vendidos 
         self.monto_bruto = monto_bruto 
+        self.monto_neto = monto_neto 
         self.fin_actividad = fin_actividad 
 
     def to_dict(self):
@@ -22,9 +23,10 @@ class Sesion(Usuario):
             "dni" : self.dni,
             "telefono" : self.telefono,
             "rol" : self.rol,
-            "inicio_activididad" : str(self.inicio_activididad),
+            "inicio_actividad" : str(self.inicio_actividad),
             "prods_vendidos" : self.prods_vendidos,
             "monto_bruto" : self.monto_bruto,
+            "monto_neto" : self.monto_neto,
             "fin_actividad" : str(self.fin_actividad)
         }
         return diccionario 
@@ -37,9 +39,10 @@ class Sesion(Usuario):
             dni = user_sesion['dni'],
             telefono = user_sesion['telefono'],
             rol = user_sesion['rol'],
-            inicio_activididad = user_sesion['inicio_activididad'],
+            inicio_actividad = user_sesion['inicio_actividad'],
             prods_vendidos = int(user_sesion['prods_vendidos']),
             monto_bruto = float(user_sesion['monto_bruto']),
+            monto_neto = float(user_sesion['monto_neto']),
             fin_actividad = user_sesion['fin_actividad'] 
         )
         return sesion
@@ -51,8 +54,9 @@ class Sesion(Usuario):
         elif self.rol == "EMPLEADO":
             return False    
 
-    def cerrar_sesion(self, monto_bruto, prods_vendidos):
-        self.prods_vendidos = prods_vendidos #cant_prod_vend(sesion)
-        self.monto_bruto = monto_bruto #mon_tot_vend(sesion)
+    def cerrar_sesion(self, monto_bruto, prods_vendidos, monto_neto):
+        self.prods_vendidos = prods_vendidos
+        self.monto_bruto = monto_bruto 
+        self.monto_neto = monto_neto 
         self.fin_actividad = datetime.now()
         

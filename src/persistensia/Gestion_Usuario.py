@@ -19,20 +19,8 @@ class Gestion_Usuario():
                     return []
                 
                 for user in lista_users:
-                    usuario = Usuario(
-                        id_usuario = int(user["id_usuario"]),
-                        nombre = user["nombre"],
-                        dni = user["dni"],
-                        telefono = user["telefono"],
-                        rol = user["rol"],
-                        sal = user["sal"],
-                        hash = user["hash"],
-                        fecha_alta = user["fecha_alta"],
-                        productos_vendidos = int(user["productos_vendidos"]),
-                        importe_vendido = float(user["importe_vendido"]),
-                        fecha_baja = "" if user["fecha_baja"] == "" else user["fecha_baja"]
-                    )
-
+                    usuario = Usuario(None,None,None,None,None,None,None).from_dict(user)
+                    
                     usuarios.append(usuario)
             return usuarios
         except FileNotFoundError:

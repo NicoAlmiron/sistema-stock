@@ -3,7 +3,7 @@ from src.utils.Helpers import dar_formato_id, dar_formato_dni, dar_formato_nombr
 from src.exceptions.excepciones import UsuarioActivo, UsuarioSuspendido
 
 class Usuario():
-    def __init__(self, id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta = None, productos_vendidos = 0, importe_vendido = 0.0, fecha_baja = ""):
+    def __init__(self, id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta = None, fecha_baja = ""):
         self.id_usuario = id_usuario
         self.nombre = nombre
         self.dni = dni
@@ -12,8 +12,6 @@ class Usuario():
         self.sal = sal
         self.hash = hash
         self.fecha_alta = fecha_alta if fecha_alta is not None else datetime.now()
-        self.productos_vendidos = productos_vendidos
-        self.importe_vendido = importe_vendido
         self.fecha_baja = fecha_baja
 
 
@@ -41,6 +39,21 @@ class Usuario():
             "fecha_baja": str(self.fecha_baja) if self.fecha_baja else ""
         }
         return user_dict    
+
+    def from_dict(self, user):
+        usuario = Usuario(
+            id_usuario = int(user["id_usuario"]),
+            nombre = user["nombre"],
+            dni = user["dni"],
+            telefono = user["telefono"],
+            rol = user["rol"],
+            sal = user["sal"],
+            hash = user["hash"],
+            fecha_alta = user["fecha_alta"],
+            fecha_baja = "" if user["fecha_baja"] == "" else user["fecha_baja"]
+        )
+        return usuario
+    
 
     def validar_estado(self):
         if self.fecha_baja != "":

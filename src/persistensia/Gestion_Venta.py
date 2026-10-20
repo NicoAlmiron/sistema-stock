@@ -34,8 +34,9 @@ class Gestion_Venta():
             return lista_ventas
         except FileNotFoundError:
             return []
-        except Exception:
-            return []
+        #except Exception as er:
+            #input(f"error {er}")
+            #return []
 
 
 

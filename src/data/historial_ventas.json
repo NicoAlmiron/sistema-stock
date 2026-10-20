@@ -1,12 +1,70 @@
 [
     {
         "id_venta": 1,
-        "forma_pago": "Transferencia",
-        "importe_total": 219500.0,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "juan manuel",
+        "forma_pago": "Efectivo",
+        "importe_sin_desc": 434500.0,
+        "descuento_tipo": null,
+        "desc_monto": null,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": null,
+        "importe_total": 434500.0,
+        "fecha": "2026-10-19 21:25:35.246568",
+        "detalle_venta": [
+            {
+                "id_producto": 1,
+                "nombre": "teclado mecanico rgb",
+                "precio": 125000.0,
+                "cantidad": 2,
+                "subtotal": 250000.0
+            },
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 1,
+                "subtotal": 184500.0
+            }
+        ]
+    },
+    {
+        "id_venta": 2,
+        "id_vendedor": 2,
+        "vendedor_nombre": "juancito",
+        "cliente": "",
+        "forma_pago": "Efectivo",
+        "importe_sin_desc": 63000.0,
+        "descuento_tipo": null,
+        "desc_monto": null,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": null,
+        "importe_total": 63000.0,
+        "fecha": "2026-10-19 21:49:07.130026",
+        "detalle_venta": [
+            {
+                "id_producto": 3,
+                "nombre": "lampara led 8 colores",
+                "precio": 35000.0,
+                "cantidad": 2,
+                "subtotal": 70000.0
+            }
+        ]
+    },
+    {
+        "id_venta": 3,
         "id_vendedor": 1,
         "vendedor_nombre": "nicolas",
         "cliente": "",
-        "fecha": "2026-10-18 11:48:15.262398",
+        "forma_pago": "Efectivo",
+        "importe_sin_desc": 309500.0,
+        "descuento_tipo": "PORCENTUAL",
+        "desc_monto": 30950.0,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": 10,
+        "importe_total": 278550.0,
+        "fecha": "2026-10-19 22:00:40.512831",
         "detalle_venta": [
             {
                 "id_producto": 2,
@@ -16,47 +74,71 @@
                 "subtotal": 184500.0
             },
             {
-                "id_producto": 3,
-                "nombre": "lampara led 8 colores",
-                "precio": 35000.0,
+                "id_producto": 1,
+                "nombre": "teclado mecanico rgb",
+                "precio": 125000.0,
                 "cantidad": 1,
-                "subtotal": 35000.0
+                "subtotal": 125000.0
             }
         ]
     },
     {
-        "id_venta": 2,
-        "forma_pago": "Efectivo",
-        "importe_total": 105000.0,
+        "id_venta": 4,
         "id_vendedor": 1,
         "vendedor_nombre": "nicolas",
-        "cliente": "",
-        "fecha": "2026-10-18 17:27:22.713588",
+        "cliente": "roxette",
+        "forma_pago": "Transferencia",
+        "importe_sin_desc": 254500.0,
+        "descuento_tipo": "IMPORTE",
+        "desc_monto": 4500.0,
+        "desc_tipo_importe": 4500.0,
+        "desc_tipo_porcentual": null,
+        "importe_total": 250000.0,
+        "fecha": "2026-10-19 22:08:27.870354",
         "detalle_venta": [
             {
                 "id_producto": 3,
                 "nombre": "lampara led 8 colores",
                 "precio": 35000.0,
-                "cantidad": 3,
-                "subtotal": 105000.0
+                "cantidad": 2,
+                "subtotal": 70000.0
+            },
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 1,
+                "subtotal": 184500.0
             }
         ]
     },
     {
-        "id_venta": 3,
-        "forma_pago": "Efectivo",
-        "importe_total": 250000.0,
-        "id_vendedor": 2,
-        "vendedor_nombre": "juancito",
+        "id_venta": 5,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
         "cliente": "",
-        "fecha": "2026-10-18 21:24:48.282308",
+        "forma_pago": "Tarjeta",
+        "importe_sin_desc": 678500.0,
+        "descuento_tipo": "PORCENTUAL",
+        "desc_monto": 67850.0,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": 10,
+        "importe_total": 610650.0,
+        "fecha": "2026-10-19 22:08:55.528199",
         "detalle_venta": [
             {
                 "id_producto": 1,
                 "nombre": "teclado mecanico rgb",
                 "precio": 125000.0,
-                "cantidad": 2,
-                "subtotal": 250000.0
+                "cantidad": 1,
+                "subtotal": 125000.0
+            },
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 3,
+                "subtotal": 553500.0
             }
         ]
     }
