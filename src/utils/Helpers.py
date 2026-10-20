@@ -7,33 +7,53 @@ def limpiar_consola():
     os.system('cls' if os.name == 'nt' else 'clear')
 #lo anterior se realiza para poder limpiar la consola
 
-def pausar_consola():
-    input('|##··········                 Presione Enter para continuar...                 ··········##|')
+def pausar_consola(mensaje=None):
+    cadena = mensaje if mensaje is not None else "Presione Enter para continuar..."
+    sobrante = 80 - len(cadena)
+    
+    izq = sobrante // 2             # división entera (redondea para abajo)
+    der = sobrante - izq            # lo que queda va a la derecha
+    
+    input(f'|#····{" " * izq}{cadena}{" " * der}····#|')
 
 def guion_base(cadena=""):
     caracteres = len(cadena) if cadena is not None else 0
     lon = 90 - caracteres
     linea = f'|{cadena}{" "*lon}|'
     print(linea)
+    return linea
 
 def guion_opcion(num, cadena):
     caracteres = len(cadena) if cadena is not None else 0
     lon = 51 - caracteres
     linea = f'|{" "*31}{num} ) --- {cadena}{" "*lon}|'
     print(linea)
+    return linea
 
-def guion_titulo(cadena=None):
-    caracteres = len(cadena) if cadena is not None else 0
-    lon = int(round((80-caracteres)/2))
-    linea = f'|#····{(" " * lon)}{cadena}{(" " * lon)}····#|'
+def guion_titulo(cadena=""):
+    cadena = cadena if cadena is not None else ""        
+    sobrante = 80 - len(cadena)
+
+    izq = sobrante // 2             # división entera (redondea para abajo)                           INICIO DE SESION 
+    der = sobrante - izq            # lo que queda va a la derecha
+
+    linea = f'|#····{" " * izq}{cadena}{" " * der}····#|'
     print(linea)
+    return linea
 
 def guion_item(cadena=None):
     caracteres = len(cadena) if cadena is not None else 0
-    lon = 82 - caracteres
-    linea = f'|#·> {cadena}{(" " * lon)}···#|'
+    lon = 68 - caracteres
+    linea = f'|#{"·"*20}> {cadena}{(" " * lon)}···#|'
     print(linea)
+    return linea
 
+def guion_sub_item(cadena=None):
+    caracteres = len(cadena) if cadena is not None else 0
+    lon = 68 - caracteres
+    linea = f'| {" "*15} ·>{cadena}{(" " * lon)}···#|'
+    print(linea)
+    return linea
 
 def cabecera_menu() -> None:
     print(f'|###--··{" "*34}TecStore{" "*34}··--###|')

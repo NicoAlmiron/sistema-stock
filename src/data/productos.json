@@ -1,11 +1,11 @@
 [
     {
         "id_producto": 1,
-        "nombre": "teclado mecanico rgb",
-        "precio": 125000.0,
+        "nombre": "Teclado Mecanico RGB 70%",
+        "precio": 135000.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 2
+        "stock": 40
     },
     {
         "id_producto": 2,
@@ -13,7 +13,7 @@
         "precio": 184500.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 0
+        "stock": 35
     },
     {
         "id_producto": 3,
@@ -21,6 +21,30 @@
         "precio": 35000.0,
         "cant_vendidos": 0,
         "discontinuado": false,
-        "stock": 0
+        "stock": 80
+    },
+    {
+        "id_producto": 4,
+        "nombre": "Gabinete Gamer",
+        "precio": 125000.0,
+        "cant_vendidos": 0,
+        "discontinuado": false,
+        "stock": 50
+    },
+    {
+        "id_producto": 5,
+        "nombre": "Nvidia 4090RTX 16gb RogStrix",
+        "precio": 1585000.0,
+        "cant_vendidos": 0,
+        "discontinuado": false,
+        "stock": 4
+    },
+    {
+        "id_producto": 6,
+        "nombre": "Ram DDR4 4gb",
+        "precio": 75000.0,
+        "cant_vendidos": 0,
+        "discontinuado": true,
+        "stock": 8
     }
 ]

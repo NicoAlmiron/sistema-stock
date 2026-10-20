@@ -71,13 +71,13 @@ class Gestion_Producto():
         return max(p.id_producto for p in productos) + 1
 
 
-    def listar_productos(self, lista_productos = None):
+    def listar_productos(self, lista_productos = None, mostrar_discontinuados=False):
         if lista_productos is None:
             lista_productos = self.extraer_productos()
 
         if lista_productos:
             for producto in lista_productos:
-                if not producto.discontinuado:
+                if mostrar_discontinuados or not producto.discontinuado:
                     print(producto)
         else:
             raise ArchivoVacio()

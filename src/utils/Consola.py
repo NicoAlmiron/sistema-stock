@@ -49,7 +49,7 @@ def menuPrincipal(vendedor):
                 #        estadisticas_generales()
                     case "6":
                         if vendedor.verificar_permisos():
-                            abm_producto(vendedor)
+                            abm_producto()
                         else:
                             raise OpcionInvalida()
                     case "7":
@@ -80,37 +80,36 @@ def menuPrincipal(vendedor):
 
 #   _________________________________
 #|--| Sub-Menu de gestion Productos |-----------------------------------------------------
-def abm_producto(vendedor):
+def abm_producto():
     while True:
         limpiar_consola()
         cabecera_menu()
-        print('| 1 ) --- Agregar Nuevo')
-        print('| 2 ) --- Modificar Existente')
-        print('| 3 ) --- Modificar Stock')
-        print('| 4 ) --- Eliminar')
-        print('| 5 ) --- Listar Productos')
-        print('| 6 ) --- Reactivar')
-        print('| 0 ) --- Volver')
+        guion_titulo('ADMINISTRACION DE PRODUCTOS')
+        guion_titulo('')
+        guion_opcion("1","Agregar Nuevo")
+        guion_opcion("2","Listar Productos")
+        guion_opcion("3","Modificar Existente")
+        guion_opcion("4","Modificar Stock")
+        guion_opcion("5","Eliminar")
+        guion_opcion("6","Reactivar")
+        guion_opcion("0","Volver")
 
         try:
 
-            op = input('|OPCION···---: ')
+            op = pedir_opcion(input(f'|{" "*31}OPCION···---: '))
 
             limpiar_consola()
             match op:
                 case "1":
                     agregar_prod()
                 case "2":
-                    mod_prod()
+                    mostrar_lista_prods()
                 case "3":
-                    mod_stock_prod()
+                    mod_prod()
                 case "4":
-                    eliminar_producto()
+                    mod_stock_prod()
                 case "5":
-                    cabecera_menu()
-                    print('|·# Productos')
-                    Gestion_Producto().listar_productos()
-                    input('precione una tecla para continuar!')
+                    eliminar_producto()
                 case "6":
                     reactivacion_producto()
                 case "0":
@@ -118,10 +117,8 @@ def abm_producto(vendedor):
                 case _:
                     raise OpcionInvalida()
 
-            input('precione una tecla para continuar!')
-
         except TecStoreError as e:
-            print(e)
+            pausar_consola(e.mensaje_default)
 
 #   ________________________________
 #|--| Sub-Menu de gestion Usuarios |-----------------------------------------------------

@@ -30,24 +30,30 @@ class Detalle_Venta(Venta):
             return diccionario
 
     def __str__(self):
-            linea = f'o- VENTA NROº: {self.id_venta}'
-            linea += f'\n - Cajero: {self.vendedor_nombre}'
-            linea += f'\n - Fecha: {self.fecha.strftime("%d/%m/%Y %H:%M:%S")}'
-            linea += F'\n - Cliente: {self.cliente}'
-            linea += f'\n - Forma de pago: {self.forma_pago}'
-            linea += f'\n - Total Bruto: ${self.importe_sin_desc:,}'
+            linea = f'|{"-"*17}> VENTA NRO: {self.id_venta}{" "* (60-len(str(self.id_venta)))}|'
+            linea += f'\n|{" "*15} ·> Cajero: {self.vendedor_nombre}{" "* (63-len(self.vendedor_nombre))}|'
+            linea += f'\n|{" "*15} ·> Fecha: {self.fecha.strftime("%d/%m/%Y %H:%M:%S")}{" "* (64-len(self.fecha.strftime("%d/%m/%Y %H:%M:%S")))}|'
+            linea += f'\n|{" "*15} ·> Cliente: {self.cliente}{" "* (62-len(self.cliente))}|'
+            linea += f'\n|{" "*15} ·>Forma de Pago: {self.forma_pago}{" "*(57-len(self.forma_pago))}|'
+            linea += f'\n|{" "*15} ·>Total Bruto: ${self.importe_sin_desc:,}{" "*(57-len(str(self.importe_sin_desc)))}|'
             if self.descuento_tipo:
-                if self.descuento_tipo == "PORCENTUAL": linea += f'\n - Descuento: %{self.desc_tipo_porcentual}'
-                if self.descuento_tipo == "IMPORTE": linea += f'\n - Importe de Descuento'
-                linea += f'\n - descontado: -${self.desc_monto:,}'
-                linea += f'\n - Total Neto: ${self.importe_total:,}'
-            linea += '\n - Productos:'
+                if self.descuento_tipo == "PORCENTUAL": 
+                    linea += f'\n|{" "*15} ·> Descuento: %{self.desc_tipo_porcentual}{" "*(59-(len(str(self.desc_tipo_porcentual))))}|'
+                elif self.descuento_tipo == "IMPORTE": 
+                    linea += f'\n|{" "*15} ·> Importe de Descuento{" "* 51}|'
+                linea += f'\n|{" "*15} ·> descontado: -${self.desc_monto:,}{" "* (56-len(str(self.desc_monto)))}|'
+                linea += f'\n|{" "*15} ·> Total Neto: ${self.importe_total:,}{" "* (57-len(str(self.importe_total)))}|'
+            linea += f'\n|{" "*10}·> PRODUCTOS{" " * 68}|'
             for prod_vent in self.detalle_venta:
-                precio_prod = f'{prod_vent.precio:,}'
-                linea += f'\n     ·{prod_vent.nombre}{(" " * ( 30 - len(prod_vent.nombre) ) )}- ${precio_prod}{(" " * ( 11 - len(precio_prod) ) )} - x {prod_vent.cantidad} - SubTotal ${prod_vent.subtotal:,} '
-            linea += '\n-········································'
-    
+                            precio_prod = f'{prod_vent.precio:,}'
+                            linea += f'\n|{" "*10}·{prod_vent.nombre}{(" " * ( 30 - len(prod_vent.nombre) ) )}'
+                            linea += f' - ${precio_prod}{(" " * ( 11 - len(precio_prod) ) )}'
+                            linea += f'- x {prod_vent.cantidad} - SubTotal ${prod_vent.subtotal:,}'
+                            linea += f'{" " * (16 - (len(str(prod_vent.cantidad)) + len(str(prod_vent.subtotal)))) }|'
+            linea += f'\n|##{"·"*20}{" "*46}{"·"*20}##|'
+            
             return linea
+
 
     def from_dict(self, venta_item, detalles_ventas):
         det_venta = Detalle_Venta(

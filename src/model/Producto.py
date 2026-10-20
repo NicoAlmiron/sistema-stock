@@ -75,13 +75,9 @@ class Producto:
     def discontinuar_producto(self):
         if not self.discontinuado:
             self.discontinuado = True
-        else:
-            raise OperacionCancelada("|· Producto ya discontinuado")
 
     def reactivar_producto(self):
         if self.discontinuado:
             self.discontinuado = False
-        else:
-            raise OperacionCancelada("|· Producto Activo")
 
     

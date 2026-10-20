@@ -82,14 +82,14 @@ def realizar_venta(vendedor):
 def listar_ventas():
     
     hist_ventas = Gestion_Venta().extraer_ventas()
-    print('|# Lista de Ventas')
+    guion_titulo('HISTORIAL DE VENTAS')
     if hist_ventas:
         for det_venta in hist_ventas:
             print(det_venta)
-        input('precione una tecla para continuar!')
+        pausar_consola()
     else: 
-        print('|  ·No se encontraron ventas!')
-        input('precione una tecla para continuar!')
+        guion_titulo('No se encontraron ventas!')
+        pausar_consola
         return
 
 

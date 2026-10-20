@@ -17,11 +17,11 @@ def Login():
         try:
             user = Gestion_Usuario().autenticar_usuario(dni, clave)
             guion_titulo(f'BIENVENIDO {user.nombre}')
-            guion_base()
+            pausar_consola()
             sesion_activa = Gestion_Sesion().crear_sesion(user)
             return sesion_activa
         except AuthenticationError as e:
             guion_base()
-            guion_base(e.mensaje_default)
+            guion_titulo(e.mensaje_default)
             guion_base()
             pausar_consola()

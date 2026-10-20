@@ -1,5 +1,4 @@
 from datetime import datetime
-
 class Venta:
     def __init__(self, id_venta, forma_pago, importe_total, fecha = None, importe_sin_desc = None, descuento_tipo = None, desc_monto = None, desc_tipo_importe = None, desc_tipo_porcentual=None):
         self.id_venta = id_venta
@@ -30,16 +29,18 @@ class Venta:
 
 
     def __str__(self):
-        linea = f'o- VENTA NROº: {self.id_venta}'
-        linea += f'\n - Forma de pago: {self.forma_pago}'
-        linea += f'\n - Total: ${self.importe_sin_desc:,}'
+        linea = f'|{"-"*20}> VENTA NRO: {self.id_venta}{" "* (57-len(str(self.id_venta)))}|'
+        linea += f'\n|{" "*15} ·>Forma de Pago: {self.forma_pago}{" "*(13-len(self.forma_pago))}|'
+        linea += f'\n|{" "*15} ·>Total Bruto: ${self.importe_sin_desc:,}{" "*(14-len(str(self.importe_sin_desc)))}|'
         if self.descuento_tipo:
-            if self.descuento_tipo == "PORCENTUAL": linea += f'\n - Descuento: %{self.desc_tipo_porcentual}'
-            if self.descuento_tipo == "IMPORTE": linea += f'\n - Descuento: ${self.desc_tipo_importe:,}'
-            linea += f'\n - descontado: -${self.desc_monto:,}'
-            linea += f'\n - Total Final: ${self.importe_total:,}'
-        linea += f'\n - Fecha: {self.fecha.strftime("%d/%m/%Y %H:%M:%S")}'
-        linea += '\n-········································'
+            if self.descuento_tipo == "PORCENTUAL": 
+                linea += f'\n|{" "*15} ·> Descuento: %{self.desc_tipo_porcentual}{" "*(59-(len(str(self.desc_tipo_porcentual))))}|'
+            elif self.descuento_tipo == "IMPORTE": 
+                linea += f'\n|{" "*15} ·> Importe de Descuento{" "* 51}|'
+            linea += f'\n|{" "*15} ·> descontado: -${self.desc_monto:,}{" "* (57-len(str(self.desc_monto)))}|'
+            linea += f'\n|{" "*15} ·> Total Neto: ${self.importe_total:,}{" "* (58-len(str(self.importe_total)))}|'
+        linea += f'\n|{" "*15} ·> Fecha: {self.fecha.strftime("%d/%m/%Y %H:%M:%S")}{" "* (64-len(self.fecha.strftime("%d/%m/%Y %H:%M:%S")))}'
+        linea += f'\n|##··········{" "*66}··········##|'
 
         return linea
 
