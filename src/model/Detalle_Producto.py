@@ -21,11 +21,12 @@ class Detalle_Producto(Producto):
 
 
     def __str__(self):
-        linea = f'|-{self.nombre}{dar_formato_nombre(self.nombre)} x {self.cantidad} - ${self.subtotal:,}'
+        esp = 45 - ( len(str(self.cantidad)) + len(str(self.subtotal)) )
+        linea = f'|     + {self.nombre.upper()}{dar_formato_nombre(self.nombre)} x {self.cantidad} - ${self.subtotal:,}{" "* esp }|'
         return linea
 
     def to_str_carrito(self):
-        print(f'||-{self.nombre} x {self.cantidad}')
+        print(f'||-{self.nombre} x {self.cantidad}|')
 
 
     def from_dict(self, det_venta):

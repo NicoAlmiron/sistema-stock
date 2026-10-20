@@ -7,12 +7,49 @@ def limpiar_consola():
     os.system('cls' if os.name == 'nt' else 'clear')
 #lo anterior se realiza para poder limpiar la consola
 
-def cabecera_menu() -> None:
-    print('|###--··  TecStore  ··--###|')
-    print('|##······················##|')
-
 def pausar_consola():
-    input("Presione Enter para continuar...")
+    input('|##··········                 Presione Enter para continuar...                 ··········##|')
+
+def guion_base(cadena=""):
+    caracteres = len(cadena) if cadena is not None else 0
+    lon = 90 - caracteres
+    linea = f'|{cadena}{" "*lon}|'
+    print(linea)
+
+def guion_opcion(num, cadena):
+    caracteres = len(cadena) if cadena is not None else 0
+    lon = 51 - caracteres
+    linea = f'|{" "*31}{num} ) --- {cadena}{" "*lon}|'
+    print(linea)
+
+def guion_titulo(cadena=None):
+    caracteres = len(cadena) if cadena is not None else 0
+    lon = int(round((80-caracteres)/2))
+    linea = f'|#····{(" " * lon)}{cadena}{(" " * lon)}····#|'
+    print(linea)
+
+def guion_item(cadena=None):
+    caracteres = len(cadena) if cadena is not None else 0
+    lon = 82 - caracteres
+    linea = f'|#·> {cadena}{(" " * lon)}···#|'
+    print(linea)
+
+
+def cabecera_menu() -> None:
+    print(f'|###--··{" "*34}TecStore{" "*34}··--###|')
+    print(f'|##··········{" "*66}··········##|')
+
+def pedir_opcion(op):
+    if op == "":
+        raise OperacionCancelada()
+    elif not op.isdigit():
+        raise DatoNumericoObligatorio()
+    elif len(op) >= 5:
+        raise NumeroDemasiadoAlto()
+    elif int(op) < 0:
+        raise OpcionInvalida()
+    else:
+        return op
 
 
 def lista_Clases_a_diccionario(lista_clases):

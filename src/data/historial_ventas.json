@@ -141,5 +141,81 @@
                 "subtotal": 553500.0
             }
         ]
+    },
+    {
+        "id_venta": 6,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "juan calvario",
+        "forma_pago": "Efectivo",
+        "importe_sin_desc": 184500.0,
+        "descuento_tipo": "PORCENTUAL",
+        "desc_monto": 46125.0,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": 25,
+        "importe_total": 138375.0,
+        "fecha": "2026-10-20 01:55:46.725377",
+        "detalle_venta": [
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 1,
+                "subtotal": 184500.0
+            }
+        ]
+    },
+    {
+        "id_venta": 7,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "",
+        "forma_pago": "Tarjeta",
+        "importe_sin_desc": 434500.0,
+        "descuento_tipo": "IMPORTE",
+        "desc_monto": 34500.0,
+        "desc_tipo_importe": 34500.0,
+        "desc_tipo_porcentual": null,
+        "importe_total": 400000.0,
+        "fecha": "2026-10-20 02:15:30.616328",
+        "detalle_venta": [
+            {
+                "id_producto": 2,
+                "nombre": "auriculares gamer hyperx",
+                "precio": 184500.0,
+                "cantidad": 1,
+                "subtotal": 184500.0
+            },
+            {
+                "id_producto": 1,
+                "nombre": "teclado mecanico rgb",
+                "precio": 125000.0,
+                "cantidad": 2,
+                "subtotal": 250000.0
+            }
+        ]
+    },
+    {
+        "id_venta": 8,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "",
+        "forma_pago": "Transferencia",
+        "importe_sin_desc": 250000.0,
+        "descuento_tipo": null,
+        "desc_monto": null,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": null,
+        "importe_total": null,
+        "fecha": "2026-10-20 02:19:35.092432",
+        "detalle_venta": [
+            {
+                "id_producto": 1,
+                "nombre": "teclado mecanico rgb",
+                "precio": 125000.0,
+                "cantidad": 2,
+                "subtotal": 250000.0
+            }
+        ]
     }
 ]

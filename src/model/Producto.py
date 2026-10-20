@@ -13,22 +13,22 @@ class Producto:
         
     def __str__(self):
         precio_prod = f'{self.precio:,}'
-        renglon = f'|ID: {self.id_producto}{dar_formato_id(self.id_producto)}'
+        renglon = f'| -> ID: {self.id_producto}{dar_formato_id(self.id_producto)}'
         renglon += f'| {self.nombre}{dar_formato_nombre(self.nombre)}'
         renglon += f'| ${precio_prod}{dar_formato_precio(precio_prod)}'
-        renglon += f'| VENDIDOS: {self.cant_vendidos}{dar_formato_id(self.cant_vendidos)}'
+        #renglon += f'| VENDIDOS: {self.cant_vendidos}{dar_formato_id(self.cant_vendidos)}'
 
         if self.discontinuado:
             renglon += '| PRODUCTO DISCONTINUADO'
         elif int(self.stock) < 4 and int(self.stock) > 0:
-            renglon += f'| STOCK: {self.stock} (STOCK BAJO)'
+            renglon += f'| STOCK: {self.stock} STOCK BAJO{" "*(8- len(str(self.stock)))}|'
         elif int(self.stock) == 0:
-            renglon += f'| STOCK: {self.stock} (SIN STOCK!!*!*!*!)'
+            renglon += f'| STOCK: {self.stock} *SIN STOCK*{" "*(7- len(str(self.stock)))}|'
         else :
-            renglon += f'| STOCK: {self.stock}'
-
+            renglon += f'| STOCK: {self.stock}{" "*(19- len(str(self.stock)))}|'
         return renglon
 
+    
     def to_dict(self):
             diccionario = {
                 "id_producto": self.id_producto,

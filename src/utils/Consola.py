@@ -6,7 +6,8 @@ from src.services.Producto_services import agregar_prod, mod_stock_prod, mod_pro
 from src.services.Ventas_services import realizar_venta, listar_ventas
 from src.services.Usuario_services import registrar_usuario, suspender_usuario, reactivar_usuario
 from src.persistensia.Gestion_Sesion import Gestion_Sesion
-from .Helpers import limpiar_consola, cabecera_menu
+from .Helpers import limpiar_consola, cabecera_menu, guion_titulo, guion_base, guion_item, guion_opcion, pedir_opcion
+from .Helpers import pausar_consola
 
 
 # Menu Principal
@@ -16,25 +17,28 @@ def menuPrincipal(vendedor):
     while True:
             limpiar_consola()
             cabecera_menu()
-            print('| 1 ) --- Mostrar Productos')
-            print('| 2 ) --- Realizar Venta')
-            print('| 3 ) --- Mostrar Ventas')
-            print('| 4 ) --- Buscar Producto')
-            print('| 5 ) --- Estadisticas de Ventas')
+            guion_titulo('MENU PRINCIPAL')
+            guion_titulo('')
+            #guion_base()
+            guion_opcion("1","Mostrar Productos")
+            guion_opcion("2","Realizar Venta")
+            guion_opcion("3","Mostrar Ventas")
+            guion_opcion("4","Buscar Producto")
+            guion_opcion("5","Estadisticas")
             if vendedor.verificar_permisos():
-                print('| 6 ) --- Gestion de Producto') 
-                print('| 7 ) --- Modificar Stock') 
-                print('| 8 ) --- Gestion de Usuario') # solo admin
-            print('| 0 ) --- Salir')
+                guion_opcion("6","Gestion de Producto")
+                guion_opcion("7","Modificar Stock")
+                guion_opcion("8","Gestion de Usuario")
+            guion_opcion("0","Salir")
+            guion_titulo('')
             try:
-                op = input('|OPCION···---: ')
+
+                op = pedir_opcion(input(f'|{" "*31}OPCION···---: '))
                 limpiar_consola()
+
                 match op:
                     case "1":
-                        cabecera_menu()
-                        print('|·# Productos')
-                        Gestion_Producto().listar_productos(productos)
-                        input('precione una tecla para continuar!')
+                        mostrar_lista_prods()
                     case "2":
                         realizar_venta(vendedor)
                     case "3":
@@ -67,7 +71,7 @@ def menuPrincipal(vendedor):
                     
             except TecStoreError as e:
                 print(e)
-                input( '|##······················##|')
+                pausar_consola()
             #input('precione una tecla para continuar!')
     
 
@@ -160,3 +164,20 @@ def abm_usuarios():
 
         except TecStoreError as e:
             input(e)
+
+
+def estadisticas_generales():
+    limpiar_consola()
+    cabecera_menu()
+
+
+
+
+def mostrar_lista_prods():
+    cabecera_menu()
+    guion_titulo('Listado de Productos')
+    guion_base("")
+    Gestion_Producto().listar_productos()
+    guion_base("")
+    guion_titulo('')
+    pausar_consola()

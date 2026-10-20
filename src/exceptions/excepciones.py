@@ -24,7 +24,7 @@ class OpcionInvalida(TecStoreError):
     mensaje_default = "|· Ingrese una opcion valida!"
 
 class AuthenticationError(TecStoreError):
-    mensaje_default = '|·· *ERROR* - USUARIO Y/O  |\n| CONTRASEÑA INCORRECTOS ··|'
+    mensaje_default = '**  USUARIO Y/O CONTRASEÑA INCORRECTOS  **'
 
 class ClavesDistintaError(TecStoreError):
     mensaje_default = '|· Las contraseñas deben ser iguales'

@@ -195,3 +195,5 @@ def reactivacion_producto():
     except ValueError:
         input('|· Ingrese valores Numericos')
 
+
+

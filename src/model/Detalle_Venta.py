@@ -1,5 +1,6 @@
 from datetime import datetime
 from .Venta import Venta
+from src.utils.Helpers import guion_item, dar_formato_nombre, dar_formato_precio, pausar_consola
 
 class Detalle_Venta(Venta):
     def __init__(self, id_venta, forma_pago, importe_total, id_vendedor, vendedor_nombre, detalle_venta, cliente=None, fecha=None, importe_sin_desc=None, descuento_tipo=None, desc_monto=None, desc_tipo_importe=None, desc_tipo_porcentual=None):
@@ -65,3 +66,22 @@ class Detalle_Venta(Venta):
             detalle_venta = detalles_ventas)
         return det_venta
         
+
+    def resumen_venta(self, desc):
+        guion_item("RESUMEN DE LA VENTA")
+        print('|-- Productos')
+            
+        for prod in self.detalle_venta:
+            #prod_dicc = lista_prods[i]
+            prcio_prod = f'{prod.precio:,}'
+            linea = f"|    + {prod.nombre.upper()}{dar_formato_nombre(prod.nombre)}"
+            linea += f'${prcio_prod}{dar_formato_precio(prcio_prod)} C/U'
+            linea += f' x {prod.cantidad} - ${prod.subtotal:,}{" " * (28 - (len(str(prod.cantidad))+len(str(prod.subtotal))) )}|'
+            print(linea)
+                                    
+        print(f'|-- Total: ${self.importe_sin_desc:,}{" "*(79-(len(str(self.importe_sin_desc))))}|')
+        if desc: 
+            print(f'|-- Descuento: -${self.desc_monto:,}{" "*(73-(len(str(self.desc_monto))))}|')
+            print(f'|-- Total Neto(Descuento): ${self.importe_total:,}{" "*(62-(len(str(self.importe_total))))}|')
+        print(f'|-- Forma de pago: {self.forma_pago:,}{" "*(71-(len(str(self.forma_pago))))}|')
+        pausar_consola()
