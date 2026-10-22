@@ -1,12 +1,14 @@
 from src.exceptions.excepciones import OpcionInvalida, TecStoreError
 from src.services.Producto_services import (agregar_prod, mod_stock_prod, mod_prod, eliminar_producto,
                                             reactivacion_producto, buscador, listar_productos)
-from src.services.Ventas_services import realizar_venta, listar_ventas
+from src.services.Ventas_services import realizar_venta, listar_ventas, exportar_historial_csv
 from src.services.Usuario_services import (registrar_usuario, suspender_usuario, reactivar_usuario,
                                            listar_usuarios, listar_usuarios_activos, listar_usuarios_suspendidos)
 from src.persistensia.Gestion_Sesion import Gestion_Sesion
 from .Helpers import limpiar_consola, cabecera_menu, guion_titulo, guion_base, guion_item, guion_opcion, pedir_opcion
 from .Helpers import pausar_consola
+from src.services.Estadisticas_services import menu_estadisticas
+
 
 
 def menuPrincipal(vendedor):
@@ -24,6 +26,7 @@ def menuPrincipal(vendedor):
                 guion_opcion("6","Gestion de Producto")
                 guion_opcion("7","Modificar Stock")
                 guion_opcion("8","Gestion de Usuario")
+                guion_opcion("9","Exportar CSV Historial Ventas")
             guion_opcion("0","Salir")
             guion_titulo('')
             try:
@@ -40,8 +43,8 @@ def menuPrincipal(vendedor):
                         listar_ventas()
                     case "4":
                         buscador()
-                #    case "5":
-                #        menu_estadisticas(vendedor)
+                    case "5":
+                        menu_estadisticas(vendedor)
                     case "6":
                         if vendedor.verificar_permisos():
                             abm_producto()
@@ -55,6 +58,11 @@ def menuPrincipal(vendedor):
                     case "8":
                         if vendedor.verificar_permisos():
                             abm_usuarios()
+                        else:
+                            raise OpcionInvalida()
+                    case "9":
+                        if vendedor.verificar_permisos():
+                            exportar_historial_csv()
                         else:
                             raise OpcionInvalida()
                     case "0":
@@ -157,10 +165,6 @@ def abm_usuarios():
         except TecStoreError as e:
             pausar_consola(e.mensaje)
 
-
-def estadisticas_generales():
-    limpiar_consola()
-    cabecera_menu()
 
 def mostrar_lista_prods():
     cabecera_menu()

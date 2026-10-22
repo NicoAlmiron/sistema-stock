@@ -4,8 +4,9 @@ from src.utils.Helpers import (limpiar_consola, cabecera_menu, venta_pedir_id, p
 from .Producto_services import descontar_stock, listar_productos
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
+from src.persistensia.ExportadorCSV import ExportadorCSV
 from src.exceptions.excepciones import (TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida,
-                                        NombreInvalido, IdNoEncontrado, MetodoPagoInvalidoError)
+                                        NombreInvalido, IdNoEncontrado, MetodoPagoInvalidoError, ArchivoVacio)
 from src.model.Venta import Venta
 from src.model.Detalle_Producto import Detalle_Producto
 
@@ -220,3 +221,10 @@ def mostrar_resumen_venta(venta):
         print(f'|-- Total Neto(Descuento): ${venta.importe_total:,}{" "*(62-(len(str(venta.importe_total))))}|')
     print(f'|-- Forma de pago: {venta.forma_pago}{" "*(71-(len(str(venta.forma_pago))))}|')
     pausar_consola()
+
+def exportar_historial_csv():
+    ventas = Gestion_Venta().extraer_ventas()
+    if not ventas:
+        raise ArchivoVacio('No hay ventas para exportar')
+    cantidad = ExportadorCSV().exportar_ventas(ventas)
+    pausar_consola("Se exportaron " + str(cantidad) + " ventas a ventas_historial.csv")
