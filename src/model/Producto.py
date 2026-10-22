@@ -41,8 +41,8 @@ class Producto:
             return diccionario
 
     @classmethod
-    def from_dict(self, prod):
-        producto = Producto(
+    def from_dict(cls, prod):
+        return cls(
                         id_producto = int(prod["id_producto"]),
                         nombre = prod["nombre"],
                         precio = float(prod["precio"]),
@@ -50,7 +50,6 @@ class Producto:
                         discontinuado = bool(prod["discontinuado"]),
                         stock = int(prod["stock"]) 
                     )
-        return producto
 
     def verificar_stock(self, cant_compra):
         if self.stock and self.stock >= cant_compra:

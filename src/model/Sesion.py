@@ -32,8 +32,8 @@ class Sesion(Usuario):
         return diccionario 
 
     @classmethod
-    def from_dict(self, user_sesion):
-        sesion = Sesion(
+    def from_dict(cls, user_sesion):
+        return cls(
             id_sesion = int(user_sesion['id_sesion']),
             id_usuario = int(user_sesion['id_usuario']),
             nombre = user_sesion['nombre'],
@@ -46,7 +46,6 @@ class Sesion(Usuario):
             monto_neto = float(user_sesion['monto_neto']),
             fin_actividad = user_sesion['fin_actividad'] 
         )
-        return sesion
 
 
     def verificar_permisos(self):

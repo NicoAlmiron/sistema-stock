@@ -19,7 +19,6 @@ def realizar_venta(vendedor):
 
     productos = Gestion_Producto().extraer_productos()
 
-    descuento = False
 
     venta = Venta(id_venta = None,forma_pago = None, importe_total= None, fecha = None)
 
@@ -45,10 +44,8 @@ def realizar_venta(vendedor):
             listar_carrito(list_prods, venta)
             if vendedor.verificar_permisos():
                 venta = aplicar_descuentos_venta(venta)
-                descuento = True
             else:
                 venta.descuento_porcentaje(10)
-                descuento = True
             
             venta_completa = Detalle_Venta(
                             id_venta = venta.id_venta,
@@ -69,6 +66,8 @@ def realizar_venta(vendedor):
                 guion_titulo('Se realizo la venta exitosamente!')
                 pausar_consola()
                 limpiar_consola()
+
+                descuento = False if venta.descuento_tipo is None else True
 
                 venta_completa.resumen_venta(descuento)
             else: 
@@ -162,10 +161,10 @@ def pasarela_produtos():
                         print(f'|{" "*15}-{producto.nombre.upper()} x {cant} Agregado a la compra!{" " * (49 - (len(producto.nombre) + len(str(cant))))}|') 
                         guion_base()
                         pausar_consola()
-                if encontrado:
+                if not encontrado:
                     raise IdNoEncontrado()
         except TecStoreError as er:
-                    pausar_consola(er.mensaje_default)
+            pausar_consola(er.mensaje_default)
 
 
 def pasarela_metodos_pago():
@@ -205,9 +204,11 @@ def aplicar_descuentos_venta(venta):
         print(f'|-----------Importe con Descuento ${venta.importe_total:,}{" "*(56-len(str(venta.importe_total)))}|')
         return venta
     elif opc == "0":
+        venta.importe_total = venta.importe_sin_desc
         print(f'|-----------Importe Actual ${venta.importe_sin_desc:,}{" "*(63-len(str(venta.importe_sin_desc)))}|')
         return venta
     elif opc == "":
+        venta.importe_total = venta.importe_sin_desc
         print(f'|-----------Importe Actual ${venta.importe_sin_desc:,}{" "*(63-len(str(venta.importe_sin_desc)))}|')
         return venta
     else:

@@ -1,14 +1,13 @@
 import json
 from src.model.Usuario import Usuario
-from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio
-from src.utils.Helpers import verificar_clave, cabecera_menu
+from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio, TecStoreError
+from src.utils.Helpers import verificar_clave, cabecera_menu, pausar_consola
 
 
 class Gestion_Usuario():
     def __init__(self):
         self.arch_json = "src/data/usuarios.json"
-
-
+    
     def extraer_usuarios(self): 
         try:
             usuarios = [] 
@@ -19,22 +18,23 @@ class Gestion_Usuario():
                     return []
                 
                 for user in lista_users:
-                    usuario = Usuario().from_dict(user)
+                    usuario = Usuario.from_dict(user)
                     
                     usuarios.append(usuario)
             return usuarios
         except FileNotFoundError:
+            pausar_consola()
             return []
-        except:
+        except TecStoreError as e:
+            pausar_consola(e.mensaje_default)
             return []
-
 
 
 
     def escribir_usuarios(self, usuarios):
         lista_dicc = []
         for user in usuarios:
-            lista_dicc.append(user.a_dict())
+            lista_dicc.append(user.to_dict())
         try:
 
             with open(self.arch_json , 'w', encoding='UTF-8') as users_json:
@@ -51,10 +51,10 @@ class Gestion_Usuario():
                 users_json.write(arch_json)
                 return True
         except FileExistsError:
-            input("A sucedido un error inesperado!")
+            pausar_consola("A sucedido un error inesperado!")
             return False
 
-    
+
     def validar_dni(self, dni):
         usuarios = self.extraer_usuarios()
         if not usuarios:
@@ -64,7 +64,6 @@ class Gestion_Usuario():
                 raise DniRegistrado(dni=dni)
         return True 
 
-
     def definir_id(self):
         usuarios = self.extraer_usuarios()
         if not usuarios:
@@ -72,10 +71,10 @@ class Gestion_Usuario():
         return max(u.id_usuario for u in usuarios) + 1
 
 
-    def registrar_usuario(self):
+    def registrar_usuario(self, user):
 
         lista_usuarios = self.extraer_usuarios()
-        lista_usuarios.append(self)
+        lista_usuarios.append(user)
         
         return self.escribir_usuarios(lista_usuarios)
 
@@ -112,6 +111,7 @@ class Gestion_Usuario():
         if usuarios_activos:
             self.listar_usuarios(usuarios_activos)
 
+            
     def lista_usuarios_suspendidos(self):
         usuarios = self.extraer_usuarios()
         usuarios_suspendidos = []

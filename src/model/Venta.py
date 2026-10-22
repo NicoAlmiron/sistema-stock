@@ -46,18 +46,21 @@ class Venta:
         return linea
 
     def descuento_importe(self, descuento):
-        self.descuento_tipo = "IMPORTE"
-        self.desc_tipo_importe = descuento
-        self.desc_monto = descuento
-        self.importe_total = self.importe_sin_desc - descuento
+        if 0 > descuento: 
+            raise NumeroNegativoError()
+        else:
+            self.descuento_tipo = "IMPORTE"
+            self.desc_tipo_importe = descuento
+            self.desc_monto = descuento
+            self.importe_total = self.importe_sin_desc - descuento
 
     def descuento_porcentaje(self, descuento):
-        if 0 < descuento < 100:    
+        if 0 > descuento: 
+            raise NumeroNegativoError()
+        elif 100 < descuento:
+            raise NumeroDemasiadoAlto()
+        elif 0 < descuento <= 100:    
             self.descuento_tipo = "PORCENTUAL"
             self.desc_tipo_porcentual = descuento
             self.desc_monto = float(self.importe_sin_desc)*(descuento/100)
             self.importe_total = float(self.importe_sin_desc) - (float(self.importe_sin_desc)*(descuento/100))
-        elif 0 > descuento: 
-            raise NumeroNegativoError()
-        elif 100 < descuento:
-            raise NumeroDemasiadoAlto()

@@ -8,6 +8,7 @@ class Gestion_Sesion():
     def __init__(self):
         self.arch_json = "src/data/historial_actividad.json"
 
+
     def extraer_historial_actividad(self):
         try:
             historial_actividad = [] 
@@ -19,7 +20,7 @@ class Gestion_Sesion():
                     return []
                     
                 for user_sesion in lista_actv:
-                    sesion = Sesion().from_dict(user_sesion)
+                    sesion = Sesion.from_dict(user_sesion)
                     historial_actividad.append(sesion)
 
             return historial_actividad
@@ -56,7 +57,8 @@ class Gestion_Sesion():
         except Exception as er:
             input("A sucedido un error inesperado!")
             #return False
-        
+
+
     def definir_id(self):
         hist_actv =  self.extraer_historial_actividad()
 
@@ -65,10 +67,12 @@ class Gestion_Sesion():
         
         return max(h.id_sesion for h in hist_actv) + 1
 
+
     def crear_sesion(self, user):
         id_sesion = self.definir_id()
         sesion_activa = Sesion(id_usuario=user.id_usuario, nombre=user.nombre, dni=user.dni, telefono=user.telefono, rol=user.rol, id_sesion=id_sesion)
         return sesion_activa
+
 
     def guardar_sesion(self, sesion):
         ventas = Gestion_Venta().extraer_ventas_en_rango(desde=sesion.inicio_actividad,id_vendedor=sesion.id_usuario) #cant_prod_vend(sesion)

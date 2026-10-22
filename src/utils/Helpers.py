@@ -1,7 +1,9 @@
 import os
 import hmac
 import hashlib
-from src.exceptions.excepciones import DatoNumericoObligatorio, OpcionInvalida, ClavesDistintaError, NombreInvalido, OperacionCancelada, PrecioDemaciadoAlto, PrecioNegativoError, NumeroDemasiadoAlto, NumeroNegativoError
+from src.exceptions.excepciones import (DatoNumericoObligatorio, OpcionInvalida, ClavesDistintaError, 
+                                        NombreInvalido, OperacionCancelada, PrecioDemaciadoAlto,
+                                        PrecioNegativoError, NumeroDemasiadoAlto, NumeroNegativoError)
 
 def limpiar_consola():
     os.system('cls' if os.name == 'nt' else 'clear')

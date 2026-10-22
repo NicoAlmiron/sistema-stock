@@ -1,11 +1,10 @@
 from src.model import Producto
-from src.exceptions.excepciones import ArchivoVacio, FileNotFoundError
+from src.exceptions.excepciones import ArchivoVacio
 import json
 
 class Gestion_Producto():
     def __init__(self):
         self.arch_json = 'src/data/productos.json'
-
 
     def extraer_productos(self): 
 
@@ -16,7 +15,7 @@ class Gestion_Producto():
                 if not lista_prod:
                     return []
                 for prod in lista_prod:
-                    producto = Producto().from_dict(prod)
+                    producto = Producto.from_dict(prod)
                     productos.append(producto)
             return productos
         except FileNotFoundError:
@@ -26,7 +25,6 @@ class Gestion_Producto():
 
     #   __________________________________
     #|--| Guardar producto en el archivo |-------------------------------------------------
-
 
     def escribir_productos(self, productos):
 
@@ -53,13 +51,11 @@ class Gestion_Producto():
         except:
             return False
 
-
     def definir_id(self):
         productos = self.extraer_productos()
         if not productos:
             return 1
         return max(p.id_producto for p in productos) + 1
-
 
     def listar_productos(self, lista_productos = None, mostrar_discontinuados=False):
         if lista_productos is None:
@@ -72,7 +68,6 @@ class Gestion_Producto():
         else:
             raise ArchivoVacio()
 
-
     def mostrar_un_prod(self, id):
         productos = self.extraer_productos()
         encontrado = False
@@ -82,9 +77,8 @@ class Gestion_Producto():
                 return producto
         if not encontrado : return False
 
-
     def fitrador(self, filtro, buscar):
-        productos = Gestion_Producto().extraer_productos()
+        productos = Gestion_Producto.extraer_productos()
         encontrado = False
         resultados = []
         for producto in productos:

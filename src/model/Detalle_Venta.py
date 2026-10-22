@@ -55,8 +55,8 @@ class Detalle_Venta(Venta):
             return linea
 
     @classmethod
-    def from_dict(self, venta_item, detalles_ventas):
-        det_venta = Detalle_Venta(
+    def from_dict(cls, venta_item, detalles_ventas):
+        return cls(
             id_venta =int(venta_item["id_venta"]), 
             id_vendedor = int(venta_item["id_vendedor"]), 
             vendedor_nombre = venta_item["vendedor_nombre"], 
@@ -70,7 +70,6 @@ class Detalle_Venta(Venta):
             importe_total = float(venta_item["importe_total"]) if venta_item["importe_total"] is not None else None,
             fecha = datetime.fromisoformat(venta_item["fecha"]),
             detalle_venta = detalles_ventas)
-        return det_venta
         
 
     def resumen_venta(self, desc):

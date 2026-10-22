@@ -29,13 +29,12 @@ class Detalle_Producto(Producto):
         print(f'||-{self.nombre} x {self.cantidad}|')
 
     @classmethod
-    def from_dict(self, det_venta):
-        detalle_venta = Detalle_Producto(  
+    def from_dict(cls, det_venta):
+        return cls(  
             id_producto = det_venta["id_producto"], 
             nombre = det_venta["nombre"], 
             precio = det_venta["precio"], 
             cantidad = det_venta['cantidad'], 
             subtotal = det_venta['subtotal'])
-        return detalle_venta
 
     

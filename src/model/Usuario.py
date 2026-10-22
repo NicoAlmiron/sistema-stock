@@ -39,8 +39,8 @@ class Usuario():
         return user_dict    
 
     @classmethod
-    def from_dict(self, user):
-        usuario = Usuario(
+    def from_dict(cls, user):
+        return cls(
             id_usuario = int(user["id_usuario"]),
             nombre = user["nombre"],
             dni = user["dni"],
@@ -51,7 +51,7 @@ class Usuario():
             fecha_alta = user["fecha_alta"],
             fecha_baja = "" if user["fecha_baja"] == "" else user["fecha_baja"]
         )
-        return usuario
+        
     
 
     def validar_estado(self):
