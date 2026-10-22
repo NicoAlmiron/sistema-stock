@@ -95,7 +95,7 @@ class Gestion_Usuario():
             usuarios = self.extraer_usuarios()
 
         if not usuarios:
-            raise ArchivoVacio('|· No Se Encontraron Usuarios')
+            raise ArchivoVacio('No Se Encontraron Usuarios')
         for user in usuarios:
             print(user)
 
@@ -125,6 +125,6 @@ class Gestion_Usuario():
         if usuarios_suspendidos:
             self.listar_usuarios(usuarios_suspendidos)
         else:
-            raise ArchivoVacio('|· No Se Encontraron Usuarios')
+            raise ArchivoVacio('No Se Encontraron Usuarios')
 
     

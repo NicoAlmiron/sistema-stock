@@ -19,7 +19,6 @@ def menuPrincipal(vendedor):
             cabecera_menu()
             guion_titulo('MENU PRINCIPAL')
             guion_titulo('')
-            #guion_base()
             guion_opcion("1","Mostrar Productos")
             guion_opcion("2","Realizar Venta")
             guion_opcion("3","Mostrar Ventas")
@@ -126,16 +125,18 @@ def abm_usuarios():
     while True:
         limpiar_consola()
         cabecera_menu()
-        print('| 1 ) --- Registrar Usuario')
-        print('| 2 ) --- Usuarios Activos')
-        print('| 3 ) --- Usuarios Suspendidos')
-        print('| 4 ) --- Usuarios General')
-        print('| 5 ) --- Suspender Usuario')
-        print('| 6 ) --- Reactivar Usuario')
-        print('| 0 ) --- Volver')
+        guion_titulo('ADMINISTRACION DE PRODUCTOS')
+        guion_titulo('')
+        guion_opcion("1","Registrar Usuario")
+        guion_opcion("2","Usuarios Activos")
+        guion_opcion("3","Usuarios Suspendidos")
+        guion_opcion("4","Usuarios General")
+        guion_opcion("5","Suspender Usuario")
+        guion_opcion("6","Reactivar Usuario")
+        guion_opcion("0","Volver")
 
         try:
-            op = input('|OPCION···---: ')
+            op = input(f'|{" "*31}OPCION···---: ')
 
             limpiar_consola()
             match op:

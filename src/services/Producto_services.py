@@ -1,4 +1,4 @@
-from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id
+from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion
 from src.utils.Helpers import cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola
 from src.model import Producto
 from src.exceptions.excepciones import TecStoreError, OperacionCancelada, OpcionInvalida
@@ -182,42 +182,57 @@ def descontar_stock(lista_prods ,id ,cantidad):
 #|--| Buscardor de Productos |-----------------------------------------------------
 def buscador():
     productos = Gestion_Producto().extraer_productos()
-    while True:
-        limpiar_consola()
-        print('|###--··  TecStore  ··--###|')
-        print('|##······················##|')
-        if len(productos) == 0:
-            print('|\t·No se emcontraron productos!')
-            return
-        print('| 1 ) --- Buscar por Nombre')
-        print('| 2 ) --- Buscar por ID')
-        print('| 3 ) --- Buscar por Precio')
-        print('| 0 ) --- Salir')
-        op = input('|OPCION···---: ')
-
-        limpiar_consola()
-        match op:
-            case "1":
-                print('|###--··  TecStore  ··--###|')
-                print('|##--- Ingrese el Nombre a Buscar')
-                nombre = pedir_nombre(input('|Nombre···---: ')).lower()
-                Gestion_Producto().fitrador('nombre', nombre.lower())
-            case "2":
-                print('|###--··  TecStore  ··--###|')
-                print('|##--- Ingrese el ID a Buscar')
-                id_prod = pedir_id(input('|ID ···---: '))
-                Gestion_Producto().fitrador('id', id_prod)
-            case "3":
-                print('|###--··  TecStore  ··--###|')
-                print('|##--- Ingrese el Precio a Buscar')
-                precio = pedir_precio(input('|Precio ···---: $'))
-                Gestion_Producto().fitrador('precio', precio)
-            case "0":
-                break
-            case _:
-                print('Ingrese una opcion valida!')
-        
-        input('precione una tecla para continuar!')
+    try:
+        while True:
+            limpiar_consola()
+            cabecera_menu()
+            guion_titulo('BUSCADOR DE PRODUCTOS')
+            guion_titulo('')
+            if len(productos) == 0:
+                pausar_consola('No se encontraron productos!')
+                return
+            guion_opcion("1","Buscar por Nombre")
+            guion_opcion("2","Buscar por ID")
+            guion_opcion("3","Buscar por Precio")
+            guion_opcion("0","Salir")
+            op = input(f'|{" "*30}OPCION···---: ')
+    
+            match op:
+                case "1":
+                    limpiar_consola()
+                    cabecera_menu()
+                    guion_titulo('BUSCADOR DE PRODUCTOS')
+                    guion_titulo('')
+                    guion_item('Ingrese el Nombre del producto a Buscar')
+                    guion_titulo('')
+                    nombre = pedir_nombre(input(f'|{" "*25}·Nombre···---: ')).lower()
+                    guion_titulo('')
+                    Gestion_Producto().fitrador('nombre', nombre.lower())
+                    guion_titulo('')
+                case "2":
+                    limpiar_consola()
+                    cabecera_menu()
+                    guion_titulo('BUSCADOR DE PRODUCTOS')
+                    guion_titulo('')
+                    guion_item('Ingrese el ID del producto a Buscar')
+                    id_prod = pedir_id(input(f'|{" "*30}·ID ···---: '))
+                    Gestion_Producto().fitrador('id', id_prod)
+                case "3":
+                    limpiar_consola()
+                    cabecera_menu()
+                    guion_titulo('BUSCADOR DE PRODUCTOS')
+                    guion_titulo('')
+                    guion_item('Ingrese el Precio del producto a Buscar')
+                    precio = pedir_precio(input(f'|{" "*30}·Precio ···---: $'))
+                    Gestion_Producto().fitrador('precio', precio)
+                case "0":
+                    break
+                case _:
+                    raise OpcionInvalida()
+            
+            pausar_consola('precione una tecla para continuar!')
+    except TecStoreError as er:
+        pausar_consola(er.mensaje)
 
 
 

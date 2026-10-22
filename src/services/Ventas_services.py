@@ -1,5 +1,5 @@
 from src.utils.Helpers import limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio
-from src.utils.Helpers import guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo
+from src.utils.Helpers import guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad
 from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
@@ -26,7 +26,6 @@ def realizar_venta(vendedor):
 
     try:
         prod_vent = pasarela_produtos()
-        print(prod_vent)
         list_prods = prod_vent["lista_productos"]
         venta.importe_sin_desc = prod_vent["importe_total"]
         productos = prod_vent["productos"]
@@ -35,6 +34,7 @@ def realizar_venta(vendedor):
             venta.id_venta = Gestion_Venta().definir_id()
             limpiar_consola()
             cabecera_menu()
+            guion_item('FINALICE LA VENTA')
             listar_carrito(list_prods, venta)
 
             cliente = ingresar_cliente()
@@ -73,7 +73,7 @@ def realizar_venta(vendedor):
         else:
             raise OperacionCancelada()
     except TecStoreError as e:
-        input(e)
+        pausar_consola(e.mensaje_default)
 
 
 
@@ -89,7 +89,7 @@ def listar_ventas():
         pausar_consola()
     else: 
         guion_titulo('No se encontraron ventas!')
-        pausar_consola
+        pausar_consola()
         return
 
 
@@ -100,7 +100,10 @@ def pasarela_produtos():
     while True:
         limpiar_consola()
         cabecera_menu()
+        guion_titulo('REALIZAR VENTA')
+        guion_base()
         Gestion_Producto().listar_productos(productos)
+        guion_base()
         print(f'|{"|"*90}|')
         if list_prods:
             print(f'|--->    Carrito:{" "*74}|')
@@ -121,8 +124,7 @@ def pasarela_produtos():
 
         for i, producto in enumerate(productos):
             if id_prod_v == producto.id_producto:
-                cant = 0
-                cant = pedir_stock(input('|##-· Cantidad: '))
+                cant = pedir_cantidad(input('|##-· Cantidad: '))
                 if producto.verificar_stock(cant):
 
                     det_prod_ven = Detalle_Producto(
@@ -158,7 +160,7 @@ def pasarela_produtos():
 
 def pasarela_metodos_pago():
     metodos_pago = ("Efectivo", "Transferencia", "Tarjeta")
-    guion_item('FORMA DE PAGO         (introduzca el numero de la forma de pago correspondiente)')
+    guion_item('FORMA DE PAGO      (introduzca el numero de la forma de pago)')
     print(f'|· ( 1 ) Efectivo · ( 2 ) Transferencia · ( 3 ) Tarjeta · ( 0 ) Cancelar{" "*19}|')
     guion_base()
     op =  pedir_opcion(input('|##-Forma de Pago: '))
@@ -217,4 +219,4 @@ def listar_carrito(lista_prods, venta):
     for prod in lista_prods:
         print(prod)          
     guion_base()
-    print(f'|\n|{"-" * 40}> Total: ${venta.importe_sin_desc:,}{" "* (39-len(str(venta.importe_sin_desc)))}|')
+    print(f'|\n|{"-" * 40} Total: ${venta.importe_sin_desc:,}{" "* (39-len(str(venta.importe_sin_desc)))}|')

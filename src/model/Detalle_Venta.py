@@ -89,5 +89,5 @@ class Detalle_Venta(Venta):
         if desc: 
             print(f'|-- Descuento: -${self.desc_monto:,}{" "*(73-(len(str(self.desc_monto))))}|')
             print(f'|-- Total Neto(Descuento): ${self.importe_total:,}{" "*(62-(len(str(self.importe_total))))}|')
-        print(f'|-- Forma de pago: {self.forma_pago:,}{" "*(71-(len(str(self.forma_pago))))}|')
+        print(f'|-- Forma de pago: {self.forma_pago}{" "*(71-(len(str(self.forma_pago))))}|')
         pausar_consola()

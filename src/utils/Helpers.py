@@ -43,7 +43,7 @@ def guion_titulo(cadena=""):
 
 def guion_item(cadena=None):
     caracteres = len(cadena) if cadena is not None else 0
-    lon = 68 - caracteres
+    lon = 63 - caracteres
     linea = f'|#{"·"*20}> {cadena}{(" " * lon)}···#|'
     print(linea)
     return linea
@@ -124,11 +124,23 @@ def pedir_nombre(nombre):
 
 def pedir_telefono():
     while True:
-        telefono = input('|#-TELEFONO: ')
+        telefono = input(f'{" "*20}|#-TELEFONO: ')
         if not telefono.isdigit():
             raise DatoNumericoObligatorio()
         else:
             return telefono
+
+def pedir_cantidad(cant):
+    if cant == "":
+        return 1
+    elif not cant.isdigit():
+        raise DatoNumericoObligatorio()
+    elif len(cant) >= 12:
+        raise NumeroDemasiadoAlto()
+    elif float(cant) < 0:
+        raise NumeroNegativoError() 
+    else:
+        return cant
 
 def pedir_precio(precio):
     if precio == "": 
@@ -170,7 +182,7 @@ def definir_clave():
         clave = input('|#-CONTRASEÑA: ')
         print('|# REPETIR CONTRASEÑA ')
         claveRep = input('|#-CONTRASEÑA: ')
-        if clave == claveRep:
+        if clave == claveRep and clave != "" and claveRep != "":
             return clave
         else:
             raise ClavesDistintaError()
