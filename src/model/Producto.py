@@ -1,15 +1,59 @@
 from src.utils.Helpers import dar_formato_id, dar_formato_precio, dar_formato_nombre, pedir_nombre, pedir_precio, pedir_stock
 from src.exceptions.excepciones import StockInsuficiente, OperacionCancelada
+from src.exceptions.excepciones import (StockInsuficiente, NombreInvalido, PrecioNegativoError,
+                                        PrecioDemaciadoAlto, NumeroNegativoError, NumeroDemasiadoAlto)
 
 class Producto:
-    def __init__(self, id_producto, nombre, precio, stock, cant_vendidos = None, discontinuado = False):
-        self.id_producto = id_producto
-        self.nombre = nombre
+    NOMBRE_MAX = 30
+    PRECIO_MAX = 99_999_999_999
+    STOCK_MAX = 9_999
+
+    def __init__(self, id_producto, nombre, precio, stock, cant_vendidos=None, discontinuado=False):
+        self._id_producto = id_producto
+        self.nombre = nombre          # pasa por el setter, que valida
         self.precio = precio
         self.stock = stock
         self.discontinuado = discontinuado
         self.cant_vendidos = cant_vendidos if cant_vendidos is not None else 0
 
+    @property
+    def id_producto(self):
+        return self._id_producto      # solo lectura
+
+    @property
+    def nombre(self):
+        return self._nombre
+
+    @nombre.setter
+    def nombre(self, valor):
+        valor = str(valor).strip()
+        if not valor or len(valor) > self.NOMBRE_MAX:
+            raise NombreInvalido()
+        self._nombre = valor
+
+    @property
+    def precio(self):
+        return self._precio
+
+    @precio.setter
+    def precio(self, valor):
+        if valor < 0:
+            raise PrecioNegativoError()
+        if valor > self.PRECIO_MAX:
+            raise PrecioDemaciadoAlto()
+        self._precio = valor
+
+    @property
+    def stock(self):
+        return self._stock
+
+    @stock.setter
+    def stock(self, valor):
+        if valor < 0:
+            raise NumeroNegativoError()
+        if valor > self.STOCK_MAX:
+            raise NumeroDemasiadoAlto()
+        self._stock = valor
         
     def __str__(self):
         precio_prod = f'{self.precio:,}'
@@ -57,31 +101,11 @@ class Producto:
         else:
             raise StockInsuficiente()
 
-    def desc_stock(self, cantidad):
-        self.stock = self.stock - cantidad
-
-    def modificar_producto(self):
-        print(f'|##-· Producto ID: {self.id_producto}')
-        try:
-            print(f"|-Nobre anterior *{self.nombre}*")
-            self.nombre = pedir_nombre(input('|-Nobre del articulo: '))
-        except OperacionCancelada:
-            pass
-        try:    
-            print(f"|-Precio anterior $*{self.precio:,}*".replace(",","."))
-            self.precio = pedir_precio(input('|-Precio: $'))
-        except OperacionCancelada:
-            pass
-
-    def modificar_stock(self):
-        print(f'|##-· Producto ID: {self.id_producto}')
-        try:
-            print(f"| {self.nombre}*")
-            print(f"| -Stock actual *{self.stock}*")
-            self.stock = pedir_stock(input('|-Nuevo Stock: '))
-        except OperacionCancelada:
-            pass
-
+    def descontar_stock(self, cantidad):
+        if cantidad > self.stock:
+            raise StockInsuficiente()
+        self.stock -= cantidad
+        self.cant_vendidos += cantidad
 
     def discontinuar_producto(self):
         if not self.discontinuado:

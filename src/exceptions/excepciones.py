@@ -57,7 +57,7 @@ class NumeroNegativoError(ValidacionError):
 class ArchivoVacio(TecStoreError):
     mensaje_default = 'Sin Registros '
 
-class StockInsuficiente(ValidacionError):
+class StockInsuficiente(TecStoreError):
     mensaje_default = 'Producto Sin Stock!'
 
 

@@ -105,7 +105,7 @@ def reactivar_usuario():
         id_buscar = pedir_id(input('|##-· ID: '))
             
         for user in usuarios:
-            if user.id_usuario == id_buscar and user.fecha_baja == "":
+            if user.id_usuario == id_buscar and user.fecha_baja != "":
                 sin_coincidencias = True
                 limpiar_consola()
                 cabecera_menu()

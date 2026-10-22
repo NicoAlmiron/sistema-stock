@@ -1,5 +1,5 @@
-from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion
-from src.utils.Helpers import cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola
+from src.utils.Helpers import (limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion,
+                               cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola)
 from src.model import Producto
 from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado)
 from src.persistensia.Gestion_Producto import Gestion_Producto
@@ -53,10 +53,22 @@ def mod_prod():
         guion_base()
         guion_item('Ingrese el ID del Producto')
         id_buscar = pedir_id(input('|##-· ID: '))
-        for i , prod in enumerate(productos):
-            if prod.id_producto == id_buscar:
-                prod.modificar_producto()
-                break
+
+        prod = next((p for p in productos if p.id_producto == id_buscar), None)
+
+        if prod is None:
+            raise IdNoEncontrado()
+        print(f'|##-· Producto ID: {prod.id_producto}')
+        try:
+            print(f"|-Nombre anterior *{prod.nombre}*")
+            prod.nombre = pedir_nombre(input('|-Nombre del articulo: '))
+        except OperacionCancelada:
+            pass
+        try:
+            print(f"|-Precio anterior $*{prod.precio:,}*".replace(",", "."))
+            prod.precio = pedir_precio(input('|-Precio: $'))
+        except OperacionCancelada:
+            pass
 
         if Gestion_Producto().escribir_productos(productos): 
             pausar_consola("Se Guardo el producto exitosamente!")
@@ -64,6 +76,8 @@ def mod_prod():
             raise TecStoreError()
     except TecStoreError as er:
         pausar_consola(er.mensaje)
+
+
 
 #   _______________________________
 #|--| Modificar Stock de Producto |-----------------------------------------------------
@@ -80,10 +94,18 @@ def mod_stock_prod():
             guion_base()
             guion_item('Ingrese el ID del Producto')
             id_buscar = pedir_id(input('|##-· ID: '))
-            for i , prod in enumerate(productos):
-                if prod.id_producto == id_buscar:
-                    prod.modificar_stock()    
-                    break
+
+            prod = next((p for p in productos if p.id_producto == id_buscar), None)
+            if prod is None:
+                raise IdNoEncontrado()
+            print(f'|##-· Producto ID: {prod.id_producto}')
+            print(f"| {prod.nombre}")
+            print(f"| -Stock actual *{prod.stock}*")
+            try:
+                prod.stock = pedir_stock(input('|-Nuevo Stock: '))
+            except OperacionCancelada:
+                pass
+            
             if Gestion_Producto().escribir_productos(productos): 
                 pausar_consola("Se actualizo el stock exitosamente!")
             else:
@@ -91,6 +113,8 @@ def mod_stock_prod():
         except TecStoreError as er:
             pausar_consola(er.mensaje)
             break
+
+
 
 #   _____________________
 #|--| Eliminar Producto |-----------------------------------------------------
@@ -165,11 +189,12 @@ def reactivacion_producto():
         pausar_consola(er.mensaje)
 
 
+
 #|--| Descontar Stock  |-----------------------------------------------------
 def descontar_stock(lista_prods ,id ,cantidad):
     for i, producto in enumerate(lista_prods):
         if producto.id_producto == id:
-            producto.desc_stock(cantidad)
+            producto.descontar_stock(cantidad)
     return lista_prods
 
 
