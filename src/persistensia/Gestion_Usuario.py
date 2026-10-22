@@ -1,6 +1,6 @@
 import json
 from src.model.Usuario import Usuario
-from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio, TecStoreError
+from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio, ErrorPersistencia
 from src.utils.Helpers import verificar_clave, cabecera_menu, pausar_consola
 
 
@@ -25,9 +25,8 @@ class Gestion_Usuario():
         except FileNotFoundError:
             pausar_consola()
             return []
-        except TecStoreError as e:
-            pausar_consola(e.mensaje)
-            return []
+        except:
+            raise ErrorPersistencia()
 
 
 
@@ -50,9 +49,8 @@ class Gestion_Usuario():
                     indent=4)
                 users_json.write(arch_json)
                 return True
-        except FileExistsError:
-            pausar_consola("A sucedido un error inesperado!")
-            return False
+        except:
+            raise ErrorPersistencia()
 
 
     def validar_dni(self, dni):

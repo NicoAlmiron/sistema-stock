@@ -88,7 +88,7 @@ def suspender_usuario():
                 else:
                     raise OperacionCancelada()
     except TecStoreError as er:
-        pausar_consola(er.mensaje_default)
+        pausar_consola(er.mensaje)
     except ValueError:
         pausar_consola('Ingrese valores Numericos')
 
@@ -127,7 +127,7 @@ def reactivar_usuario():
                 else:
                     raise OperacionCancelada()
     except TecStoreError as er:
-        pausar_consola(er.mensaje_default)
+        pausar_consola(er.mensaje)
     except ValueError:
         pausar_consola('Ingrese valores Numericos')
 

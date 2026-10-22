@@ -2,6 +2,7 @@ from src.model.Sesion import Sesion
 from .Gestion_Venta import Gestion_Venta
 import json
 from datetime import datetime
+from src.exceptions.excepciones import ErrorPersistencia
 
 
 class Gestion_Sesion():
@@ -25,10 +26,9 @@ class Gestion_Sesion():
 
             return historial_actividad
         except FileNotFoundError:
-            input("Archivo Json no encontrado!")
             return []
-        #except Exception as er:
-            #input(er)
+        except:
+            raise ErrorPersistencia()
 
 
     def escribir_historial_actividad(self, sesion):
@@ -54,9 +54,8 @@ class Gestion_Sesion():
                     indent=4)
                 actividad_json.write(arch_json)
             return True
-        except Exception as er:
-            input("A sucedido un error inesperado!")
-            #return False
+        except:
+            raise ErrorPersistencia()
 
 
     def definir_id(self):

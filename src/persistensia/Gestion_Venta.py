@@ -2,7 +2,7 @@ from src.utils.Helpers import pausar_consola
 from src.model.Detalle_Venta import Detalle_Venta
 from src.model.Detalle_Producto import Detalle_Producto
 from datetime import datetime
-from src.exceptions.excepciones import TecStoreError
+from src.exceptions.excepciones import ErrorPersistencia
 import json
 
 class Gestion_Venta():
@@ -34,9 +34,8 @@ class Gestion_Venta():
             return lista_ventas
         except FileNotFoundError:
             return []
-        except TecStoreError as er:
-            pausar_consola(er.mensaje_)
-            return []
+        except:
+            raise ErrorPersistencia()
 
 
 
@@ -62,8 +61,8 @@ class Gestion_Venta():
                 ventas_json = json.dumps(lis_dic_venta, indent=4)
                 arch_venta.write(ventas_json)
                 return True
-        except Exception:
-            return False
+        except:
+            raise ErrorPersistencia()
             
 
 

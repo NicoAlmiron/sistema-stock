@@ -1,5 +1,5 @@
 from src.model import Producto
-from src.exceptions.excepciones import ArchivoVacio
+from src.exceptions.excepciones import ErrorPersistencia, ArchivoVacio
 import json
 
 class Gestion_Producto():
@@ -21,7 +21,7 @@ class Gestion_Producto():
         except FileNotFoundError:
             return []
         except:
-            return []
+            raise ErrorPersistencia()
 
     #   __________________________________
     #|--| Guardar producto en el archivo |-------------------------------------------------

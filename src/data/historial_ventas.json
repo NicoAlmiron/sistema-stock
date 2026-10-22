@@ -321,5 +321,28 @@
                 "subtotal": 35000.0
             }
         ]
+    },
+    {
+        "id_venta": 12,
+        "id_vendedor": 1,
+        "vendedor_nombre": "nicolas",
+        "cliente": "",
+        "forma_pago": "Tarjeta",
+        "importe_sin_desc": 135000.0,
+        "descuento_tipo": "PORCENTUAL",
+        "desc_monto": 0.0,
+        "desc_tipo_importe": null,
+        "desc_tipo_porcentual": 0,
+        "importe_total": 135000.0,
+        "fecha": "2026-10-22 13:19:05.222688",
+        "detalle_venta": [
+            {
+                "id_producto": 1,
+                "nombre": "Teclado Mecanico RGB 70%",
+                "precio": 135000.0,
+                "cantidad": 1,
+                "subtotal": 135000.0
+            }
+        ]
     }
 ]

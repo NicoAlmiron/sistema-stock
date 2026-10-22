@@ -66,6 +66,9 @@ class VentaCancelada(TecStoreError):
 class IdNoEncontrado(TecStoreError):
     mensaje_default = 'No se encontro el id buscado!'
 
+class ErrorPersistencia(TecStoreError):
+       mensaje_default = "No se pudo leer o guardar la informacion"
+
 
 
 
