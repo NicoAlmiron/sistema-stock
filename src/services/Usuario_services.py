@@ -7,7 +7,6 @@ from src.utils.Helpers import (limpiar_consola, cabecera_menu, pedir_nombre, ped
                                guion_sub_item, pausar_consola)
 
 
-
 def pedir_dni():
     while True:
         dni = input(f'|{" "*20}#-DNI: ')
@@ -65,7 +64,7 @@ def suspender_usuario():
         id_buscar = pedir_id(input('|##-· ID: '))
             
         for user in usuarios:
-            if not user.verificar_permisos():
+            if user.id_usuario == id_buscar and not user.verificar_permisos():
                 sin_coincidencias = True
                 limpiar_consola()
                 cabecera_menu()

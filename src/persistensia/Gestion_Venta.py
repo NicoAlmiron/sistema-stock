@@ -1,61 +1,24 @@
-from src.model.Venta import Venta
 from datetime import datetime
-from src.exceptions.excepciones import ErrorPersistencia
-import json
+from src.model.Venta import Venta
+from .Gestor_JSON import GestorJSON
 
-class Gestion_Venta():
-    def __init__(self, venta=None):
-        self.venta = venta
-        self.arch_json = "src/data/historial_ventas.json"
 
-    #|--------  ARCHIVO VENTA   --------|#
-#   _____________________________
-#|--| Extraer ventas del archivo|-----------------------------------------------------
+class Gestion_Venta(GestorJSON):
+    def __init__(self):
+        super().__init__("src/data/historial_ventas.json")
+
     def extraer_ventas(self):
-        
-        try:
-            ventas_dicc = []
-            with open(self.arch_json, 'r', encoding='UTF-8') as arch_venta: 
-                ventas_dicc = json.load(arch_venta)
-                if not ventas_dicc:
-                    return []
-                
-                lista_ventas = [Venta.from_dict(item) for item in ventas_dicc]
+        ventas = []
+        for dicc in self.leer():
+            ventas.append(Venta.from_dict(dicc))
+        return ventas
 
-            return lista_ventas
-        except FileNotFoundError:
-            return []
-        except:
-            raise ErrorPersistencia()
-
-
-
-#   _____________________________
-#|--| Guardar ventas del archivo|-----------------------------------------------------
     def procesar_venta(self, venta_nueva):
-
-        ventas = self.extraer_ventas()
-        lis_dic_venta = []
-
-        for venta in ventas:
-            lis_dic_venta.append(venta.to_dict())
-
-        lis_dic_venta.append(venta_nueva.to_dict())
-
-        try:
-            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: 
-                ventas_json = json.dumps(lis_dic_venta, indent=4)
-                arch_venta.write(ventas_json)
-                return True
-        except FileNotFoundError:
-            with open(self.arch_json, 'w', encoding='UTF-8') as arch_venta: 
-                ventas_json = json.dumps(lis_dic_venta, indent=4)
-                arch_venta.write(ventas_json)
-                return True
-        except:
-            raise ErrorPersistencia()
-            
-
+        lista = []
+        for venta in self.extraer_ventas():
+            lista.append(venta.to_dict())
+        lista.append(venta_nueva.to_dict())
+        return self.guardar(lista)
 
     def definir_id(self):
         ventas = self.extraer_ventas()
@@ -72,7 +35,4 @@ class Gestion_Venta():
             
             if desde <= v.fecha <= hasta 
             and (id_vendedor is None or v.id_vendedor == id_vendedor) 
-        ]    
-
-
-
+        ]

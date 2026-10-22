@@ -1,55 +1,22 @@
 from src.model import Producto
-from src.exceptions.excepciones import ErrorPersistencia, ArchivoVacio
-import json
+from src.exceptions.excepciones import ArchivoVacio
+from .Gestor_JSON import GestorJSON
 
-class Gestion_Producto():
+class Gestion_Producto(GestorJSON):
     def __init__(self):
-        self.arch_json = 'src/data/productos.json'
+        super().__init__("src/data/productos.json")
 
-    def extraer_productos(self): 
-
-        try:
-            productos = [] 
-            with open(self.arch_json , 'r', encoding='UTF-8') as archivo_producto:
-                lista_prod = json.load(archivo_producto)
-                if not lista_prod:
-                    return []
-                for prod in lista_prod:
-                    producto = Producto.from_dict(prod)
-                    productos.append(producto)
-            return productos
-        except FileNotFoundError:
-            return []
-        except:
-            raise ErrorPersistencia()
-
-    #   __________________________________
-    #|--| Guardar producto en el archivo |-------------------------------------------------
+    def extraer_productos(self):
+        productos = []
+        for dicc in self.leer():
+            productos.append(Producto.from_dict(dicc))
+        return productos
 
     def escribir_productos(self, productos):
-
-        lista_productos = []
-
+        lista = []
         for prod in productos:
-            lista_productos.append(prod.to_dict())
-
-        try:
-
-            with open(self.arch_json, 'w', encoding='UTF-8') as archivo_producto:
-                prod_json = json.dumps(
-                    lista_productos, 
-                    indent=4)
-                archivo_producto.write(prod_json)
-            return True
-        except FileNotFoundError:
-            with open(self.arch_json, 'w', encoding='UTF-8') as archivo_producto:
-                prod_json = json.dumps(
-                    lista_productos, 
-                    indent=4)
-                archivo_producto.write(prod_json)
-            return True
-        except:
-            return False
+            lista.append(prod.to_dict())
+        return self.guardar(lista)
 
     def definir_id(self):
         productos = self.extraer_productos()
@@ -98,4 +65,4 @@ class Gestion_Producto():
                     encontrado = True
                     print(producto)
         if encontrado == False:
-            raise ArchivoVacio('|· No se encontraron coincidencias')
+            raise ArchivoVacio('No se encontraron coincidencias')

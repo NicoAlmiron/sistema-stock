@@ -1,62 +1,25 @@
 from src.model.Sesion import Sesion
+
 from .Gestion_Venta import Gestion_Venta
-import json
-from datetime import datetime
-from src.exceptions.excepciones import ErrorPersistencia
+from .Gestor_JSON import GestorJSON
 
 
-class Gestion_Sesion():
+class Gestion_Sesion(GestorJSON):
     def __init__(self):
-        self.arch_json = "src/data/historial_actividad.json"
-
+        super().__init__("src/data/historial_actividad.json")
 
     def extraer_historial_actividad(self):
-        try:
-            historial_actividad = [] 
-
-            with open(self.arch_json , 'r', encoding='UTF-8') as actividad_json:
-                lista_actv = json.load(actividad_json)
-
-                if len(lista_actv) == 0:
-                    return []
-                    
-                for user_sesion in lista_actv:
-                    sesion = Sesion.from_dict(user_sesion)
-                    historial_actividad.append(sesion)
-
-            return historial_actividad
-        except FileNotFoundError:
-            return []
-        except:
-            raise ErrorPersistencia()
-
+        historial = []
+        for dicc in self.leer():
+            historial.append(Sesion.from_dict(dicc))
+        return historial
 
     def escribir_historial_actividad(self, sesion):
-        lista_dicc = []
-        historial_actividad = self.extraer_historial_actividad()
-
-        for actv in historial_actividad:
-            lista_dicc.append(actv.to_dict())
-        lista_dicc.append(sesion.to_dict())
-
-
-        try:
-            with open(self.arch_json , 'w', encoding='UTF-8') as actividad_json:
-                arch_json = json.dumps(
-                    lista_dicc,
-                    indent=4)
-                actividad_json.write(arch_json)
-            return True
-        except FileNotFoundError:
-            with open(self.arch_json , 'w', encoding='UTF-8') as actividad_json:
-                arch_json = json.dumps(
-                    lista_dicc,
-                    indent=4)
-                actividad_json.write(arch_json)
-            return True
-        except:
-            raise ErrorPersistencia()
-
+        lista = []
+        for actividad in self.extraer_historial_actividad():
+            lista.append(actividad.to_dict())
+        lista.append(sesion.to_dict())
+        return self.guardar(lista)
 
     def definir_id(self):
         hist_actv =  self.extraer_historial_actividad()
@@ -78,7 +41,5 @@ class Gestion_Sesion():
         sesion.cerrar_sesion(
             monto_bruto=sum(dv.subtotal for v in ventas for dv in v.detalle_venta),
             prods_vendidos=sum(dv.cantidad for v in ventas for dv in v.detalle_venta),
-            monto_neto=sum(v.importe_total for v in ventas)
-        )
-        sesion.fin_actividad = datetime.now()
+            monto_neto=sum(v.importe_total for v in ventas))
         self.escribir_historial_actividad(sesion)

@@ -1,57 +1,24 @@
-import json
 from src.model.Usuario import Usuario
-from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio, ErrorPersistencia
-from src.utils.Helpers import verificar_clave, cabecera_menu, pausar_consola
+from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio
+from src.utils.Helpers import verificar_clave, cabecera_menu
+from .Gestor_JSON import GestorJSON
 
 
-class Gestion_Usuario():
+class Gestion_Usuario(GestorJSON):
     def __init__(self):
-        self.arch_json = "src/data/usuarios.json"
-    
-    def extraer_usuarios(self): 
-        try:
-            usuarios = [] 
-            with open(self.arch_json , 'r', encoding='UTF-8') as users_json:
+        super().__init__(ruta="src/data/usuarios.json")
 
-                lista_users = json.load(users_json)
-                if len(lista_users) == 0:
-                    return []
-                
-                for user in lista_users:
-                    usuario = Usuario.from_dict(user)
-                    
-                    usuarios.append(usuario)
-            return usuarios
-        except FileNotFoundError:
-            pausar_consola()
-            return []
-        except:
-            raise ErrorPersistencia()
-
-
+    def extraer_usuarios(self):
+        usuarios = []
+        for dicc in self.leer():
+            usuarios.append(Usuario.from_dict(dicc))
+        return usuarios
 
     def escribir_usuarios(self, usuarios):
-        lista_dicc = []
+        lista = []
         for user in usuarios:
-            lista_dicc.append(user.to_dict())
-        try:
-
-            with open(self.arch_json , 'w', encoding='UTF-8') as users_json:
-                arch_json = json.dumps(
-                    lista_dicc,
-                    indent=4)
-                users_json.write(arch_json)
-                return True
-        except FileNotFoundError:
-            with open(self.arch_json , 'w', encoding='UTF-8') as users_json:
-                arch_json = json.dumps(
-                    lista_dicc,
-                    indent=4)
-                users_json.write(arch_json)
-                return True
-        except:
-            raise ErrorPersistencia()
-
+            lista.append(user.to_dict())
+        return self.guardar(lista)
 
     def validar_dni(self, dni):
         usuarios = self.extraer_usuarios()
@@ -123,5 +90,3 @@ class Gestion_Usuario():
             self.listar_usuarios(usuarios_suspendidos)
         else:
             raise ArchivoVacio('No Se Encontraron Usuarios')
-
-    
