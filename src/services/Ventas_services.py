@@ -114,8 +114,7 @@ def pasarela_produtos():
                                 id_producto=producto.id_producto,
                                 nombre = producto.nombre,
                                 precio=producto.precio,
-                                cantidad=cant,
-                                subtotal = producto.precio * cant
+                                cantidad=cant
                             )
 
                                             

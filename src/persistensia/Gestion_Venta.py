@@ -1,6 +1,4 @@
-from src.utils.Helpers import pausar_consola
-from src.model.Detalle_Venta import Detalle_Venta
-from src.model.Detalle_Producto import Detalle_Producto
+from src.model.Venta import Venta
 from datetime import datetime
 from src.exceptions.excepciones import ErrorPersistencia
 import json
@@ -22,14 +20,7 @@ class Gestion_Venta():
                 if not ventas_dicc:
                     return []
                 
-                lista_ventas = []
-                for venta_item in ventas_dicc:
-                    detalles_ventas = []
-                    for det_vent_item in venta_item["detalle_venta"]:
-                        det_prod = Detalle_Producto.from_dict(det_vent_item)
-                        detalles_ventas.append(det_prod)
-                    det_venta = Detalle_Venta.from_dict(venta_item, detalles_ventas)   
-                    lista_ventas.append(det_venta)
+                lista_ventas = [Venta.from_dict(item) for item in ventas_dicc]
 
             return lista_ventas
         except FileNotFoundError:
