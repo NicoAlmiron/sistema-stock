@@ -1,7 +1,7 @@
 from src.persistensia.Gestion_Usuario import Gestion_Usuario
 from src.model.Usuario import Usuario
 from src.exceptions.excepciones import (DniRegistrado, OperacionCancelada, TecStoreError,
-                                        DatoNumericoObligatorio, NumeroDemasiadoAlto, TecStoreError)
+                                        DatoNumericoObligatorio, NumeroDemasiadoAlto)
 from src.utils.Helpers import (limpiar_consola, cabecera_menu, pedir_nombre, pedir_id, pedir_telefono,
                                definir_clave, definir_rol, hashear_clave, guion_titulo, guion_item, 
                                guion_sub_item, pausar_consola)
@@ -105,7 +105,7 @@ def reactivar_usuario():
         id_buscar = pedir_id(input('|##-· ID: '))
             
         for user in usuarios:
-            if user.id_usuario == id_buscar and user.fecha_baja is not "":
+            if user.id_usuario == id_buscar and user.fecha_baja == "":
                 sin_coincidencias = True
                 limpiar_consola()
                 cabecera_menu()

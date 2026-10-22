@@ -4,7 +4,7 @@ from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
 from src.exceptions.excepciones import (TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida,
-                                        NombreInvalido, IdNoEncontrado)
+                                        NombreInvalido, IdNoEncontrado, MetodoPagoInvalidoError)
 from src.model.Venta import Venta
 from src.model.Detalle_Producto import Detalle_Producto
 from src.model.Detalle_Venta import Detalle_Venta
@@ -185,7 +185,7 @@ def pasarela_metodos_pago():
         case "":
             raise VentaCancelada()
         case _:
-            raise OperacionCancelada()
+            raise MetodoPagoInvalidoError()
 
 
 def aplicar_descuentos_venta(venta):

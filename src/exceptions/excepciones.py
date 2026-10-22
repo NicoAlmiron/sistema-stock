@@ -9,48 +9,55 @@ class TecStoreError(Exception):
     def __str__(self):
         return self.mensaje
 
-class DatoInvalidoError(TecStoreError):
-    mensaje_default = "El dato ingresado es invalido"
 
 class DniRegistrado(TecStoreError):
     def __init__(self, mensaje=None, dni=None):
         super().__init__(mensaje, dni)
     mensaje_default = "Este DNI ya se encuentra registrado"
 
-class DatoNumericoObligatorio(TecStoreError):
+class MetodoPagoInvalidoError(TecStoreError):
+    mensaje_default = "Metodo de pago invalido (Efectivo, Transferencia o Tarjeta)"
+
+class ValidacionError(TecStoreError):
+    mensaje_default = "Dato invalido"
+
+class DatoInvalidoError(ValidacionError):
+    mensaje_default = "El dato ingresado es invalido"
+
+class DatoNumericoObligatorio(ValidacionError):
     mensaje_default = "Debe ingresar solo valores numericos"
 
-class OpcionInvalida(TecStoreError):
+class OpcionInvalida(ValidacionError):
     mensaje_default = "Ingrese una opcion valida!"
 
 class AuthenticationError(TecStoreError):
     mensaje_default = '**  USUARIO Y/O CONTRASEÑA INCORRECTOS  **'
 
-class ClavesDistintaError(TecStoreError):
+class ClavesDistintaError(ValidacionError):
     mensaje_default = 'Las contraseñas deben ser iguales'
 
-class NombreInvalido(TecStoreError):
+class NombreInvalido(ValidacionError):
     mensaje_default = 'Debe ser un Nombre valido (max 30 caracteres)'
 
 class OperacionCancelada(TecStoreError):
     mensaje_default = 'Se cancelo la operacion'
 
-class PrecioDemaciadoAlto(TecStoreError):
+class PrecioDemaciadoAlto(ValidacionError):
     mensaje_default = 'El Precio exedio el limite permitido (limite $99.999.999.999)'
 
-class PrecioNegativoError(TecStoreError):
+class PrecioNegativoError(ValidacionError):
     mensaje_default = 'El Precio no puede ser negativo!'
 
-class NumeroDemasiadoAlto(TecStoreError):
+class NumeroDemasiadoAlto(ValidacionError):
     mensaje_default = 'Numero demaciado alto!'
 
-class NumeroNegativoError(TecStoreError):
+class NumeroNegativoError(ValidacionError):
     mensaje_default = 'El numero NO puede ser Negativo'
 
 class ArchivoVacio(TecStoreError):
     mensaje_default = 'Sin Registros '
 
-class StockInsuficiente(TecStoreError):
+class StockInsuficiente(ValidacionError):
     mensaje_default = 'Producto Sin Stock!'
 
 

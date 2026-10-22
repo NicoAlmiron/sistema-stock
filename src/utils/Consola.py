@@ -13,7 +13,7 @@ from .Helpers import pausar_consola
 # Menu Principal
 
 def menuPrincipal(vendedor):
-    productos = Gestion_Producto().extraer_productos()
+    #productos = Gestion_Producto().extraer_productos()
     while True:
             limpiar_consola()
             cabecera_menu()
