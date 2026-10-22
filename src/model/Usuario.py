@@ -1,19 +1,63 @@
 from datetime import datetime
 from src.utils.Helpers import dar_formato_id, dar_formato_dni, dar_formato_nombre, dar_formato_telefono
-from src.exceptions.excepciones import UsuarioActivo, UsuarioSuspendido
+from src.exceptions.excepciones import UsuarioActivo, UsuarioSuspendido, NombreInvalido, DatoInvalidoError
 
-class Usuario():
+class Usuario:
+    ROL_ADMIN = "ADMINISTRADOR"
+    ROL_EMPLEADO = "EMPLEADO"
+    ROLES = (ROL_ADMIN, ROL_EMPLEADO)
+    NOMBRE_MAX = 30
+
     def __init__(self, id_usuario, nombre, dni, telefono, rol, sal, hash, fecha_alta = None, fecha_baja = ""):
-        self.id_usuario = id_usuario
-        self.nombre = nombre
-        self.dni = dni
+        self._id_usuario = id_usuario
+        self.nombre = nombre              # setter: valida
+        self._dni = dni
         self.telefono = telefono
-        self.rol = rol
-        self.sal = sal
-        self.hash = hash
+        self.rol = rol                    # setter: valida
+        self._sal = sal
+        self._hash = hash
         self.fecha_alta = fecha_alta if fecha_alta is not None else datetime.now()
         self.fecha_baja = fecha_baja
 
+    @property
+    def id_usuario(self):
+        return self._id_usuario
+
+    @property
+    def dni(self):
+        return self._dni
+
+    @property
+    def sal(self):
+        return self._sal
+
+    @property
+    def hash(self):
+        return self._hash
+
+    @property
+    def nombre(self):
+        return self._nombre
+
+    @nombre.setter
+    def nombre(self, valor):
+        valor = str(valor).strip()
+        if not valor or len(valor) > self.NOMBRE_MAX:
+            raise NombreInvalido()
+        self._nombre = valor
+
+    @property
+    def rol(self):
+        return self._rol
+
+    @rol.setter
+    def rol(self, valor):
+        if valor not in self.ROLES:
+            raise DatoInvalidoError("Rol invalido")
+        self._rol = valor
+
+    def verificar_permisos(self):
+        return self.rol == self.ROL_ADMIN
 
     def __str__(self):
         linea  = f"|·ID: {self.id_usuario}{dar_formato_id(self.id_usuario)}"
@@ -55,21 +99,14 @@ class Usuario():
     
 
     def validar_estado(self):
-        if self.fecha_baja != "":
-            return False
-        elif self.fecha_baja == "":
-            return True
-
-    
+        return not self.fecha_baja          # activo = sin fecha de baja
 
     def baja_usuario(self):
-        if self.fecha_baja is "" or None:
-            self.fecha_baja = datetime.now()
-        else:
+        if not self.validar_estado():
             raise UsuarioSuspendido()
+        self.fecha_baja = datetime.now()
 
     def reactivacion_usuario(self):
-        if self.fecha_baja:
-            self.fecha_baja = ""
-        else:
+        if self.validar_estado():
             raise UsuarioActivo()
+        self.fecha_baja = ""

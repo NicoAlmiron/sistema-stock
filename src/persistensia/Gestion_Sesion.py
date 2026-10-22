@@ -69,14 +69,16 @@ class Gestion_Sesion():
 
     def crear_sesion(self, user):
         id_sesion = self.definir_id()
-        sesion_activa = Sesion(id_usuario=user.id_usuario, nombre=user.nombre, dni=user.dni, telefono=user.telefono, rol=user.rol, id_sesion=id_sesion)
+        sesion_activa = Sesion(usuario=user, id_sesion=id_sesion)
         return sesion_activa
 
 
     def guardar_sesion(self, sesion):
         ventas = Gestion_Venta().extraer_ventas_en_rango(desde=sesion.inicio_actividad,id_vendedor=sesion.id_usuario) #cant_prod_vend(sesion)
-        sesion.prods_vendidos = sum(dv.cantidad for v in ventas for dv in v.detalle_venta)
-        sesion.monto_bruto = sum(dv.subtotal for v in ventas for dv in v.detalle_venta)
-        sesion.monto_neto = sum(v.importe_total for v in ventas)
+        sesion.cerrar_sesion(
+            monto_bruto=sum(dv.subtotal for v in ventas for dv in v.detalle_venta),
+            prods_vendidos=sum(dv.cantidad for v in ventas for dv in v.detalle_venta),
+            monto_neto=sum(v.importe_total for v in ventas)
+        )
         sesion.fin_actividad = datetime.now()
         self.escribir_historial_actividad(sesion)

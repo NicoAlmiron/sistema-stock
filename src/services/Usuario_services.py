@@ -65,7 +65,7 @@ def suspender_usuario():
         id_buscar = pedir_id(input('|##-· ID: '))
             
         for user in usuarios:
-            if user.id_usuario == id_buscar and user.rol != "ADMINISTRADOR":
+            if not user.verificar_permisos():
                 sin_coincidencias = True
                 limpiar_consola()
                 cabecera_menu()
