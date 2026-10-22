@@ -223,6 +223,7 @@ def mostrar_resumen_venta(venta):
     pausar_consola()
 
 def exportar_historial_csv():
+    cabecera_menu()
     ventas = Gestion_Venta().extraer_ventas()
     if not ventas:
         raise ArchivoVacio('No hay ventas para exportar')

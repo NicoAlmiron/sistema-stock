@@ -5,8 +5,8 @@ from src.services.Ventas_services import realizar_venta, listar_ventas, exportar
 from src.services.Usuario_services import (registrar_usuario, suspender_usuario, reactivar_usuario,
                                            listar_usuarios, listar_usuarios_activos, listar_usuarios_suspendidos)
 from src.persistensia.Gestion_Sesion import Gestion_Sesion
-from .Helpers import (limpiar_consola, cabecera_menu, guion_titulo, guion_base, guion_opcion, 
-                      pedir_opcion, pausar_consola)
+from .Helpers import limpiar_consola, cabecera_menu, guion_titulo, guion_base, guion_item, guion_opcion, pedir_opcion
+from .Helpers import pausar_consola
 from src.services.Estadisticas_services import menu_estadisticas
 
 
@@ -66,13 +66,13 @@ def menuPrincipal(vendedor):
                         else:
                             raise OpcionInvalida()
                     case "0":
-                        Gestion_Sesion().guardar_sesion(vendedor)
                         pausar_consola('Saliendo.....')
                         break
                     case _:
                         raise OpcionInvalida()
                     
             except TecStoreError as e:
+                cabecera_menu()
                 pausar_consola(e.mensaje)
     
 

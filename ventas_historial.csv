@@ -1,0 +1,23 @@
+﻿id_venta;fecha;cliente;vendedor;producto;cantidad;precio_unitario;subtotal;metodo_pago;descuento;total_venta
+1;19/10/2026 21:25:35;juan manuel;nicolas;teclado mecanico rgb;2;125000.0;250000.0;Efectivo;0;434500.0
+1;19/10/2026 21:25:35;juan manuel;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Efectivo;;
+2;19/10/2026 21:49:07;;juancito;lampara led 8 colores;2;35000.0;70000.0;Efectivo;0;70000.0
+3;19/10/2026 22:00:40;;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Efectivo;30950.0;278550.0
+3;19/10/2026 22:00:40;;nicolas;teclado mecanico rgb;1;125000.0;125000.0;Efectivo;;
+4;19/10/2026 22:08:27;roxette;nicolas;lampara led 8 colores;2;35000.0;70000.0;Transferencia;4500.0;250000.0
+4;19/10/2026 22:08:27;roxette;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Transferencia;;
+5;19/10/2026 22:08:55;;nicolas;teclado mecanico rgb;1;125000.0;125000.0;Tarjeta;67850.0;610650.0
+5;19/10/2026 22:08:55;;nicolas;auriculares gamer hyperx;3;184500.0;553500.0;Tarjeta;;
+6;20/10/2026 01:55:46;juan calvario;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Efectivo;46125.0;138375.0
+7;20/10/2026 02:15:30;;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Tarjeta;34500.0;400000.0
+7;20/10/2026 02:15:30;;nicolas;teclado mecanico rgb;2;125000.0;250000.0;Tarjeta;;
+8;20/10/2026 02:19:35;;nicolas;teclado mecanico rgb;2;125000.0;250000.0;Transferencia;0;250000.0
+9;20/10/2026 23:23:14;betiana;juancito;Teclado Mecanico RGB 70%;2;135000.0;270000.0;Efectivo;30500.0;274500.0
+9;20/10/2026 23:23:14;betiana;juancito;lampara led 8 colores;1;35000.0;35000.0;Efectivo;;
+10;21/10/2026 17:09:00;;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Efectivo;54500.0;300000.0
+10;21/10/2026 17:09:00;;nicolas;Teclado Mecanico RGB 70%;1;135000.0;135000.0;Efectivo;;
+10;21/10/2026 17:09:00;;nicolas;lampara led 8 colores;1;35000.0;35000.0;Efectivo;;
+11;21/10/2026 17:10:13;;nicolas;Teclado Mecanico RGB 70%;1;135000.0;135000.0;Transferencia;54500.0;300000.0
+11;21/10/2026 17:10:13;;nicolas;auriculares gamer hyperx;1;184500.0;184500.0;Transferencia;;
+11;21/10/2026 17:10:13;;nicolas;lampara led 8 colores;1;35000.0;35000.0;Transferencia;;
+12;22/10/2026 13:19:05;;nicolas;Teclado Mecanico RGB 70%;1;135000.0;135000.0;Tarjeta;0;135000.0
