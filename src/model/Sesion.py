@@ -31,6 +31,7 @@ class Sesion(Usuario):
         }
         return diccionario 
 
+    @classmethod
     def from_dict(self, user_sesion):
         sesion = Sesion(
             id_sesion = int(user_sesion['id_sesion']),

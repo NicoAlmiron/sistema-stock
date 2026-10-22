@@ -19,12 +19,11 @@ class Gestion_Usuario():
                     return []
                 
                 for user in lista_users:
-                    usuario = Usuario(None,None,None,None,None,None,None).from_dict(user)
+                    usuario = Usuario().from_dict(user)
                     
                     usuarios.append(usuario)
             return usuarios
         except FileNotFoundError:
-            #input("Archivo Json no encontrado!")
             return []
         except:
             return []

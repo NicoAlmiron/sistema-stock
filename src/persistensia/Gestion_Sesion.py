@@ -19,7 +19,7 @@ class Gestion_Sesion():
                     return []
                     
                 for user_sesion in lista_actv:
-                    sesion = Sesion(None, None, None, None, None, None).from_dict(user_sesion)
+                    sesion = Sesion().from_dict(user_sesion)
                     historial_actividad.append(sesion)
 
             return historial_actividad

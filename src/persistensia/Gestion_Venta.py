@@ -27,9 +27,9 @@ class Gestion_Venta():
                     detalles_ventas = []
                     for det_vent_item in venta_item["detalle_venta"]:
                         #det_vent = None
-                        det_prod = Detalle_Producto(None,None,None,None,None).from_dict(det_vent_item)
+                        det_prod = Detalle_Producto().from_dict(det_vent_item)
                         detalles_ventas.append(det_prod)
-                    det_venta = Detalle_Venta(None,None,None,None,None,None).from_dict(venta_item, detalles_ventas)   
+                    det_venta = Detalle_Venta().from_dict(venta_item, detalles_ventas)   
                     lista_ventas.append(det_venta)
 
             return lista_ventas

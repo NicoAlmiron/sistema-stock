@@ -28,7 +28,7 @@ class Detalle_Producto(Producto):
     def to_str_carrito(self):
         print(f'||-{self.nombre} x {self.cantidad}|')
 
-
+    @classmethod
     def from_dict(self, det_venta):
         detalle_venta = Detalle_Producto(  
             id_producto = det_venta["id_producto"], 

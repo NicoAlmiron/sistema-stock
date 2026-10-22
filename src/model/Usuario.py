@@ -24,7 +24,7 @@ class Usuario():
 
         return linea
 
-    def a_dict(self):
+    def to_dict(self):
         user_dict = {
             "id_usuario": self.id_usuario,
             "nombre": self.nombre,
@@ -38,6 +38,7 @@ class Usuario():
         }
         return user_dict    
 
+    @classmethod
     def from_dict(self, user):
         usuario = Usuario(
             id_usuario = int(user["id_usuario"]),

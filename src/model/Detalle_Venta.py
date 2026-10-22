@@ -54,7 +54,7 @@ class Detalle_Venta(Venta):
             
             return linea
 
-
+    @classmethod
     def from_dict(self, venta_item, detalles_ventas):
         det_venta = Detalle_Venta(
             id_venta =int(venta_item["id_venta"]), 

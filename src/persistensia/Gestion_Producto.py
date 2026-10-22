@@ -1,5 +1,5 @@
 from src.model import Producto
-from src.exceptions.excepciones import ArchivoVacio
+from src.exceptions.excepciones import ArchivoVacio, FileNotFoundError
 import json
 
 class Gestion_Producto():
@@ -16,23 +16,13 @@ class Gestion_Producto():
                 if not lista_prod:
                     return []
                 for prod in lista_prod:
-                    producto = Producto(
-                        id_producto = int(prod["id_producto"]),
-                        nombre = prod["nombre"],
-                        precio = float(prod["precio"]),
-                        cant_vendidos =int(prod["cant_vendidos"]),
-                        discontinuado = bool(prod["discontinuado"]),
-                        stock = int(prod["stock"]) 
-                    )
+                    producto = Producto().from_dict(prod)
                     productos.append(producto)
-
-            
             return productos
-
-        except:
-            
+        except FileNotFoundError:
             return []
-
+        except:
+            return []
 
     #   __________________________________
     #|--| Guardar producto en el archivo |-------------------------------------------------
