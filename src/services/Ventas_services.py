@@ -1,5 +1,6 @@
 from src.utils.Helpers import (limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio,
-                               guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad)
+                               guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad,
+                               dar_formato_nombre, dar_formato_precio)
 from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
@@ -7,7 +8,6 @@ from src.exceptions.excepciones import (TecStoreError, VentaCancelada, Operacion
                                         NombreInvalido, IdNoEncontrado, MetodoPagoInvalidoError)
 from src.model.Venta import Venta
 from src.model.Detalle_Producto import Detalle_Producto
-from src.model.Detalle_Venta import Detalle_Venta
 
 
 
@@ -16,64 +16,43 @@ from src.model.Detalle_Venta import Detalle_Venta
 #   __________________
 #|--| Realizar Venta |-----------------------------------------------------
 def realizar_venta(vendedor):
-
+ 
     productos = Gestion_Producto().extraer_productos()
-
-
-    venta = Venta(id_venta = None,forma_pago = None, importe_total= None, fecha = None)
-
-    list_prods = []
-
+ 
     try:
         prod_vent = pasarela_produtos()
         list_prods = prod_vent["lista_productos"]
-        venta.importe_sin_desc = prod_vent["importe_total"]
         productos = prod_vent["productos"]
-
-        if list_prods:
-            venta.id_venta = Gestion_Venta().definir_id()
-            limpiar_consola()
-            cabecera_menu()
-            guion_item('FINALICE LA VENTA')
-            listar_carrito(list_prods, venta)
-
-            cliente = ingresar_cliente()
-            venta.forma_pago = pasarela_metodos_pago()
-            limpiar_consola()
-            cabecera_menu()
-            listar_carrito(list_prods, venta)
-            if vendedor.verificar_permisos():
-                venta = aplicar_descuentos_venta(venta)
-            else:
-                venta.descuento_porcentaje(10)
-            
-            venta_completa = Detalle_Venta(
-                            id_venta = venta.id_venta,
-                            id_vendedor = vendedor.id_usuario, 
-                            vendedor_nombre = vendedor.nombre,
-                            cliente=cliente,
-                            forma_pago = venta.forma_pago, 
-                            importe_total = venta.importe_total, 
-                            importe_sin_desc=venta.importe_sin_desc,
-                            descuento_tipo=venta.descuento_tipo,
-                            desc_monto=venta.desc_monto,
-                            desc_tipo_importe=venta.desc_tipo_importe,
-                            desc_tipo_porcentual=venta.desc_tipo_porcentual,
-                            detalle_venta = list_prods
-                            )
-            if Gestion_Venta().procesar_venta(venta_completa):
-                Gestion_Producto().escribir_productos(productos)
-                guion_titulo('Se realizo la venta exitosamente!')
-                pausar_consola()
-                limpiar_consola()
-
-                descuento = False if venta.descuento_tipo is None else True
-
-                venta_completa.resumen_venta(descuento)
-            else: 
-                raise TecStoreError()
-        else:
+ 
+        if not list_prods:
             raise OperacionCancelada()
+ 
+        venta = Venta(id_venta=Gestion_Venta().definir_id(),
+                      id_vendedor=vendedor.id_usuario,
+                      vendedor_nombre=vendedor.nombre,
+                      detalles=list_prods)
+        limpiar_consola()
+        cabecera_menu()
+        guion_item('FINALICE LA VENTA')
+        listar_carrito(list_prods, venta)
+ 
+        venta.cliente = ingresar_cliente()
+        venta.forma_pago = pasarela_metodos_pago()
+        venta.aplicar_descuento_efectivo()          # 10% si paga en efectivo
+        limpiar_consola()
+        cabecera_menu()
+        listar_carrito(list_prods, venta)
+        if vendedor.verificar_permisos():
+            aplicar_descuentos_venta(venta)         # el admin puede reemplazarlo por uno especial
+ 
+        if Gestion_Venta().procesar_venta(venta):
+            Gestion_Producto().escribir_productos(productos)
+            guion_titulo('Se realizo la venta exitosamente!')
+            pausar_consola()
+            limpiar_consola()
+            mostrar_resumen_venta(venta)
+        else:
+            raise TecStoreError()
     except TecStoreError as e:
         pausar_consola(e.mensaje)
 
@@ -122,7 +101,6 @@ def pasarela_produtos():
             if id_prod_v == 0:
                 return {
                             "lista_productos" : list_prods, 
-                            "importe_total": total_venta,
                             "productos" : productos
                         }
             else:
@@ -203,13 +181,8 @@ def aplicar_descuentos_venta(venta):
         print(f'|-----------Importe Total ${venta.importe_sin_desc:,}{" "*(64-len(str(venta.importe_sin_desc)))}|')
         print(f'|-----------Importe con Descuento ${venta.importe_total:,}{" "*(56-len(str(venta.importe_total)))}|')
         return venta
-    elif opc == "0":
-        venta.importe_total = venta.importe_sin_desc
-        print(f'|-----------Importe Actual ${venta.importe_sin_desc:,}{" "*(63-len(str(venta.importe_sin_desc)))}|')
-        return venta
-    elif opc == "":
-        venta.importe_total = venta.importe_sin_desc
-        print(f'|-----------Importe Actual ${venta.importe_sin_desc:,}{" "*(63-len(str(venta.importe_sin_desc)))}|')
+    elif opc in ("0", ""):
+        print(f'|-----------Importe Actual ${venta.importe_total:,}{" "*(63-len(str(venta.importe_total)))}|')
         return venta
     else:
         raise OpcionInvalida()
@@ -231,3 +204,20 @@ def listar_carrito(lista_prods, venta):
         print(prod)          
     guion_base()
     print(f'|\n|{"-" * 40} Total: ${venta.importe_sin_desc:,}{" "* (39-len(str(venta.importe_sin_desc)))}|')
+
+
+def mostrar_resumen_venta(venta):
+    guion_item("RESUMEN DE LA VENTA")
+    print('|-- Productos')
+    for prod in venta.detalle_venta:
+        precio = f'{prod.precio:,}'
+        linea = f"|    + {prod.nombre.upper()}{dar_formato_nombre(prod.nombre)}"
+        linea += f'${precio}{dar_formato_precio(precio)} C/U'
+        linea += f' x {prod.cantidad} - ${prod.subtotal:,}{" " * (28 - (len(str(prod.cantidad))+len(str(prod.subtotal))) )}|'
+        print(linea)
+    print(f'|-- Total: ${venta.importe_sin_desc:,}{" "*(79-(len(str(venta.importe_sin_desc))))}|')
+    if venta.descuento_tipo:
+        print(f'|-- Descuento: -${venta.desc_monto:,}{" "*(73-(len(str(venta.desc_monto))))}|')
+        print(f'|-- Total Neto(Descuento): ${venta.importe_total:,}{" "*(62-(len(str(venta.importe_total))))}|')
+    print(f'|-- Forma de pago: {venta.forma_pago}{" "*(71-(len(str(venta.forma_pago))))}|')
+    pausar_consola()

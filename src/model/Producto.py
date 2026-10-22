@@ -1,5 +1,4 @@
-from src.utils.Helpers import dar_formato_id, dar_formato_precio, dar_formato_nombre, pedir_nombre, pedir_precio, pedir_stock
-from src.exceptions.excepciones import StockInsuficiente, OperacionCancelada
+from src.utils.Helpers import dar_formato_id, dar_formato_precio, dar_formato_nombre
 from src.exceptions.excepciones import (StockInsuficiente, NombreInvalido, PrecioNegativoError,
                                         PrecioDemaciadoAlto, NumeroNegativoError, NumeroDemasiadoAlto)
 
