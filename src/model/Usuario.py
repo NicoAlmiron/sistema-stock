@@ -34,8 +34,6 @@ class Usuario():
             "sal": self.sal,
             "hash": self.hash,
             "fecha_alta": str(self.fecha_alta),
-            "productos_vendidos": self.productos_vendidos,
-            "importe_vendido": self.importe_vendido,
             "fecha_baja": str(self.fecha_baja) if self.fecha_baja else ""
         }
         return user_dict    
@@ -67,10 +65,10 @@ class Usuario():
         if self.fecha_baja is "" or None:
             self.fecha_baja = datetime.now()
         else:
-            raise UsuarioActivo()
+            raise UsuarioSuspendido()
 
     def reactivacion_usuario(self):
         if self.fecha_baja:
             self.fecha_baja = ""
         else:
-            raise UsuarioSuspendido()
+            raise UsuarioActivo()

@@ -1,3 +1,4 @@
+from src.exceptions.excepciones import NumeroDemasiadoAlto, NumeroNegativoError
 from datetime import datetime
 class Venta:
     def __init__(self, id_venta, forma_pago, importe_total, fecha = None, importe_sin_desc = None, descuento_tipo = None, desc_monto = None, desc_tipo_importe = None, desc_tipo_porcentual=None):
@@ -45,13 +46,18 @@ class Venta:
         return linea
 
     def descuento_importe(self, descuento):
-       self.descuento_tipo = "IMPORTE"
-       self.desc_tipo_importe = descuento
-       self.desc_monto = descuento
-       self.importe_total = self.importe_sin_desc - descuento
+        self.descuento_tipo = "IMPORTE"
+        self.desc_tipo_importe = descuento
+        self.desc_monto = descuento
+        self.importe_total = self.importe_sin_desc - descuento
 
     def descuento_porcentaje(self, descuento):
-       self.descuento_tipo = "PORCENTUAL"
-       self.desc_tipo_porcentual = descuento
-       self.desc_monto = float(self.importe_sin_desc)*(descuento/100)
-       self.importe_total = float(self.importe_sin_desc) - (float(self.importe_sin_desc)*(descuento/100))
+        if 0 < descuento < 100:    
+            self.descuento_tipo = "PORCENTUAL"
+            self.desc_tipo_porcentual = descuento
+            self.desc_monto = float(self.importe_sin_desc)*(descuento/100)
+            self.importe_total = float(self.importe_sin_desc) - (float(self.importe_sin_desc)*(descuento/100))
+        elif 0 > descuento: 
+            raise NumeroNegativoError()
+        elif 100 < descuento:
+            raise NumeroDemasiadoAlto()

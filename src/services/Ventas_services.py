@@ -1,9 +1,10 @@
-from src.utils.Helpers import limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio
-from src.utils.Helpers import guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad
+from src.utils.Helpers import (limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio,
+                               guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad)
 from .Producto_services import  descontar_stock
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
-from src.exceptions.excepciones import TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida, NombreInvalido
+from src.exceptions.excepciones import (TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida,
+                                        NombreInvalido, IdNoEncontrado)
 from src.model.Venta import Venta
 from src.model.Detalle_Producto import Detalle_Producto
 from src.model.Detalle_Venta import Detalle_Venta
@@ -44,8 +45,10 @@ def realizar_venta(vendedor):
             listar_carrito(list_prods, venta)
             if vendedor.verificar_permisos():
                 venta = aplicar_descuentos_venta(venta)
+                descuento = True
             else:
                 venta.descuento_porcentaje(10)
+                descuento = True
             
             venta_completa = Detalle_Venta(
                             id_venta = venta.id_venta,
@@ -113,49 +116,56 @@ def pasarela_produtos():
             print(f'|##······{" "*32}·Total: ${total_venta:,}{" "*(40 - len(str(total_venta)))}|')
             print(f'|{"-"*90}|')
         print(f'|-· Ingrese el Id del producto (Dejar vacio para continuar){" "*32}|')
-        id_prod_v = venta_pedir_id(input('|##-· ID: '))  
+        try:
+            id_prod_v = venta_pedir_id(input('|##-· ID: '))  
+            encontrado = False
+        
+            if id_prod_v == 0:
+                return {
+                            "lista_productos" : list_prods, 
+                            "importe_total": total_venta,
+                            "productos" : productos
+                        }
+            else:
+                for i, producto in enumerate(productos):
+                    if id_prod_v == producto.id_producto and not producto.discontinuado:
+                        encontrado = True
+                        cant = pedir_cantidad(input('|##-· Cantidad: '))
+                        if producto.verificar_stock(cant):
 
-        if id_prod_v == 0:
-            return {
-                        "lista_productos" : list_prods, 
-                        "importe_total": total_venta,
-                        "productos" : productos
-                    }
+                            det_prod_ven = Detalle_Producto(
+                                id_producto=producto.id_producto,
+                                nombre = producto.nombre,
+                                precio=producto.precio,
+                                cantidad=cant,
+                                subtotal = producto.precio * cant
+                            )
 
-        for i, producto in enumerate(productos):
-            if id_prod_v == producto.id_producto:
-                cant = pedir_cantidad(input('|##-· Cantidad: '))
-                if producto.verificar_stock(cant):
+                                            
+                            total_venta = total_venta + (producto.precio * cant)
 
-                    det_prod_ven = Detalle_Producto(
-                        id_producto=producto.id_producto,
-                        nombre = producto.nombre,
-                        precio=producto.precio,
-                        cantidad=cant,
-                        subtotal = producto.precio * cant
-                    )
+                            productos = descontar_stock(productos,producto.id_producto,cant)
 
-                                    
-                    total_venta = total_venta + (producto.precio * cant)
+                            nuevoProd = True
 
-                    productos = descontar_stock(productos,producto.id_producto,cant)
+                            if list_prods:
+                                for i, prod_item in enumerate(list_prods):
+                                    if prod_item.id_producto == det_prod_ven.id_producto:
+                                        list_prods[i].cantidad =  det_prod_ven.cantidad + prod_item.cantidad
+                                        nuevoProd = False
 
-                    nuevoProd = True
-
-                    if list_prods:
-                        for i, prod_item in enumerate(list_prods):
-                            if prod_item.id_producto == det_prod_ven.id_producto:
-                                list_prods[i].cantidad =  det_prod_ven.cantidad + prod_item.cantidad
-                                nuevoProd = False
-
-                        if nuevoProd:
-                            list_prods.append(det_prod_ven)
-                    else:
-                        list_prods.append(det_prod_ven)
-                guion_base()
-                print(f'|{" "*15}-{producto.nombre.upper()} x {cant} Agregado a la compra!{" " * (49 - (len(producto.nombre) + len(str(cant))))}|') 
-                guion_base()
-                pausar_consola()
+                                if nuevoProd:
+                                    list_prods.append(det_prod_ven)
+                            else:
+                                list_prods.append(det_prod_ven)
+                        guion_base()
+                        print(f'|{" "*15}-{producto.nombre.upper()} x {cant} Agregado a la compra!{" " * (49 - (len(producto.nombre) + len(str(cant))))}|') 
+                        guion_base()
+                        pausar_consola()
+                if encontrado:
+                    raise IdNoEncontrado()
+        except TecStoreError as er:
+                    pausar_consola(er.mensaje_default)
 
 
 def pasarela_metodos_pago():
@@ -163,7 +173,7 @@ def pasarela_metodos_pago():
     guion_item('FORMA DE PAGO      (introduzca el numero de la forma de pago)')
     print(f'|· ( 1 ) Efectivo · ( 2 ) Transferencia · ( 3 ) Tarjeta · ( 0 ) Cancelar{" "*19}|')
     guion_base()
-    op =  pedir_opcion(input('|##-Forma de Pago: '))
+    op =  pedir_opcion(input('|#######-Forma de Pago: '))
     match op:
         case '1':
             return metodos_pago[int(op)-1]

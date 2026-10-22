@@ -45,7 +45,7 @@ def menuPrincipal(vendedor):
                     case "4":
                         buscador()
                 #    case "5":
-                #        estadisticas_generales()
+                #        menu_estadisticas(vendedor)
                     case "6":
                         if vendedor.verificar_permisos():
                             abm_producto()

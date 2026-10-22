@@ -135,12 +135,12 @@ def pedir_cantidad(cant):
         return 1
     elif not cant.isdigit():
         raise DatoNumericoObligatorio()
-    elif len(cant) >= 12:
+    elif len(cant) >= 3 and float(cant) > 999:
         raise NumeroDemasiadoAlto()
     elif float(cant) < 0:
         raise NumeroNegativoError() 
     else:
-        return cant
+        return int(cant)
 
 def pedir_precio(precio):
     if precio == "": 
@@ -170,9 +170,9 @@ def definir_rol():
     while True:
         print('|#(1) EMPLEADO | (2) ADMIN #|')
         rol = input('|-ROL: ')
-        if rol == "1" or rol.upper == "EMPLEADO":
+        if rol == "1" or rol.upper() == "EMPLEADO":
             return "EMPLEADO"
-        elif rol == "2" or rol.upper == "ADMIN" or rol.upper == "ADMINISTRADOR":
+        elif rol == "2" or rol.upper() == "ADMIN" or rol.upper() == "ADMINISTRADOR":
             return "ADMINISTRADOR"
         else:
             raise OpcionInvalida()

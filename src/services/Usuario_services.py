@@ -41,7 +41,7 @@ def registrar_usuario():
 
             usuario = Usuario(id_usuario, nombre, dni, telefono, rol, sal, hash)
 
-            if registrar_usuario(usuario):
+            if Gestion_Usuario(usuario):
                 pausar_consola("Usuario registrado con exito!")
                 return
             else:

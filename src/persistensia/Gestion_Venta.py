@@ -1,3 +1,4 @@
+from src.utils.Helpers import pausar_consola
 from src.model.Detalle_Venta import Detalle_Venta
 from src.model.Detalle_Producto import Detalle_Producto
 from datetime import datetime
@@ -34,8 +35,8 @@ class Gestion_Venta():
             return lista_ventas
         except FileNotFoundError:
             return []
-        #except Exception as er:
-            #input(f"error {er}")
+        except Exception as er:
+            pausar_consola(er)
             #return []
 
 

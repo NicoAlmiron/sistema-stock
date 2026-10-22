@@ -63,6 +63,9 @@ class UsuarioSuspendido(TecStoreError):
 class VentaCancelada(TecStoreError):
     mensaje_default = 'Se cancelo la venta!'
 
+class IdNoEncontrado(TecStoreError):
+    mensaje_default = 'No se encontro el id buscado!'
+
 
 
 
