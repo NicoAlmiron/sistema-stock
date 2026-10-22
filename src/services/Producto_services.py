@@ -1,7 +1,7 @@
 from src.utils.Helpers import (limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion,
                                cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola)
 from src.model import Producto
-from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado)
+from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado, ArchivoVacio)
 from src.persistensia.Gestion_Producto import Gestion_Producto
 
 #------                                           ------#
@@ -9,6 +9,26 @@ from src.persistensia.Gestion_Producto import Gestion_Producto
 #------                                           ------#
 
 #|--------  PRODUCTOS --------|#
+#   ____________________
+#|--| Mostrar Productos |-----------------------------------------------------
+def listar_productos(lista_productos=None, mostrar_discontinuados=False):
+    if lista_productos is None:
+        lista_productos = Gestion_Producto().extraer_productos()
+
+    if not lista_productos:
+        raise ArchivoVacio()
+    for producto in lista_productos:
+        if mostrar_discontinuados or not producto.discontinuado:
+            print(producto)
+
+
+def mostrar_busqueda(filtro, valor):
+    resultados = Gestion_Producto().buscar(filtro, valor)
+    if not resultados:
+        raise ArchivoVacio('No se encontraron coincidencias')
+    for producto in resultados:
+        print(producto)
+
 #   ____________________
 #|--| Agregar Producto |-----------------------------------------------------
 def agregar_prod():
@@ -48,7 +68,7 @@ def mod_prod():
         cabecera_menu()
         guion_titulo('MODIFICAR DATOS DEL PRODUCTO')
         guion_base()
-        Gestion_Producto().listar_productos()
+        listar_productos()
 
         guion_base()
         guion_item('Ingrese el ID del Producto')
@@ -89,7 +109,7 @@ def mod_stock_prod():
             cabecera_menu()
             guion_titulo('MODIFICAR STOCK DE PRODUCTOS')
             guion_base()
-            Gestion_Producto().listar_productos()
+            listar_productos()
             
             guion_base()
             guion_item('Ingrese el ID del Producto')
@@ -125,7 +145,7 @@ def eliminar_producto():
         cabecera_menu()
         guion_titulo('DISCONTINUAR PRODUCTOS')
         guion_base()
-        Gestion_Producto().listar_productos()
+        listar_productos()
                     
         guion_base()
         guion_item('Ingrese el ID del Producto')
@@ -160,7 +180,7 @@ def reactivacion_producto():
         cabecera_menu()
         guion_titulo('REACTIVACION DE PRODUCTOS')
         guion_base()
-        Gestion_Producto().listar_productos(product, True)
+        listar_productos(product, True)
         guion_base()
         guion_item('Ingrese el ID del Producto')
         id_buscar = pedir_id(input('|##-· ID: '))
@@ -228,7 +248,7 @@ def buscador():
                     guion_titulo('')
                     nombre = pedir_nombre(input(f'|{" "*25}·Nombre···---: ')).lower()
                     guion_titulo('')
-                    Gestion_Producto().fitrador('nombre', nombre.lower())
+                    mostrar_busqueda('nombre', nombre.lower())
                     guion_titulo('')
                 case "2":
                     limpiar_consola()
@@ -237,7 +257,7 @@ def buscador():
                     guion_titulo('')
                     guion_item('Ingrese el ID del producto a Buscar')
                     id_prod = pedir_id(input(f'|{" "*30}·ID ···---: '))
-                    Gestion_Producto().fitrador('id', id_prod)
+                    mostrar_busqueda('id', id_prod)
                 case "3":
                     limpiar_consola()
                     cabecera_menu()
@@ -245,7 +265,7 @@ def buscador():
                     guion_titulo('')
                     guion_item('Ingrese el Precio del producto a Buscar')
                     precio = pedir_precio(input(f'|{" "*30}·Precio ···---: $'))
-                    Gestion_Producto().fitrador('precio', precio)
+                    mostrar_busqueda('precio', precio)
                 case "0":
                     break
                 case _:
@@ -254,8 +274,3 @@ def buscador():
             pausar_consola()
     except TecStoreError as er:
         pausar_consola(er.mensaje)
-
-
-
-
-

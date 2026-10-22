@@ -1,19 +1,15 @@
 from src.exceptions.excepciones import OpcionInvalida, TecStoreError
-from src.model.Sesion import Sesion
-from src.persistensia.Gestion_Producto import Gestion_Producto
-from src.persistensia.Gestion_Usuario import Gestion_Usuario
-from src.services.Producto_services import agregar_prod, mod_stock_prod, mod_prod, eliminar_producto, reactivacion_producto, buscador
+from src.services.Producto_services import (agregar_prod, mod_stock_prod, mod_prod, eliminar_producto,
+                                            reactivacion_producto, buscador, listar_productos)
 from src.services.Ventas_services import realizar_venta, listar_ventas
-from src.services.Usuario_services import registrar_usuario, suspender_usuario, reactivar_usuario
+from src.services.Usuario_services import (registrar_usuario, suspender_usuario, reactivar_usuario,
+                                           listar_usuarios, listar_usuarios_activos, listar_usuarios_suspendidos)
 from src.persistensia.Gestion_Sesion import Gestion_Sesion
 from .Helpers import limpiar_consola, cabecera_menu, guion_titulo, guion_base, guion_item, guion_opcion, pedir_opcion
 from .Helpers import pausar_consola
 
 
-# Menu Principal
-
 def menuPrincipal(vendedor):
-    #productos = Gestion_Producto().extraer_productos()
     while True:
             limpiar_consola()
             cabecera_menu()
@@ -141,12 +137,12 @@ def abm_usuarios():
                 case "1":
                     registrar_usuario()
                 case "2":
-                    Gestion_Usuario().lista_usuarios_activos()
+                    listar_usuarios_activos()
                 case "3":
-                    Gestion_Usuario().lista_usuarios_suspendidos()
+                    listar_usuarios_suspendidos()
                 case "4":
                     cabecera_menu()
-                    Gestion_Usuario().listar_usuarios()
+                    listar_usuarios()
                 case "5":
                     suspender_usuario()
                 case "6":
@@ -170,7 +166,7 @@ def mostrar_lista_prods():
     cabecera_menu()
     guion_titulo('Listado de Productos')
     guion_base("")
-    Gestion_Producto().listar_productos()
+    listar_productos()
     guion_base("")
     guion_titulo('')
     pausar_consola()

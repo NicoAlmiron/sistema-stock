@@ -1,7 +1,7 @@
 from src.persistensia.Gestion_Usuario import Gestion_Usuario
 from src.model.Usuario import Usuario
 from src.exceptions.excepciones import (DniRegistrado, OperacionCancelada, TecStoreError,
-                                        DatoNumericoObligatorio, NumeroDemasiadoAlto)
+                                        DatoNumericoObligatorio, NumeroDemasiadoAlto, ArchivoVacio)
 from src.utils.Helpers import (limpiar_consola, cabecera_menu, pedir_nombre, pedir_id, pedir_telefono,
                                definir_clave, definir_rol, hashear_clave, guion_titulo, guion_item, 
                                guion_sub_item, pausar_consola)
@@ -52,6 +52,31 @@ def registrar_usuario():
 
 
 
+def listar_usuarios(usuarios=None):
+    if usuarios is None:
+        usuarios = Gestion_Usuario().extraer_usuarios()
+
+    if not usuarios:
+        raise ArchivoVacio('No Se Encontraron Usuarios')
+    for user in usuarios:
+        print(user)
+
+
+def listar_usuarios_activos():
+    cabecera_menu()
+    activos = Gestion_Usuario().extraer_activos()
+    if activos:
+        listar_usuarios(activos)
+
+
+def listar_usuarios_suspendidos():
+    cabecera_menu()
+    suspendidos = Gestion_Usuario().extraer_suspendidos()
+    if not suspendidos:
+        raise ArchivoVacio('No Se Encontraron Usuarios')
+    listar_usuarios(suspendidos)
+
+
 def suspender_usuario():
     usuarios = Gestion_Usuario().extraer_usuarios()
     sin_coincidencias = False
@@ -59,7 +84,7 @@ def suspender_usuario():
         limpiar_consola()
         cabecera_menu()
         guion_titulo('SUSPENCION DE USUARIOS')
-        Gestion_Usuario().listar_usuarios()
+        listar_usuarios()
         guion_item('Ingrese el Id del Usuario')
         id_buscar = pedir_id(input('|##-· ID: '))
             
@@ -99,7 +124,7 @@ def reactivar_usuario():
         limpiar_consola()
         cabecera_menu()
         guion_titulo('REACTIVACION DE USUARIOS')
-        Gestion_Usuario().lista_usuarios_suspendidos()
+        listar_usuarios_suspendidos()
         guion_item('Ingrese el Id del Usuario')
         id_buscar = pedir_id(input('|##-· ID: '))
             
@@ -129,14 +154,3 @@ def reactivar_usuario():
         pausar_consola(er.mensaje)
     except ValueError:
         pausar_consola('Ingrese valores Numericos')
-
-
-
-
-
-
-
-
-
-
-

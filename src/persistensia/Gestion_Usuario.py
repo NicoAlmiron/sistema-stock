@@ -1,6 +1,6 @@
 from src.model.Usuario import Usuario
-from src.exceptions.excepciones import DniRegistrado, AuthenticationError, ArchivoVacio
-from src.utils.Helpers import verificar_clave, cabecera_menu
+from src.exceptions.excepciones import DniRegistrado, AuthenticationError
+from src.utils.Helpers import verificar_clave
 from .Gestor_JSON import GestorJSON
 
 
@@ -53,40 +53,16 @@ class Gestion_Usuario(GestorJSON):
         raise AuthenticationError()
 
 
-    def listar_usuarios(self, usuarios=None):
-        if not usuarios:
-            usuarios = self.extraer_usuarios()
+    def extraer_activos(self):
+        activos = []
+        for user in self.extraer_usuarios():
+            if user.validar_estado():
+                activos.append(user)
+        return activos
 
-        if not usuarios:
-            raise ArchivoVacio('No Se Encontraron Usuarios')
-        for user in usuarios:
-            print(user)
-
-
-    def lista_usuarios_activos(self):
-        usuarios = self.extraer_usuarios()
-        usuarios_activos = []
-        cabecera_menu()
-
-
-        for user in usuarios:
-            if user.fecha_baja == "":
-                usuarios_activos.append(user)
-
-        if usuarios_activos:
-            self.listar_usuarios(usuarios_activos)
-
-            
-    def lista_usuarios_suspendidos(self):
-        usuarios = self.extraer_usuarios()
-        usuarios_suspendidos = []
-        cabecera_menu()
-
-        for user in usuarios:
-            if user.fecha_baja != "":
-                usuarios_suspendidos.append(user)
-
-        if usuarios_suspendidos:
-            self.listar_usuarios(usuarios_suspendidos)
-        else:
-            raise ArchivoVacio('No Se Encontraron Usuarios')
+    def extraer_suspendidos(self):
+        suspendidos = []
+        for user in self.extraer_usuarios():
+            if not user.validar_estado():
+                suspendidos.append(user)
+        return suspendidos

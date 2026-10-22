@@ -1,7 +1,7 @@
 from src.utils.Helpers import (limpiar_consola, cabecera_menu, venta_pedir_id, pedir_stock, pedir_precio,
                                guion_base, pedir_opcion, pausar_consola, guion_item, guion_titulo, pedir_cantidad,
                                dar_formato_nombre, dar_formato_precio)
-from .Producto_services import  descontar_stock
+from .Producto_services import descontar_stock, listar_productos
 from src.persistensia.Gestion_Producto import Gestion_Producto
 from src.persistensia.Gestion_Venta import Gestion_Venta
 from src.exceptions.excepciones import (TecStoreError, VentaCancelada, OperacionCancelada, OpcionInvalida,
@@ -83,7 +83,7 @@ def pasarela_produtos():
         cabecera_menu()
         guion_titulo('REALIZAR VENTA')
         guion_base()
-        Gestion_Producto().listar_productos(productos)
+        listar_productos(productos)
         guion_base()
         print(f'|{"|"*90}|')
         if list_prods:
