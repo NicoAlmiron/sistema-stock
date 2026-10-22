@@ -33,9 +33,12 @@ class Gestion_Producto(GestorJSON):
             elif filtro == "id":
                 if producto.id_producto == valor:
                     resultados.append(producto)
-            elif filtro == "precio":
-                if producto.precio == valor:
-                    resultados.append(producto)
         return resultados
 
-    
+    def buscar_por_rango_precio(self, minimo, maximo):
+        # Productos cuyo precio esta entre minimo y maximo (ambos incluidos)
+        resultados = []
+        for producto in self.extraer_productos():
+            if minimo <= producto.precio <= maximo:
+                resultados.append(producto)
+        return resultados

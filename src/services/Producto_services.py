@@ -1,7 +1,7 @@
 from src.utils.Helpers import (limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion,
                                cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola)
 from src.model import Producto
-from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado, ArchivoVacio)
+from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado, ArchivoVacio, DatoInvalidoError)
 from src.persistensia.Gestion_Producto import Gestion_Producto
 
 #------                                           ------#
@@ -24,6 +24,14 @@ def listar_productos(lista_productos=None, mostrar_discontinuados=False):
 
 def mostrar_busqueda(filtro, valor):
     resultados = Gestion_Producto().buscar(filtro, valor)
+    if not resultados:
+        raise ArchivoVacio('No se encontraron coincidencias')
+    for producto in resultados:
+        print(producto)
+
+
+def mostrar_busqueda_precio(minimo, maximo):
+    resultados = Gestion_Producto().buscar_por_rango_precio(minimo, maximo)
     if not resultados:
         raise ArchivoVacio('No se encontraron coincidencias')
     for producto in resultados:
@@ -263,9 +271,14 @@ def buscador():
                     cabecera_menu()
                     guion_titulo('BUSCADOR DE PRODUCTOS')
                     guion_titulo('')
-                    guion_item('Ingrese el Precio del producto a Buscar')
-                    precio = pedir_precio(input(f'|{" "*30}·Precio ···---: $'))
-                    mostrar_busqueda('precio', precio)
+                    guion_item('Ingrese el rango de Precio a Buscar (Enter = sin limite)')
+                    texto_min = input(f'|{" "*30}·Desde $: ')
+                    minimo = 0 if texto_min == "" else pedir_precio(texto_min)
+                    texto_max = input(f'|{" "*30}·Hasta $: ')
+                    maximo = Producto.PRECIO_MAX if texto_max == "" else pedir_precio(texto_max)
+                    if minimo > maximo:
+                        raise DatoInvalidoError('El precio minimo no puede ser mayor al maximo')
+                    mostrar_busqueda_precio(minimo, maximo)
                 case "0":
                     break
                 case _:

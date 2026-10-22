@@ -187,7 +187,7 @@ def mostrar_por_dia(ventas):
 
 
 def mostrar_alertas_stock(ventas):
-    a = alertas_stock(Gestion_Producto.extraer_productos(), ventas)
+    a = alertas_stock(Gestion_Producto().extraer_productos(), ventas)
 
     def nombres(lista):
         return ", ".join(f'{p.nombre} ({p.stock})' for p in lista) or "ninguno"
@@ -242,7 +242,7 @@ def menu_estadisticas(usuario):
 
             limpiar_consola()
             cabecera_menu()
-            ventas = Gestion_Venta.extraer_ventas_en_rango(desde, id_vendedor=id_vendedor)
+            ventas = Gestion_Venta().extraer_ventas_en_rango(desde, id_vendedor=id_vendedor)
             if not ventas and op != "6":
                 guion_titulo('No hay ventas en este periodo')
             else:
