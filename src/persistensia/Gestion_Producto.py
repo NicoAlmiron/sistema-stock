@@ -78,7 +78,7 @@ class Gestion_Producto():
         if not encontrado : return False
 
     def fitrador(self, filtro, buscar):
-        productos = Gestion_Producto.extraer_productos()
+        productos = Gestion_Producto().extraer_productos()
         encontrado = False
         resultados = []
         for producto in productos:

@@ -1,7 +1,7 @@
 from src.utils.Helpers import limpiar_consola, pedir_nombre, pedir_precio, pedir_stock, pedir_id, guion_opcion
 from src.utils.Helpers import cabecera_menu, guion_base, guion_item, pedir_opcion, guion_titulo, pausar_consola
 from src.model import Producto
-from src.exceptions.excepciones import TecStoreError, OperacionCancelada, OpcionInvalida
+from src.exceptions.excepciones import (TecStoreError, OperacionCancelada, OpcionInvalida, IdNoEncontrado)
 from src.persistensia.Gestion_Producto import Gestion_Producto
 
 #------                                           ------#
@@ -37,7 +37,7 @@ def agregar_prod():
         pausar_consola()
 
     except TecStoreError as er:
-        pausar_consola(er.mensaje_default)
+        pausar_consola(er.mensaje)
 
 #   ______________________
 #|--| Modificar Producto |-----------------------------------------------------
@@ -61,9 +61,9 @@ def mod_prod():
         if Gestion_Producto().escribir_productos(productos): 
             pausar_consola("Se Guardo el producto exitosamente!")
         else:
-            pausar_consola("Error al guardar el producto")
+            raise TecStoreError()
     except TecStoreError as er:
-        pausar_consola(er.mensaje_default)
+        pausar_consola(er.mensaje)
 
 #   _______________________________
 #|--| Modificar Stock de Producto |-----------------------------------------------------
@@ -87,9 +87,9 @@ def mod_stock_prod():
             if Gestion_Producto().escribir_productos(productos): 
                 pausar_consola("Se actualizo el stock exitosamente!")
             else:
-                pausar_consola("Error al guardar el producto")
+                raise TecStoreError()
         except TecStoreError as er:
-            pausar_consola(er.mensaje_default)
+            pausar_consola(er.mensaje)
             break
 
 #   _____________________
@@ -121,9 +121,7 @@ def eliminar_producto():
                 else:
                     raise OpcionInvalida()
     except TecStoreError as er:
-        pausar_consola(er)
-    except ValueError:
-        pausar_consola('Ingrese valores Numericos')
+        pausar_consola(er.mensaje)
 
 
 #   ____________________
@@ -162,11 +160,9 @@ def reactivacion_producto():
                 else:
                     raise OperacionCancelada()
             else:
-                pausar_consola("No se encontro el ID del producto!")
+                raise IdNoEncontrado()
     except TecStoreError as er:
-        pausar_consola(er.mensaje_default)
-    except ValueError:
-        pausar_consola('Ingrese valores Numericos')
+        pausar_consola(er.mensaje)
 
 
 #|--| Descontar Stock  |-----------------------------------------------------
@@ -230,7 +226,7 @@ def buscador():
                 case _:
                     raise OpcionInvalida()
             
-            pausar_consola('precione una tecla para continuar!')
+            pausar_consola()
     except TecStoreError as er:
         pausar_consola(er.mensaje)
 

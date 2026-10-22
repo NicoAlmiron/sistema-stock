@@ -75,7 +75,7 @@ def realizar_venta(vendedor):
         else:
             raise OperacionCancelada()
     except TecStoreError as e:
-        pausar_consola(e.mensaje_default)
+        pausar_consola(e.mensaje)
 
 
 
@@ -164,7 +164,7 @@ def pasarela_produtos():
                 if not encontrado:
                     raise IdNoEncontrado()
         except TecStoreError as er:
-            pausar_consola(er.mensaje_default)
+            pausar_consola(er.mensaje)
 
 
 def pasarela_metodos_pago():

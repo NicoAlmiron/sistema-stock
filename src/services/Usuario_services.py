@@ -1,10 +1,10 @@
 from src.persistensia.Gestion_Usuario import Gestion_Usuario
 from src.model.Usuario import Usuario
-from src.exceptions.excepciones import DniRegistrado, OperacionCancelada, TecStoreError
-from src.exceptions.excepciones import DatoNumericoObligatorio, NumeroDemasiadoAlto, TecStoreError
-from src.utils.Helpers import limpiar_consola, cabecera_menu, pedir_nombre, pedir_id, pedir_telefono
-from src.utils.Helpers import definir_clave, definir_rol, hashear_clave, guion_titulo, guion_item, guion_sub_item
-from src.utils.Helpers import pausar_consola
+from src.exceptions.excepciones import (DniRegistrado, OperacionCancelada, TecStoreError,
+                                        DatoNumericoObligatorio, NumeroDemasiadoAlto, TecStoreError)
+from src.utils.Helpers import (limpiar_consola, cabecera_menu, pedir_nombre, pedir_id, pedir_telefono,
+                               definir_clave, definir_rol, hashear_clave, guion_titulo, guion_item, 
+                               guion_sub_item, pausar_consola)
 
 
 
@@ -48,7 +48,7 @@ def registrar_usuario():
                 raise TecStoreError()
             
         except TecStoreError as e:
-            pausar_consola(e.mensaje_default)
+            pausar_consola(e.mensaje)
             break
 
 
@@ -88,7 +88,7 @@ def suspender_usuario():
                 else:
                     raise OperacionCancelada()
     except TecStoreError as er:
-        pausar_consola(er)
+        pausar_consola(er.mensaje_default)
     except ValueError:
         pausar_consola('Ingrese valores Numericos')
 
@@ -127,7 +127,7 @@ def reactivar_usuario():
                 else:
                     raise OperacionCancelada()
     except TecStoreError as er:
-        pausar_consola(er)
+        pausar_consola(er.mensaje_default)
     except ValueError:
         pausar_consola('Ingrese valores Numericos')
 

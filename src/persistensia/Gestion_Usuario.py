@@ -26,7 +26,7 @@ class Gestion_Usuario():
             pausar_consola()
             return []
         except TecStoreError as e:
-            pausar_consola(e.mensaje_default)
+            pausar_consola(e.mensaje)
             return []
 
 

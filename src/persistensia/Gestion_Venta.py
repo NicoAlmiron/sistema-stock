@@ -35,7 +35,7 @@ class Gestion_Venta():
         except FileNotFoundError:
             return []
         except TecStoreError as er:
-            pausar_consola(er.mensaje_default)
+            pausar_consola(er.mensaje_)
             return []
 
 

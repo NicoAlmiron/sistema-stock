@@ -22,6 +22,6 @@ def Login():
             return sesion_activa
         except AuthenticationError as e:
             guion_base()
-            guion_titulo(e.mensaje_default)
+            guion_titulo(e.mensaje)
             guion_base()
             pausar_consola()

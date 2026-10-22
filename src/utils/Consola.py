@@ -63,15 +63,13 @@ def menuPrincipal(vendedor):
                             raise OpcionInvalida()
                     case "0":
                         Gestion_Sesion().guardar_sesion(vendedor)
-                        print('Saliendo.....')
+                        pausar_consola('Saliendo.....')
                         break
                     case _:
                         raise OpcionInvalida()
                     
             except TecStoreError as e:
-                print(e)
-                pausar_consola()
-            #input('precione una tecla para continuar!')
+                pausar_consola(e.mensaje)
     
 
 
@@ -117,7 +115,7 @@ def abm_producto():
                     raise OpcionInvalida()
 
         except TecStoreError as e:
-            pausar_consola(e.mensaje_default)
+            pausar_consola(e.mensaje)
 
 #   ________________________________
 #|--| Sub-Menu de gestion Usuarios |-----------------------------------------------------
@@ -158,18 +156,15 @@ def abm_usuarios():
                 case _:
                     raise OpcionInvalida()
 
-            input('precione una tecla para continuar!')
+            pausar_consola()
 
         except TecStoreError as e:
-            input(e)
+            pausar_consola(e.mensaje)
 
 
 def estadisticas_generales():
     limpiar_consola()
     cabecera_menu()
-
-
-
 
 def mostrar_lista_prods():
     cabecera_menu()
